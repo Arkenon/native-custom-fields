@@ -1,0 +1,55 @@
+.native-custom-fields-forms-page {
+    padding: 24px;
+    margin: 0 auto;
+
+    .native-custom-fields-forms-header {
+        margin-bottom: 24px;
+
+        h1 {
+            margin: 0;
+            line-height: 1.4;
+        }
+    }
+
+    .native-custom-fields-forms-loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+
+    .native-custom-fields-forms-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .native-custom-fields-preview-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    .native-custom-fields-preview-json,
+    .native-custom-fields-preview-fields {
+        min-width: 0;
+    }
+
+    .native-custom-fields-preview-wrapper {
+        background: #fff;
+        padding: 24px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+    }
+
+
+    // Responsive styles
+    @media (max-width: 782px) {
+        padding: 16px;
+
+        .native-custom-fields-forms-header {
+            margin-bottom: 16px;
+        }
+    }
+} 

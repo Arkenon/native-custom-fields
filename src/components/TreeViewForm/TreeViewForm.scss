@@ -1,0 +1,675 @@
+// Drop indicator animation
+@keyframes dropIndicatorPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scaleY(1.2);
+    }
+}
+
+// TreeViewForm Styles
+.gf-tree-view-form {
+    padding: 20px;
+    max-width: 100%;
+    margin: 20px 20px 0 0;
+    background: #fff;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+
+        h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        &-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        &-subtitle {
+            font-size: 13px;
+            color: #666;
+
+            strong {
+                color: #2271b1;
+                font-weight: 600;
+            }
+        }
+    }
+
+    &__footer{
+        background: #ffffff;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin: 20px 0;
+        padding: 15px;
+    }
+
+    // Notice styles
+    .native-custom-fields-notice {
+        margin: 20px 0;
+
+        .components-notice__content {
+            margin: 0;
+            line-height: 1.6;
+        }
+    }
+
+    &__palette {
+        margin-bottom: 20px;
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 4px;
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 35% 1fr;
+        gap: 20px;
+        align-items: start;
+
+        @media screen and (max-width: 1440px) {
+            grid-template-columns: 45% 1fr;
+        }
+    }
+
+    &__sidebar {
+        position: sticky;
+        top: 20px;
+        overflow-y: auto;
+    }
+
+    &__main {
+        min-height: 400px;
+        background: #fff;
+    }
+
+    &__tree {
+        min-height: 200px;
+
+        &-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+    }
+
+    &__tree-panel {
+        margin: 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+}
+
+// TreeNode Styles
+.gf-tree-node {
+    display: flex;
+    align-items: center;
+    margin: 4px 0 8px 10px; // 10px left margin keeps the connection lines visible
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative; // Lets the drop indicator position absolutely
+
+    &:hover {
+        background: #f9f9f9;
+        border-color: #999;
+    }
+
+    &--selected {
+        background: #e3f2fd;
+        border-color: #2196F3;
+    }
+
+    &--dragging {
+        opacity: 0.5;
+        background: #f0f0f0;
+    }
+
+    // Drag over state - highlight the field during drag hover
+    &--drag-over {
+        background: #e8f4fd !important;
+        border-color: #3b82f6 !important;
+        border-width: 2px !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    }
+
+    // Drop indicator - visual guide line
+    &__drop-indicator {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 4px;
+        z-index: 10;
+        pointer-events: none;
+
+        &--before {
+            top: -3px;
+        }
+
+        &--after {
+            bottom: -3px;
+        }
+
+        &-line {
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+            animation: dropIndicatorPulse 1s ease-in-out infinite;
+        }
+    }
+
+    &__drag-handle {
+        display: flex;
+        align-items: center;
+        margin-right: 8px;
+        cursor: grab;
+        color: #999;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+
+    &__expand-button {
+        background: none;
+        border: none;
+        padding: 4px;
+        margin-right: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        color: #666;
+
+        &:hover {
+            color: #000;
+        }
+    }
+
+    &__content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    &__type {
+        font-weight: 600;
+        color: #2196F3;
+        font-size: 13px;
+    }
+
+    &__label {
+        color: #333;
+        font-size: 13px;
+    }
+
+    &__name {
+        color: #666;
+        font-size: 12px;
+        font-style: italic;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-left: 8px;
+        margin-right: 8px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+
+        button {
+            transition: all 0.2s ease;
+
+            &:hover:not(:disabled) {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            &:active:not(:disabled) {
+                transform: scale(0.95);
+            }
+
+            &:disabled {
+                opacity: 0.3;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    &:hover &__actions {
+        opacity: 1;
+    }
+
+    &__delete {
+        // Specific styles for delete button if needed
+    }
+
+    // Animation states for move operations
+    &.moving-up {
+        opacity: 0.3;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    &.moving-down {
+        opacity: 0.3;
+        transform: translateY(10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    &.hide-not-moving {
+        opacity: 0.6;
+        transition: opacity 0.3s ease;
+    }
+
+    &__children {
+        margin-left: 24px; // Nested indent
+        padding-left: 0;
+        position: relative;
+        margin-top: 4px;
+        min-height: 24px; // Ensures the drop area remains even when empty
+        transition: all 0.2s;
+
+        // Visual connection line
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #e0e0e0 0%, transparent 100%);
+        }
+
+        // Drag over state
+        &--drag-over {
+            background: rgba(59, 130, 246, 0.05);
+            border-radius: 4px;
+
+            &::before {
+                background: linear-gradient(to bottom, #3b82f6 0%, #60a5fa 100%);
+            }
+        }
+    }
+
+    // Add Field container inside section/meta_box/group/repeater
+    &__add-field-container {
+        padding: 6px 0;
+        margin-top: 2px;
+        opacity: 0.5;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        // Primary style for Section/Meta Box (more prominent)
+        &--primary {
+            opacity: 0.7;
+
+            .gf-tree-node__add-field-button {
+                border: 1px dashed #b0b0b0;
+                color: #666;
+                background: transparent;
+
+                &:hover {
+                    border-color: #2271b1;
+                    border-style: solid;
+                    color: #2271b1;
+                    background: rgba(34, 113, 177, 0.04);
+                }
+
+                svg {
+                    fill: #666;
+                }
+
+                &:hover svg {
+                    fill: #2271b1;
+                }
+            }
+        }
+
+        // Secondary style for Group/Repeater (more subtle)
+        &--secondary {
+            opacity: 0.4;
+
+            .gf-tree-node__add-field-button {
+                border: 1px dashed #d0d0d0;
+                color: #999;
+                background: transparent;
+
+                &:hover {
+                    border-color: #2271b1;
+                    border-style: solid;
+                    color: #2271b1;
+                    background: rgba(34, 113, 177, 0.04);
+                }
+
+                svg {
+                    fill: #999;
+                }
+
+                &:hover svg {
+                    fill: #2271b1;
+                }
+            }
+        }
+    }
+
+    &__add-field-button {
+        width: 100%;
+        height: 32px;
+        min-width: unset;
+        padding: 4px 8px;
+        justify-content: center;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        font-size: 11px;
+
+        // Remove default button styles
+        &.components-button.is-tertiary {
+            padding: 4px 8px;
+        }
+
+        svg {
+            width: 18px;
+            height: 18px;
+            transition: fill 0.2s ease;
+        }
+    }
+
+    // Children drop indicator - 4px blue line visible only during drag overs
+    &__children-drop-indicator {
+        padding: 8px 0;
+    }
+
+    &__children-drop-line {
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+        border-radius: 2px;
+        box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
+        animation: dropIndicatorPulse 1s ease-in-out infinite;
+    }
+
+    &__empty-children {
+        padding: 12px;
+        margin: 8px 0;
+        background: #f9f9f9;
+        border: 2px dashed #ddd;
+        border-radius: 4px;
+    }
+
+    &__empty-message {
+        margin: 0;
+        font-size: 12px;
+        color: #999;
+        font-style: italic;
+        text-align: center;
+    }
+
+    // DEPRECATED - drop zone container removed
+    &__drop-zone {
+        display: none; // Unused now
+    }
+
+    // Group/Repeater visual indicator
+    &--level-0.gf-tree-node {
+        // Root level - no indent
+    }
+
+    &.gf-tree-node {
+        &--level-1, &--level-2, &--level-3, &--level-4 {
+            // Nested levels - indent is handled by inline style
+        }
+    }
+
+    // Section container styles
+    &--section {
+        background: linear-gradient(to right, #fff9e6 0%, #ffffff 30%);
+        border-left: 4px solid #f59e0b;
+        font-weight: 600;
+
+        &:hover {
+            background: linear-gradient(to right, #fff5d6 0%, #f9f9f9 30%);
+            border-color: #d97706;
+        }
+
+        &.gf-tree-node--selected {
+            background: linear-gradient(to right, #fef3c7 0%, #e3f2fd 30%);
+            border-color: #f59e0b;
+        }
+
+        .gf-tree-node__type {
+            color: #f59e0b;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    // Meta Box container styles
+    &--meta-box {
+        background: linear-gradient(to right, #ede9fe 0%, #ffffff 30%);
+        border-left: 4px solid #8b5cf6;
+        font-weight: 600;
+
+        &:hover {
+            background: linear-gradient(to right, #ddd6fe 0%, #f9f9f9 30%);
+            border-color: #7c3aed;
+        }
+
+        &.gf-tree-node--selected {
+            background: linear-gradient(to right, #ede9fe 0%, #e3f2fd 30%);
+            border-color: #8b5cf6;
+        }
+
+        .gf-tree-node__type {
+            color: #8b5cf6;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+    }
+}
+
+// FieldPalette Styles
+.gf-field-palette {
+    &__trigger {
+
+    }
+}
+
+// FieldPalette Modal Styles
+.gf-field-palette-modal {
+    max-width: 800px;
+
+    .components-modal__content {
+        padding: 20px;
+    }
+
+    .gf-field-palette__container {
+        width: 100%;
+    }
+
+    .gf-field-palette__search {
+        margin-bottom: 20px;
+
+        .gf-field-palette__search-input {
+            width: 100%;
+
+            input {
+                width: 100%;
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .gf-field-palette__grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .gf-field-palette__button {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 13px;
+        padding: 12px 8px;
+        height: auto;
+        min-height: 70px;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.4;
+
+        &:hover {
+            background: #f0f0f0;
+            border-color: #999;
+        }
+
+        .gf-field-palette__icon {
+            width: 24px;
+            height: 24px;
+            fill: #1e1e1e;
+        }
+
+        span {
+            display: block;
+        }
+    }
+
+    .gf-field-palette__no-results {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 40px 20px;
+        color: #757575;
+        font-style: italic;
+    }
+}
+
+// FieldSettingsPanel Styles
+.gf-field-settings-panel {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    &__empty {
+        text-align: center;
+        color: #999;
+        padding: 40px 20px;
+        font-style: italic;
+    }
+
+    &__content {
+        padding: 15px;
+
+        .native-custom-fields-field {
+            margin-bottom: 20px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .components-panel__body {
+        border: none;
+
+        &-title {
+            button {
+                font-size: 14px;
+                font-weight: 600;
+                color: #1e1e1e;
+
+                // Highlight the selected field name in the title
+                &:hover {
+                    color: #2271b1;
+                }
+            }
+        }
+    }
+}
+
+// Responsive Styles
+@media screen and (max-width: 782px) {
+    .gf-tree-view-form {
+        padding: 10px;
+        margin: 10px 10px 0 0;
+
+        &__content {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        &__sidebar {
+            position: static;
+            max-height: none;
+            order: 2; // Keep the sidebar below the main area
+        }
+
+        &__main {
+            order: 1; // Keep the tree view above the sidebar
+            min-height: 0; // Remove extra spacing on mobile
+        }
+
+        &__header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+
+            h2 {
+                font-size: 18px;
+            }
+
+            &-subtitle {
+                font-size: 12px;
+            }
+        }
+
+        &__footer {
+            flex-direction: column;
+            gap: 10px;
+
+            .components-button {
+                width: 100%;
+            }
+        }
+    }
+
+    .gf-field-palette-modal {
+        .gf-field-palette__grid {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .gf-tree-view-form {
+        &__header {
+            h2 {
+                font-size: 16px;
+            }
+        }
+    }
+}

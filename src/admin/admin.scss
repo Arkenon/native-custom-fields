@@ -1,0 +1,560 @@
+@import "@wordpress/base-styles/colors";
+@import "@wordpress/base-styles/variables";
+@import "@wordpress/base-styles/mixins";
+@import "@wordpress/base-styles/breakpoints";
+@import "@wordpress/base-styles/animations";
+@import "@wordpress/base-styles/z-index";
+
+// Import common styles
+@import '../common/assets/common.scss';
+
+// Import admin styles
+@import './styles/dashboard.scss';
+@import './styles/forms.scss';
+
+.native-custom-fields {
+	// CustomPanel styles
+	&-custom-panel {
+		&-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 12px 16px;
+			background: #f9f9f9;
+			border: 1px solid #ddd;
+			border-bottom: none;
+			cursor: pointer;
+			transition: background-color 0.2s;
+
+			&:hover {
+				background: #f0f0f0;
+			}
+
+			&[draggable="true"] {
+				cursor: grab;
+
+				&:active {
+					cursor: grabbing;
+				}
+
+				&:hover {
+					background: #e8f4fd;
+				}
+			}
+
+			&-actions {
+				display: flex;
+				align-items: center;
+				gap: 4px;
+			}
+		}
+
+		&-title {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-weight: 600;
+			flex: 1;
+			pointer-events: none; // Prevent drag interference when clicking on title area
+
+			.components-icon {
+				color: #666;
+			}
+		}
+
+		&-actions {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+
+			.components-button {
+				min-width: auto;
+				height: 28px;
+				padding: 0 6px;
+
+				&:not(:disabled):hover {
+					background: rgba(0, 0, 0, 0.05);
+				}
+			}
+		}
+
+		&-toggle {
+			margin-left: 8px;
+			min-width: auto !important;
+			height: 28px !important;
+			padding: 0 4px !important;
+		}
+
+		&-content {
+			border-top: none;
+		}
+	}
+
+	&-hamburger-menu {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 999999;
+		display: flex;
+
+		&-overlay {
+			position: fixed;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: -1;
+		}
+
+		&-content {
+			width: 300px;
+			background: #fff;
+			height: 100%;
+			box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);
+			animation: slideIn 0.3s ease-out;
+		}
+
+		&-header {
+			padding: 16px;
+			border-bottom: 1px solid #ddd;
+			text-align: right;
+		}
+
+		&-body {
+			padding: 16px;
+			overflow-y: auto;
+			height: calc(100% - 60px);
+		}
+	}
+
+	&-mobile-tabs {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		.native-custom-fields-mobile-tab {
+			justify-content: flex-start;
+			width: 100%;
+			padding: 12px;
+			border-radius: 2px;
+			height: auto;
+			min-height: 48px;
+			text-align: left;
+
+			.components-flex {
+				width: 100%;
+				justify-content: flex-start;
+			}
+
+			&.is-active {
+				background: #f0f0f0;
+				color: var(--wp-admin-theme-color);
+			}
+
+			&:hover:not(:disabled, [aria-disabled=true]) {
+				color: inherit;
+			}
+		}
+	}
+
+	&-app {
+		margin-right: $grid-unit-30;
+		margin-top: $grid-unit-30;
+		position: relative;
+		overflow: hidden;
+		background: $white;
+		padding: $grid-unit-30;
+
+		&-header {
+			align-items: center;
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: $grid-unit-30;
+			border-bottom: 1px solid $gray-200;
+
+			&-title {
+				font-size: $font-size-x-large;
+			}
+		}
+
+		&-notice {
+			margin: $grid-unit-20 0;
+		}
+	}
+
+	&-tabs {
+		.components-tab-panel__tabs {
+			margin-bottom: 24px;
+			display: flex;
+			flex-wrap: nowrap;
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch;
+			padding: 5px;
+
+			// Firefox scrollbar style
+			scrollbar-width: thin;
+			scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+
+			// Chrome and Safari scrollbar style
+			&::-webkit-scrollbar {
+				width: 4px;
+				height: 4px;
+
+				&-track {
+					background: transparent;
+				}
+
+				&-thumb {
+					background-color: rgba(0, 0, 0, 0.15);
+					border-radius: 20px;
+				}
+			}
+
+			.components-tab-panel__tabs-item {
+				flex: 0 0 auto;
+				white-space: nowrap;
+				padding: 8px 16px;
+			}
+		}
+
+		&.is-mobile {
+			.components-tab-panel__tabs {
+				&::-webkit-scrollbar {
+					height: 1px;
+
+					&-track {
+						background: #f0f0f0;
+						border-radius: 3px;
+					}
+
+					&-thumb {
+						background: #999;
+						border-radius: 3px;
+					}
+				}
+
+				.components-tab-panel__tabs-item {
+					&:last-child {
+						margin-right: 0;
+					}
+				}
+			}
+		}
+	}
+
+	&-actions {
+		margin-top: 24px;
+		padding: 16px;
+		background: #fff;
+		border: 1px solid #ddd;
+		border-radius: 2px;
+		position: sticky;
+		bottom: 0;
+		z-index: 100;
+		width: 100%;
+		box-sizing: border-box;
+
+		button {
+			white-space: nowrap;
+		}
+	}
+
+	&-menu-toggle {
+		@media (max-width: 960px) {
+			display: block;
+		}
+	}
+
+	&-tab-content {
+		@media (max-width: 960px) {
+			display: block !important;
+		}
+	}
+
+	&-navigation {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background: #fff;
+		padding-right: 16px;
+
+		&-menu {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			width: 100%;
+		}
+
+		&-group {
+			margin-bottom: 8px;
+			width: 100%;
+
+			&__title {
+				padding: 8px 16px;
+				margin: 0;
+				font-size: 11px;
+				font-weight: 500;
+				text-transform: uppercase;
+				color: #757575;
+			}
+
+			&__content {
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+			}
+		}
+
+		&-item {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			padding: 12px 16px;
+			border: none;
+			background: transparent;
+			cursor: pointer;
+			text-align: left;
+			color: #50575e;
+			min-height: 40px;
+			border-radius: 2px;
+			margin-bottom: 5px;
+			box-sizing: border-box;
+
+			&:hover {
+				background: #f0f0f0;
+			}
+
+			&.is-active {
+				background: #f0f0f0;
+				font-weight: bold;
+			}
+
+			&__icon {
+				margin-right: 12px;
+				width: 20px;
+				height: 20px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+			}
+
+			&__title {
+				flex: 1;
+				font-size: 13px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+	}
+
+	&-notice {
+		margin: 16px;
+	}
+
+	&-post-meta-wrapper {
+		margin: 0 auto;
+	}
+
+	&-user-meta-wrapper {
+		.native-custom-fields-field {
+			@media (min-width: 768px) {
+				width: 50%;
+			}
+		}
+	}
+
+	&-table {
+		width: 100%;
+		border-collapse: collapse;
+
+		&-wrapper {
+			overflow-x: auto;
+			margin-top: 20px;
+			background: #fff;
+			border: 1px solid #e2e4e7;
+			border-radius: 2px;
+		}
+
+		&-actions {
+			display: flex;
+			gap: 8px;
+			justify-content: start;
+		}
+
+		th, td {
+			padding: 12px 16px;
+			text-align: left;
+			border-bottom: 1px solid #e2e4e7;
+		}
+
+		th {
+			background: #f9f9f9;
+			font-weight: 600;
+			color: #1e1e1e;
+			white-space: nowrap;
+		}
+
+		tr:hover {
+			background-color: #f8f9fa;
+		}
+
+		td {
+			color: #1e1e1e;
+			vertical-align: middle;
+		}
+	}
+
+	/* Repeater table specific styles */
+	&-repeater {
+		&-table-wrapper {
+			width: 100%;
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+			display: block;
+		}
+
+		&-table {
+			width: 100%;
+			border-collapse: collapse;
+			border-spacing: 0; /* keep borders tight; spacing via padding */
+			border: 1px solid #dee3e5;
+
+			thead th,
+			tbody td {
+				padding: 12px 16px; /* reasonable column spacing */
+				text-align: left; /* left align */
+				vertical-align: top; /* top align */
+				border: 1px solid #dee3e5;
+			}
+
+			.native-custom-fields-repeater-col-order,
+			.native-custom-fields-repeater-cell-order {
+				width: 48px;
+				white-space: nowrap;
+				text-align: left;
+			}
+
+			// Drag handle/order cell: center alignment and pointer cursor
+			.native-custom-fields-repeater-cell-order {
+				cursor: pointer;
+				vertical-align: middle; /* let table cell align content to row middle */
+				/* Removed flex to keep row cells equal height */
+				user-select: none;
+			}
+
+			/* row separators removed – handled by cell borders */
+
+			.native-custom-fields-repeater-col-actions,
+			.native-custom-fields-repeater-cell-actions {
+				white-space: nowrap;
+				width: 1%; /* shrink to content */
+			}
+
+			.native-custom-fields-repeater-actions {
+				display: flex;
+				gap: 8px;
+				align-items: flex-start; /* top alignment inside cell */
+				justify-content: flex-start; /* left alignment */
+				flex-wrap: wrap; /* avoid overflow in narrow screens */
+			}
+
+			.native-custom-fields-repeater-cell {
+				vertical-align: top;
+			}
+
+			/* Ensure inner controls don’t add extra margins */
+			.native-custom-fields-repeater-cell .components-base-control {
+				margin-top: 0;
+				margin-bottom: 0;
+			}
+		}
+	}
+
+}
+
+/* Term/User Meta Sections - Common */
+.native-custom-fields-meta-th-header{
+	vertical-align: middle;
+}
+
+/* Term Meta Sections - Multiple sections support */
+.term-meta-section-wrap {
+	h3 {
+		margin-top: 20px;
+		margin-bottom: 10px;
+		font-size: 14px;
+		font-weight: 600;
+		color: #1d2327;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		line-height: 1;
+
+
+	}
+
+	&:first-of-type h3 {
+		margin-top: 0;
+	}
+
+	.native-custom-fields-term-meta-wrapper {
+		margin-bottom: 15px;
+	}
+}
+
+/* Edit term form sections */
+.form-table .term-meta-section-wrap {
+	th {
+		font-weight: 600;
+		vertical-align: top;
+		padding-top: 20px;
+		line-height: 1.4;
+
+		.dashicons {
+			font-size: 16px;
+			width: 16px;
+			height: 16px;
+			line-height: 1;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			vertical-align: middle;
+			margin-right: 4px;
+		}
+	}
+
+	td {
+		padding-top: 15px;
+	}
+}
+
+/* User Meta Sections - Multiple sections support */
+.form-table .user-meta-section-wrap {
+	th {
+		font-weight: 600;
+		vertical-align: top;
+		padding-top: 20px;
+		line-height: 1.4;
+
+		.dashicons {
+			font-size: 16px;
+			width: 16px;
+			height: 16px;
+			line-height: 1;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			vertical-align: middle;
+			margin-right: 4px;
+		}
+	}
+
+	td {
+		padding-top: 15px;
+	}
+}
+

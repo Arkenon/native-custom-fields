@@ -1,0 +1,275 @@
+// Common styles
+.native-custom-fields {
+
+	&-mt-20 {
+		margin-top: 20px;
+	}
+
+	&-field {
+
+	}
+
+	&-base-control-wrapper {
+		padding: 15px 0;
+	}
+
+	&-has-validation-error{
+		.components-base-control__help{
+			color: #cc1818;
+		}
+	}
+
+	&-file-upload {
+		&-previews {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+			gap: 16px;
+			margin: 16px 0 8px 0;
+		}
+
+		&-preview {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+
+			&-image {
+				position: relative;
+				aspect-ratio: 1;
+				border-radius: 4px;
+				overflow: hidden;
+				border: 1px solid #ddd;
+
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+
+				&:hover .native-custom-fields-file-upload-preview-actions {
+					opacity: 1;
+				}
+			}
+
+			&-actions {
+				position: absolute;
+				top: 8px;
+				right: 8px;
+				display: flex;
+				gap: 8px;
+				opacity: 0;
+				transition: opacity 0.2s ease-in-out;
+			}
+
+			&-remove,
+			&-copy {
+				padding: 4px !important;
+				min-width: auto !important;
+				height: auto !important;
+				background: rgba(255, 255, 255, 0.9) !important;
+				border-radius: 50% !important;
+
+				svg {
+					width: 16px;
+					height: 16px;
+				}
+			}
+
+			&-remove {
+				color: #cc1818 !important;
+
+				&:hover {
+					background: #fff !important;
+					box-shadow: 0 0 0 1px #cc1818 !important;
+				}
+			}
+
+			&-copy {
+				color: #007cba !important;
+
+				&:hover {
+					background: #fff !important;
+					box-shadow: 0 0 0 1px #007cba !important;
+				}
+			}
+
+			&-name {
+				font-size: 12px;
+				color: #757575;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+		}
+	}
+
+	&-repeater {
+		margin-bottom: 24px;
+
+		&-item {
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			margin-bottom: 16px;
+			background-color: #fdfdfd;
+			transition: opacity 0.3s ease, transform 0.3s ease;
+
+			&.moving-up {
+				opacity: 0.3;
+				transform: translateY(-10px);
+			}
+
+			&.moving-down {
+				opacity: 0.3;
+				transform: translateY(10px);
+			}
+
+			&.hide-not-moving {
+				opacity: 0.6;
+			}
+
+			&-header {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-top: 8px;
+			}
+
+			&-title {
+				font-weight: 600;
+				color: #1e1e1e;
+			}
+
+			&-actions {
+				display: flex;
+				gap: 4px;
+
+				button {
+					transition: background-color 0.2s ease;
+
+					&:hover {
+						background-color: rgba(0, 0, 0, 0.05);
+					}
+
+					&:active {
+						transform: scale(0.95);
+					}
+				}
+			}
+
+			&-content {
+				padding: 16px;
+			}
+
+			&-dragging {
+				opacity: 0.5;
+			}
+
+			&-dragover {
+				&-above {
+					position: relative;
+
+					&::before {
+						content: '';
+						position: absolute;
+						top: -8px;
+						left: 0;
+						right: 0;
+						height: 14px;
+						background-color: #007cba;
+						border-radius: 2px;
+						z-index: 10;
+					}
+				}
+
+				&-below {
+					position: relative;
+
+					&::after {
+						content: '';
+						position: absolute;
+						bottom: -8px;
+						left: 0;
+						right: 0;
+						height: 14px;
+						background-color: #007cba;
+						border-radius: 2px;
+						z-index: 10;
+					}
+				}
+			}
+		}
+
+		&-add-new-button {
+			margin-top: 8px;
+			display: flex;
+			justify-content: end;
+
+			button {
+				transition: transform 0.2s ease;
+
+				&:hover {
+					transform: translateY(-2px);
+				}
+
+				&:active {
+					transform: translateY(0);
+				}
+			}
+		}
+	}
+
+	&-custom-panel {
+		border: 1px solid #e0e0e0;
+		border-radius: 4px;
+
+		&-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 10px 15px;
+			background-color: #f5f5f5;
+			cursor: pointer;
+			border-bottom: 1px solid #e0e0e0;
+
+		}
+
+		&-title {
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		&-content {
+			border-top: 1px solid #e0e0e0;
+			padding: 10px;
+		}
+	}
+}
+
+.components {
+	&-base-control {
+		&.label-lowercase,
+		.label-lowercase {
+			.components-base-control__label {
+				text-transform: lowercase;
+			}
+		}
+
+		&.label-capitalize,
+		.label-capitalize {
+			.components-base-control__label {
+				text-transform: capitalize;
+			}
+		}
+	}
+
+	&-flex-item {
+		&-custom-width-100 {
+			width: 100% !important;
+		}
+
+		&-custom-width-20 {
+			width: 20% !important;
+		}
+	}
+}
