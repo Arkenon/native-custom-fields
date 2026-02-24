@@ -88,9 +88,9 @@ class FieldService
     public function getDashboardItems(): array
     {
         $items = [
-            ['label' => __('Create Post Types & Custom Fields', 'native-custom-fields'), 'description' => __('Create custom post types with custom fields', 'native-custom-fields'), 'icon' => 'postList', 'page' => 'native-custom-fields-post-type-builder'],
-            ['label' => __('Create Custom Taxonomies & Fields', 'native-custom-fields'), 'description' => __('Create custom taxonomies with custom fields', 'native-custom-fields'), 'icon' => 'category', 'page' => 'native-custom-fields-taxonomy-builder'],
-            ['label' => __('Create User Meta Fields', 'native-custom-fields'), 'description' => __('Add custom fields to user profiles', 'native-custom-fields'), 'icon' => 'people', 'page' => 'native-custom-fields-user-meta-builder'],
+            ['label' => __('Post Types & Post Meta Fields', 'native-custom-fields'), 'description' => __('Create custom post types with custom fields', 'native-custom-fields'), 'icon' => 'postList', 'page' => 'native-custom-fields-post-type-builder'],
+            ['label' => __('Custom Taxonomies & Term Meta Fields', 'native-custom-fields'), 'description' => __('Create custom taxonomies with custom fields', 'native-custom-fields'), 'icon' => 'category', 'page' => 'native-custom-fields-taxonomy-builder'],
+            ['label' => __('User Meta Fields', 'native-custom-fields'), 'description' => __('Add custom fields to user profiles', 'native-custom-fields'), 'icon' => 'people', 'page' => 'native-custom-fields-user-meta-builder'],
         ];
         return apply_filters('native_custom_fields_dashboard_items', $items);
     }

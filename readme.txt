@@ -116,11 +116,6 @@ Yes. The plugin is built around the Block Editor architecture and uses native Wo
 * Import / Export system
 * Modern native admin UI
 
-== Upgrade Notice ==
-
-= 1.0.0 =
-Initial stable release of Native Custom Fields.
-
 == Credits ==
 
 Built using official WordPress packages:
@@ -130,3 +125,9 @@ Built using official WordPress packages:
 * @wordpress/elements
 * @wordpress/icons
 * @wordpress/data
+
+== Developers ==
+
+If you want to contribute to the plugin, download the source code and run `npm install` to install the development dependencies.
+After that, to install composer dependencies, run `composer install`.
+Activate the plugin in WordPress and run `npm run dev` to start the development server.

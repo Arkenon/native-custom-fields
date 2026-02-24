@@ -96,7 +96,7 @@ final class AdminController {
 			'manage_options',
 			'native-custom-fields',
 			[ $this, 'renderDashboard' ],
-			'dashicons-admin-generic',
+			NATIVE_CUSTOM_FIELDS_URL . '/includes/Presentation/Admin/Assets/img/ncf_icon.png',
 		);
 	}
 

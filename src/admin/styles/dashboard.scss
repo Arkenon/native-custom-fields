@@ -4,9 +4,6 @@
     padding: 10px;
 
     .native-custom-fields-dashboard {
-        max-width: 1400px;
-        margin: 0 auto;
-
         .native-custom-fields-dashboard-header {
             margin-bottom: 32px;
         }
@@ -65,8 +62,7 @@
         }
     }
 
-    @media (max-width: 782px) {
-        padding: 16px;
-        margin: -10px;
+    @media (max-width: 1400px) {
+        width: 100%;
     }
 }
