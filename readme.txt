@@ -16,10 +16,11 @@ Native Custom Fields is a modern WordPress plugin for creating custom content ty
 
 Instead of shipping a proprietary UI framework or custom database structure, Native Custom Fields leverages WordPress core technologies such as:
 
+- @wordpress/scripts
 - @wordpress/components
-- @wordpress/data
 - @wordpress/elements
-- Block Editor architecture
+- @wordpress/icons
+- @wordpress/data
 
 This ensures a seamless, future-proof experience that evolves together with WordPress core.
 
