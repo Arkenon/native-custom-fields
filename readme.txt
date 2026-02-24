@@ -51,31 +51,51 @@ Create field groups and attach them to:
 * User Profiles
 * Options Pages (Pro)
 
-= Field Types =
-* Text
-* Number
-* Select
-* Checkbox
-* Radio
-* Textarea
+= Supported Components =
+* Input Control
+* Text Control
+* Number Control
+* Select Control
+* Checkbox Control
+* Radio Control
+* Textarea Control
+* Range Control
+* Toggle Control
 * Color Picker
-* Date / Time
+* Color Palette
+* Date Picker
+* DateTime Picker
+* Time Picker
+* Unit Control
+* Angle Picker Control
+* Alignment Matrix Control
+* Border Box Control
+* Border Control
+* Box Control
+* Toggle Group Control
+* Combobox Field
+* Font Size Picker
 * File Upload
+* Media Library
+* Form Token
+* ExternalLink
+* Heading
+* Notice
+* Text Highlight
+
+Custom Components:
 * Repeater (Pro)
 * Group (Pro)
-* Section
-* Heading
-* Layout Controls (Alignment, Box, Border, etc.)
 
 = Developer-Friendly =
 * Built with PSR-4 autoloading
 * Strict Types compatible
 * Modern React-based admin UI
-* Import / Export via JSON or PHP
 * Clean and extendable architecture
+* Import / Export via JSON or PHP (Pro)
 
 = Performance-Focused =
-* Zero admin UI bloat
+* Minimum admin UI bloat
 * Native WordPress components
 * No redundant database tables
 * Optimized for long-term maintainability
@@ -128,6 +148,8 @@ Built using official WordPress packages:
 
 == Developers ==
 
-If you want to contribute to the plugin, download the source code and run `npm install` to install the development dependencies.
-After that, to install composer dependencies, run `composer install`.
-Activate the plugin in WordPress and run `npm run dev` to start the development server.
+If you want to contribute to the plugin:
+1) Download the source code and run `npm install` to install the development dependencies.
+2) To install composer dependencies, run `composer install`.
+3) Run `npm start` to start the development server.
+4) To build the plugin, run `npm run build`.
