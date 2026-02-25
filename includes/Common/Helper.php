@@ -119,20 +119,29 @@ class Helper
     }
 
     /**
-     * Check if a post is of a certain type and status on AJAX actions
+     * Verify AJAX nonce for Native Custom Fields actions
      *
-     * @param string $key
+     * Uses general nonce 'native_custom_fields' for all AJAX actions.
+     * The nonce is created in ClientController and AdminController.
      *
-     * @return void
+     * @param string $action Nonce action name (default: 'native_custom_fields')
+     * @param string $query_arg Query argument name in $_REQUEST (default: 'nonce')
+     *
+     * @return void Dies with JSON error if nonce is invalid
      * @since 1.0.0
      */
-    public static function ajaxGuard(string $key = ''): void
+    public static function ajaxGuard(string $action = 'native_custom_fields', string $query_arg = 'nonce'): void
     {
-        check_ajax_referer('nonce', $key);
+        if (! check_ajax_referer($action, $query_arg, false)) {
+            wp_send_json_error(['message' => __('Invalid nonce', 'native-custom-fields')]);
+        }
     }
 
     /**
      * Upload files to the media library
+     *
+     * Note: Nonce verification must be done by the calling method before invoking this function.
+     * This method is a utility function and should only be called from properly secured contexts.
      *
      * @return array|false
      * @since 1.0.0
@@ -142,8 +151,9 @@ class Helper
 
         $file_to_upload = [];
 
-        if (isset($_FILES['files'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified by the calling method.
-            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in the loop below.
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified by the calling method before invoking this function.
+        // phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Files are sanitized in the loop below.
+        if (isset($_FILES['files'])) {
             $files = $_FILES['files'];
 
             if (!function_exists('wp_handle_upload')) {
@@ -191,6 +201,8 @@ class Helper
                 }
             }
         }
+        // phpcs:enable WordPress.Security.NonceVerification.Missing
+        // phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
         return $file_to_upload;
     }

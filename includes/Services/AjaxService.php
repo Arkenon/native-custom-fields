@@ -31,10 +31,8 @@ class AjaxService
      */
     public function handleFileUpload()
     {
-        // Check nonce
-        if (! check_ajax_referer('native_custom_fields', 'nonce', false)) {
-            wp_send_json_error(['message' => __('Invalid nonce', 'native-custom-fields')]);
-        }
+        // Verify nonce
+        Helper::ajaxGuard();
 
         // Upload files using Helper class
         $uploaded_files = Helper::uploadFiles();

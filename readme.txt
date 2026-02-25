@@ -1,6 +1,6 @@
 === Native Custom Fields ===
 Contributors: arkenon
-Tags: custom fields, custom post type, meta fields, options page, gutenberg, block editor, developer tools
+Tags: custom fields, custom post type, meta box, gutenberg, block editor
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
