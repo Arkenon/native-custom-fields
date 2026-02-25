@@ -3,7 +3,6 @@
  */
 import {useSelect} from '@wordpress/data';
 import {store as coreStore} from '@wordpress/core-data';
-import {useState} from "@wordpress/element";
 
 /**
  * Quick check: is the given input a dynamic options string?

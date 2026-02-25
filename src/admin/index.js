@@ -10,6 +10,7 @@ import {renderPostMetaFields, renderCreatePostMeta} from '@nativecustomfields/co
 import {renderCreateTermMeta, renderTermMetaFields} from "@nativecustomfields/controllers/TermMetaController.js";
 import {renderCreateUserMeta, renderUserMetaFields} from "@nativecustomfields/controllers/UserMetaController.js";
 import * as Components from '@nativecustomfields/components';
+import {fieldConfigurations} from '@nativecustomfields/configurations/field-configurations.js';
 
 // Set up REST API configuration
 apiFetch.use(apiFetch.createNonceMiddleware(window.nativeCustomFieldsData.nonce));
@@ -27,7 +28,6 @@ if (dashboardPageWrapper) {
 
 // Initialize options fields
 renderOptionsFields();
-renderCreateOptionsPages();
 
 // Initialize post meta fields
 renderPostMetaFields();
@@ -42,9 +42,12 @@ renderUserMetaFields();
 renderCreateUserMeta();
 
 
-// Export components to global scope
+// Export components and configurations to global scope
 window.NCF = {
 	components: {
 		...Components
+	},
+	configurations: {
+		fieldConfigurations
 	}
 };

@@ -153,8 +153,6 @@ function DashboardSidebar() {
                         <VStack spacing={1}>
                             {[
                                 __('Options Pages & Fields', 'native-custom-fields'),
-                                __('Repeater Field', 'native-custom-fields'),
-                                __('Group Field', 'native-custom-fields'),
                                 __('Import & Export', 'native-custom-fields'),
                             ].map((feature, i) => (
                                 <HStack key={i} spacing={2} alignment="left">
