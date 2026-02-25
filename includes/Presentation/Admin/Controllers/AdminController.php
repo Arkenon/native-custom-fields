@@ -55,18 +55,19 @@ final class AdminController {
 		);
 
 		// Localize script for rest api and ajax actions
-		wp_localize_script( 'native-custom-fields', 'nativeCustomFieldsData', [
+		$localize_data = apply_filters( 'native_custom_fields_localize_data', [
 			'nonce'           => wp_create_nonce( 'native_custom_fields' ),
 			'assets_url'      => NATIVE_CUSTOM_FIELDS_URL . '/includes/Presentation/Admin/Assets/',
 			'rest_url'        => esc_url_raw( rest_url() ),
 			'ajax_url'        => esc_url_raw( admin_url( 'admin-ajax.php' ) ),
 			'admin_url'       => esc_url_raw( admin_url() ),
 			'site_url'        => esc_url_raw( site_url() ),
-			'is_pro'          => (bool) apply_filters( 'native_custom_fields_is_pro', false ),
 			'field_types'     => $this->fieldService->getFieldTypes(),
 			'container_types' => $this->fieldService->getContainerTypes(),
             'dashboard_items' => $this->fieldService->getDashboardItems()
 		] );
+
+		wp_localize_script( 'native-custom-fields', 'nativeCustomFieldsData', $localize_data );
 	}
 
 	/**

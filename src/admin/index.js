@@ -9,6 +9,7 @@ import {renderOptionsFields, renderCreateOptionsPages} from '@nativecustomfields
 import {renderPostMetaFields, renderCreatePostMeta} from '@nativecustomfields/controllers/PostMetaController.js';
 import {renderCreateTermMeta, renderTermMetaFields} from "@nativecustomfields/controllers/TermMetaController.js";
 import {renderCreateUserMeta, renderUserMetaFields} from "@nativecustomfields/controllers/UserMetaController.js";
+import * as Components from '@nativecustomfields/components';
 
 // Set up REST API configuration
 apiFetch.use(apiFetch.createNonceMiddleware(window.nativeCustomFieldsData.nonce));
@@ -39,3 +40,11 @@ renderCreateTermMeta();
 // Initialize user meta fields
 renderUserMetaFields();
 renderCreateUserMeta();
+
+
+// Export components to global scope
+window.NCF = {
+	components: {
+		...Components
+	}
+};

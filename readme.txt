@@ -147,6 +147,11 @@ Built using official WordPress packages:
 * @wordpress/icons
 * @wordpress/data
 
+== Source Code ==
+
+It is available on GitHub:
+* GitHub: https://github.com/Arkenon/native-custom-fields
+
 == Developers ==
 
 If you want to contribute to the plugin:
