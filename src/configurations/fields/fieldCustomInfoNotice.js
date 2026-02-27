@@ -4,10 +4,10 @@ const fieldCustomInfoNotice ={
     fieldType: 'group',
     name: 'field_custom_info_notice',
     fieldLabel: __('Field Custom Options', 'native-custom-fields'),
-    layout: 'grid',
+    layout: 'flex',
     fields: [
         {
-            fieldType: 'text',
+            fieldType: 'textarea',
             name: 'children',
             fieldLabel: __('Message', 'native-custom-fields'),
             fieldHelpText: __('The displayed message of a notice.', 'native-custom-fields'),
@@ -25,14 +25,7 @@ const fieldCustomInfoNotice ={
                 {label: __('Error', 'native-custom-fields'), value: 'error'},
                 {label: __('Info', 'native-custom-fields'), value: 'info'}
             ]
-        },
-        {
-            fieldType: 'toggle',
-            name: 'isDismissible',
-            fieldLabel: __('Is Dismissible?', 'native-custom-fields'),
-            fieldHelpText: __('Whether the notice should be dismissible or not.', 'native-custom-fields'),
-            default: true
-        },
+        }
     ],
     dependencies: {
         relation: 'and',

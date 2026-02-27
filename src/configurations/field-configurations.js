@@ -94,6 +94,21 @@ export const fieldConfigurations = [
                     field: 'fieldType',
                     operator: '!==',
                     value: 'media_library'
+                },
+                {
+                    field: 'fieldType',
+                    operator: '!==',
+                    value: 'heading'
+                },
+                {
+                    field: 'fieldType',
+                    operator: '!==',
+                    value: 'text_highlight'
+                },
+                {
+                    field: 'fieldType',
+                    operator: '!==',
+                    value: 'notice'
                 }
             ]
         }

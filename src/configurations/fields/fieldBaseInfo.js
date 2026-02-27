@@ -75,6 +75,21 @@ const fieldBaseInfo = {
                 field: 'fieldType',
                 operator: '!==',
                 value: 'meta_box'
+            },
+            {
+                field: 'fieldType',
+                operator: '!==',
+                value: 'heading'
+            },
+            {
+                field: 'fieldType',
+                operator: '!==',
+                value: 'text_highlight'
+            },
+            {
+                field: 'fieldType',
+                operator: '!==',
+                value: 'notice'
             }
         ]
     }
