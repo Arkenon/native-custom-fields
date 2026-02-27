@@ -147,6 +147,15 @@ Built using official WordPress packages:
 * @wordpress/icons
 * @wordpress/data
 
+Assets:
+
+* All images located in the Admin/assets/images folder are self created and are licensed under CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
+
+Composer Packages:
+
+* PHP DI - Copyright (c) Matthieu Napoli
+
+
 == Source Code ==
 
 It is available on GitHub:
