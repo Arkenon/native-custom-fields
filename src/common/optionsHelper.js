@@ -161,12 +161,6 @@ export function useDynamicOptions(optionsString) {
 					const menus = select(coreStore).getEntityRecords('postType', 'wp_navigation', query);
 					if (!menus) loading = true;
 					combined = combined.concat(mapEntitiesToOptions('menus', menus || []));
-				} else if (source === 'roles') {
-					//TODO fix roles fetching - core data does not have a direct method for this
-					const roles = select(coreStore).getEntityRecords('root', 'options', {context: 'view'});
-					if (!roles) loading = true;
-					const allRoles = roles?.[0]?.roles ? Object.values(roles[0].roles) : [];
-					combined = combined.concat(mapEntitiesToOptions('roles', allRoles || []));
 				} else if (source === 'post_types') {
 					const postTypes = select(coreStore).getPostTypes(params || {});
 					if (!postTypes) loading = true;
