@@ -43,8 +43,8 @@ class FieldService
     public function getFieldTypes(): array
     {
         $types = [
-            ['value' => 'group', 'label' => __('Group', 'native-custom-fields-pro')],
-            ['value' => 'repeater', 'label' => __('Repeater', 'native-custom-fields-pro')],
+            ['value' => 'group', 'label' => __('Group', 'native-custom-fields')],
+            ['value' => 'repeater', 'label' => __('Repeater', 'native-custom-fields')],
             ['value' => 'input', 'label' => __('Input Control', 'native-custom-fields')],
             ['value' => 'text', 'label' => __('Text Control', 'native-custom-fields')],
             ['value' => 'number', 'label' => __('Number Control', 'native-custom-fields')],
