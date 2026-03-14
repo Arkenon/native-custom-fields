@@ -63,7 +63,9 @@ class PostMetaController {
 		register_rest_route( 'native-custom-fields/v1', 'post-meta/get-post-meta-config-by-post-type', [
 			'methods'             => 'GET',
 			'callback'            => [ $this, 'getPostMetaConfigByPostType' ],
-			'permission_callback' => '__return_true',
+			'permission_callback' => function () {
+				return current_user_can( 'edit_posts' );
+			},
 			'args'                => [
 				'post_type' => [
 					'required' => true,

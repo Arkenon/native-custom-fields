@@ -73,7 +73,9 @@ class OptionsController
         register_rest_route($this->routeNamespace, 'options/get-options-page-config-by-menu-slug', [
             'methods' => 'GET',
             'callback' => [$this, 'getOptionsPageConfigByMenuSlug'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
             'args' => [
                 'menu_slug' => [
                     'required' => true,

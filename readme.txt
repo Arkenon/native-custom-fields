@@ -4,7 +4,7 @@ Tags: custom fields, custom post type, meta box, gutenberg, block editor
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,6 +127,10 @@ No. Configuration is stored in wp_options, and data is stored in standard WordPr
 Yes. The plugin is built around the Block Editor architecture and uses native WordPress components.
 
 == Changelog ==
+
+= 1.0.1 =
+* Updated: Add PHP-DI Version to 7.1.1
+* Updated: Rest enpoint permissions in PostMetaController and OptionsController
 
 = 1.0.0 =
 * Initial public release
