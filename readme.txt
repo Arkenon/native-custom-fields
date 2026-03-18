@@ -4,7 +4,7 @@ Tags: custom fields, custom post type, meta box, gutenberg, block editor
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,6 +13,8 @@ Custom Content Types and Meta Fields built with WordPress native components. Mod
 == Description ==
 
 Native Custom Fields is a modern WordPress plugin for creating custom content types, meta fields, and options pages using WordPress’ own native component system.
+
+[youtube https://www.youtube.com/watch?v=M_HO8bI1eZA]
 
 Instead of shipping a proprietary UI framework or custom database structure, Native Custom Fields leverages WordPress core technologies such as:
 
@@ -85,8 +87,8 @@ Create field groups and attach them to:
 * Text Highlight
 
 Custom Components:
-* Repeater (Pro)
-* Group (Pro)
+* Repeater
+* Group
 
 = Developer-Friendly =
 * Built with PSR-4 autoloading
@@ -111,7 +113,7 @@ Custom Components:
 
 = Who is this plugin for? =
 
-Native Custom Fields is built primarily for WordPress developers, agencies, and advanced users who want full control over structured data while staying aligned with WordPress core standards.
+Native Custom Fields is built primarily for WordPress developers, agencies, and users who want full control over structured data while staying aligned with WordPress core standards.
 
 = How is this different from other custom field plugins? =
 
@@ -126,7 +128,23 @@ No. Configuration is stored in wp_options, and data is stored in standard WordPr
 
 Yes. The plugin is built around the Block Editor architecture and uses native WordPress components.
 
+= Do the free version have Repeater and Group fields? =
+
+Yes. The free version has Repeater and Group fields. These are custom components built using WordPress native components recursively or grouped.
+
+= What includes the Pro version? =
+
+* Import / Export via JSON or PHP
+* Options Page & Fields Builder
+* Frontend Forms (Such as Contact Form) (Coming Soon)
+* AI Integration with Abilities API & WordPress AI Client (Coming Soon)
+
+
 == Changelog ==
+
+= 1.0.2 =
+* Updated: Readme.txt
+* Updated: Dashboard screen
 
 = 1.0.1 =
 * Updated: Add PHP-DI Version to 7.1.1
@@ -134,12 +152,6 @@ Yes. The plugin is built around the Block Editor architecture and uses native Wo
 
 = 1.0.0 =
 * Initial public release
-* Custom Post Types support
-* Taxonomies support
-* Field Groups and Meta Fields
-* Options Pages
-* Import / Export system
-* Modern native admin UI
 
 == Credits ==
 
