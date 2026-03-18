@@ -1,4 +1,4 @@
-=== Native Custom Fields ===
+=== Native Custom Fields - Custom Content Types and Meta Fields ===
 Contributors: arkenon
 Tags: custom fields, custom post type, meta box, gutenberg, block editor
 Requires at least: 6.0
