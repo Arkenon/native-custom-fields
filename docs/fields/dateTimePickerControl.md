@@ -1,15 +1,15 @@
 ## PHP Field Configuration Reference
 
-### Alignment Matrix
+### Date Time Picker
 
-Use this config when `fieldType` is `alignment_matrix`.
+Use this config when `fieldType` is `date_time_picker`.
 
 
 #### 1) Base Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `fieldType` | Yes | `string` | `alignment_matrix` | `alignment_matrix` | Sets control type. |
+| `fieldType` | Yes | `string` | `date_time_picker` | `date_time_picker` | Sets control type. |
 | `name` | Yes | `string` |  |  | Sets control name. Use snake_case. |
 | `fieldLabel` | Yes | `string` |  |  | Sets control label. |
 | `required` | No | `bool` | `false` | `true`, `false` | Sets control required. |
@@ -21,37 +21,32 @@ Use this config when `fieldType` is `alignment_matrix`.
 | `fieldLabelTextTransform` | No | `string` | `uppercase` | `uppercase`, `capitalize`, `lowercase` | Sets control label text transform. |
 
 
-#### 2) Alignment Matrix Specific Parameters
+#### 2) Date Time Picker Specific Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `width` | No | `int` | `92` |  | Sets control width. |
-| `width` | No | `int` | `92` |  | Sets control default value. `center`
-`top center`
-`top right`
-`top left`
-`bottom center`
-`bottom right`
-`bottom left`
-`center left`
-`center center`
-`center right` |
+| `currentDate` | No | `string` |  |  | The current date and time at initialization. Use datetime-local format (e.g. `2024-01-15T10:30`). |
+| `dateOrder` | No | `string` | `dmy` | `dmy`, `mdy`, `ymd` | The order of day, month, and year. This prop overrides the time format determined by is12Hour prop. |
+| `startOfWeek` | No | `int` | `0` | `0`, `1`, `2`, `3`, `4`, `5`, `6` | The day that the week should start on. 0 for Sunday, 1 for Monday, etc. |
+| `is12Hour` | No | `bool` | `false` | `true`, `false` | Whether to use a 12-hour clock. With a 12-hour clock, an AM/PM widget is displayed and the time format is assumed to be MM-DD-YYYY. |
 
 #### 3) PHP Array Schema
-Here is an example of how to use the alignment matrix control in a post meta configuration:
+Here is an example of how to use the date time picker control in a post meta configuration:
 [
-    'fieldType' => 'alignment_matrix',
-    'name' => 'content_alignment',
-    'fieldLabel' => 'Content Alignment',
-    'default' => 'center center',
+    'fieldType' => 'date_time_picker',
+    'name' => 'post_date_time_picker',
+    'fieldLabel' => 'Post Date Time Picker',
     'required' => false,
     'disabled' => false,
     'hideLabelFromVision' => false,
-    'fieldHelpText' => 'Choose alignment.',
+    'fieldHelpText' => 'Select a date and time.',
     'className' => 'custom-class',
     'fieldLabelPosition' => 'top',
     'fieldLabelTextTransform' => 'uppercase',
-    'width' => 92,
+    'currentDate' => '',
+    'dateOrder' => 'dmy',
+    'startOfWeek' => 0,
+    'is12Hour' => false,
 ]
 
 #### 3) Hook-Based Example (Post Meta Config)
@@ -75,24 +70,26 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
     }
 
     $configs[ $post_type ]['sections'][] = [
-        'meta_box_id'       => 'layout_settings',
-        'meta_box_title'    => 'Layout Settings',
+        'meta_box_id'       => 'post_options',
+        'meta_box_title'    => 'Post Options',
         'meta_box_context'  => 'side',
         'meta_box_priority' => 'default',
         'fields'            => [
             [
-            'fieldType' => 'alignment_matrix',
-            'name' => 'content_alignment',
-            'fieldLabel' => 'Content Alignment',
-            'default' => 'center center',
+            'fieldType' => 'date_time_picker',
+            'name' => 'post_date_time_picker',
+            'fieldLabel' => 'Post Date Time Picker',
             'required' => false,
             'disabled' => false,
             'hideLabelFromVision' => false,
-            'fieldHelpText' => 'Choose alignment.',
+            'fieldHelpText' => 'Select a date and time.',
             'className' => 'custom-class',
             'fieldLabelPosition' => 'top',
             'fieldLabelTextTransform' => 'uppercase',
-            'width' => 92,
+            'currentDate' => '',
+            'dateOrder' => 'dmy',
+            'startOfWeek' => 0,
+            'is12Hour' => false,
             ],
         ],
     ];
@@ -105,4 +102,4 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
 | Field Type | Meta Value Type |
 |---|---|
-| alignment_matrix | string (for example "center center") |
+| date_time_picker | string (ISO datetime string, for example `"2024-01-15T10:30:00"`) |

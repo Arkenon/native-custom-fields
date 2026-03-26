@@ -1,17 +1,18 @@
 ## PHP Field Configuration Reference
 
-### Alignment Matrix
+### Color Picker
 
-Use this config when `fieldType` is `alignment_matrix`.
+Use this config when `fieldType` is `color_picker`.
 
 
 #### 1) Base Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `fieldType` | Yes | `string` | `alignment_matrix` | `alignment_matrix` | Sets control type. |
+| `fieldType` | Yes | `string` | `color_picker` | `color_picker` | Sets control type. |
 | `name` | Yes | `string` |  |  | Sets control name. Use snake_case. |
 | `fieldLabel` | Yes | `string` |  |  | Sets control label. |
+| `default` | No | `string` |  |  | Sets control default value. |
 | `required` | No | `bool` | `false` | `true`, `false` | Sets control required. |
 | `disabled` | No | `bool` | `false` | `true`, `false` | Sets control disabled. |
 | `hideLabelFromVision` | No | `bool` | `false` | `true`, `false` | Sets control hide label from vision. |
@@ -21,37 +22,30 @@ Use this config when `fieldType` is `alignment_matrix`.
 | `fieldLabelTextTransform` | No | `string` | `uppercase` | `uppercase`, `capitalize`, `lowercase` | Sets control label text transform. |
 
 
-#### 2) Alignment Matrix Specific Parameters
+#### 2) Color Picker Specific Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `width` | No | `int` | `92` |  | Sets control width. |
-| `width` | No | `int` | `92` |  | Sets control default value. `center`
-`top center`
-`top right`
-`top left`
-`bottom center`
-`bottom right`
-`bottom left`
-`center left`
-`center center`
-`center right` |
+| `color` | No | `string` |  |  | The current color value to display in the picker. Must be a hex or hex8 string. |
+| `enableAlpha` | No | `bool` | `false` | `true`, `false` | When true the color picker will display the alpha channel both in the bottom inputs as well as in the color picker itself. |
+| `copyFormat` | No | `string` | `hex` | `hex`, `hsl`, `rgb` | The format to copy when clicking the displayed color format. |
 
 #### 3) PHP Array Schema
-Here is an example of how to use the alignment matrix control in a post meta configuration:
+Here is an example of how to use the color picker control in a post meta configuration:
 [
-    'fieldType' => 'alignment_matrix',
-    'name' => 'content_alignment',
-    'fieldLabel' => 'Content Alignment',
-    'default' => 'center center',
+    'fieldType' => 'color_picker',
+    'name' => 'post_color_picker',
+    'fieldLabel' => 'Post Color Picker',
     'required' => false,
     'disabled' => false,
     'hideLabelFromVision' => false,
-    'fieldHelpText' => 'Choose alignment.',
+    'fieldHelpText' => 'Select a color.',
     'className' => 'custom-class',
     'fieldLabelPosition' => 'top',
     'fieldLabelTextTransform' => 'uppercase',
-    'width' => 92,
+    'color' => '#72aee6',
+    'enableAlpha' => false,
+    'copyFormat' => 'hex',
 ]
 
 #### 3) Hook-Based Example (Post Meta Config)
@@ -75,24 +69,25 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
     }
 
     $configs[ $post_type ]['sections'][] = [
-        'meta_box_id'       => 'layout_settings',
-        'meta_box_title'    => 'Layout Settings',
+        'meta_box_id'       => 'design_settings',
+        'meta_box_title'    => 'Design Settings',
         'meta_box_context'  => 'side',
         'meta_box_priority' => 'default',
         'fields'            => [
             [
-            'fieldType' => 'alignment_matrix',
-            'name' => 'content_alignment',
-            'fieldLabel' => 'Content Alignment',
-            'default' => 'center center',
+            'fieldType' => 'color_picker',
+            'name' => 'post_color_picker',
+            'fieldLabel' => 'Post Color Picker',
             'required' => false,
             'disabled' => false,
             'hideLabelFromVision' => false,
-            'fieldHelpText' => 'Choose alignment.',
+            'fieldHelpText' => 'Select a color.',
             'className' => 'custom-class',
             'fieldLabelPosition' => 'top',
             'fieldLabelTextTransform' => 'uppercase',
-            'width' => 92,
+            'color' => '#72aee6',
+            'enableAlpha' => false,
+            'copyFormat' => 'hex',
             ],
         ],
     ];
@@ -105,4 +100,4 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
 | Field Type | Meta Value Type |
 |---|---|
-| alignment_matrix | string (for example "center center") |
+| color_picker | string (hex color code, for example `"#72aee6"`) |

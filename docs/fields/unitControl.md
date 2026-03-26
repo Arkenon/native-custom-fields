@@ -1,17 +1,18 @@
 ## PHP Field Configuration Reference
 
-### Alignment Matrix
+### Unit
 
-Use this config when `fieldType` is `alignment_matrix`.
+Use this config when `fieldType` is `unit`.
 
 
 #### 1) Base Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `fieldType` | Yes | `string` | `alignment_matrix` | `alignment_matrix` | Sets control type. |
+| `fieldType` | Yes | `string` | `unit` | `unit` | Sets control type. |
 | `name` | Yes | `string` |  |  | Sets control name. Use snake_case. |
 | `fieldLabel` | Yes | `string` |  |  | Sets control label. |
+| `default` | No | `string` |  |  | Sets control default value. |
 | `required` | No | `bool` | `false` | `true`, `false` | Sets control required. |
 | `disabled` | No | `bool` | `false` | `true`, `false` | Sets control disabled. |
 | `hideLabelFromVision` | No | `bool` | `false` | `true`, `false` | Sets control hide label from vision. |
@@ -21,37 +22,34 @@ Use this config when `fieldType` is `alignment_matrix`.
 | `fieldLabelTextTransform` | No | `string` | `uppercase` | `uppercase`, `capitalize`, `lowercase` | Sets control label text transform. |
 
 
-#### 2) Alignment Matrix Specific Parameters
+#### 2) Unit Specific Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `width` | No | `int` | `92` |  | Sets control width. |
-| `width` | No | `int` | `92` |  | Sets control default value. `center`
-`top center`
-`top right`
-`top left`
-`bottom center`
-`bottom right`
-`bottom left`
-`center left`
-`center center`
-`center right` |
+| `size` | No | `string` | `default` | `default`, `small` | Adjusts the size of the input. |
+| `disableUnits` | No | `bool` | `false` | `true`, `false` | If true, the unit selector is hidden. |
+| `isPressEnterToChange` | No | `bool` | `false` | `true`, `false` | If true, the ENTER key press is required to trigger an onChange. A change is also triggered on blur. |
+| `isResetValueOnUnitChange` | No | `bool` | `false` | `true`, `false` | If true, and the selected unit provides a default value, this value is set when changing units. |
+| `isUnitSelectTabbable` | No | `bool` | `true` | `true`, `false` | Determines if the unit select is tabbable. |
 
 #### 3) PHP Array Schema
-Here is an example of how to use the alignment matrix control in a post meta configuration:
+Here is an example of how to use the unit control in a post meta configuration:
 [
-    'fieldType' => 'alignment_matrix',
-    'name' => 'content_alignment',
-    'fieldLabel' => 'Content Alignment',
-    'default' => 'center center',
+    'fieldType' => 'unit',
+    'name' => 'post_unit',
+    'fieldLabel' => 'Post Unit',
     'required' => false,
     'disabled' => false,
     'hideLabelFromVision' => false,
-    'fieldHelpText' => 'Choose alignment.',
+    'fieldHelpText' => 'Enter a value with unit.',
     'className' => 'custom-class',
     'fieldLabelPosition' => 'top',
     'fieldLabelTextTransform' => 'uppercase',
-    'width' => 92,
+    'size' => 'default',
+    'disableUnits' => false,
+    'isPressEnterToChange' => false,
+    'isResetValueOnUnitChange' => false,
+    'isUnitSelectTabbable' => true,
 ]
 
 #### 3) Hook-Based Example (Post Meta Config)
@@ -75,24 +73,27 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
     }
 
     $configs[ $post_type ]['sections'][] = [
-        'meta_box_id'       => 'layout_settings',
-        'meta_box_title'    => 'Layout Settings',
+        'meta_box_id'       => 'design_settings',
+        'meta_box_title'    => 'Design Settings',
         'meta_box_context'  => 'side',
         'meta_box_priority' => 'default',
         'fields'            => [
             [
-            'fieldType' => 'alignment_matrix',
-            'name' => 'content_alignment',
-            'fieldLabel' => 'Content Alignment',
-            'default' => 'center center',
+            'fieldType' => 'unit',
+            'name' => 'post_unit',
+            'fieldLabel' => 'Post Unit',
             'required' => false,
             'disabled' => false,
             'hideLabelFromVision' => false,
-            'fieldHelpText' => 'Choose alignment.',
+            'fieldHelpText' => 'Enter a value with unit.',
             'className' => 'custom-class',
             'fieldLabelPosition' => 'top',
             'fieldLabelTextTransform' => 'uppercase',
-            'width' => 92,
+            'size' => 'default',
+            'disableUnits' => false,
+            'isPressEnterToChange' => false,
+            'isResetValueOnUnitChange' => false,
+            'isUnitSelectTabbable' => true,
             ],
         ],
     ];
@@ -105,4 +106,4 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
 | Field Type | Meta Value Type |
 |---|---|
-| alignment_matrix | string (for example "center center") |
+| unit | string (value with unit, for example `"10px"`) |

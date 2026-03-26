@@ -1,19 +1,19 @@
 ## PHP Field Configuration Reference
 
-### Alignment Matrix
+### Group
 
-Use this config when `fieldType` is `alignment_matrix`.
+Use this config when `fieldType` is `group`.
+
+A group is a container field that visually groups other fields together. It does not store its own meta value, but the fields it contains do.
 
 
 #### 1) Base Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `fieldType` | Yes | `string` | `alignment_matrix` | `alignment_matrix` | Sets control type. |
+| `fieldType` | Yes | `string` | `group` | `group` | Sets control type. |
 | `name` | Yes | `string` |  |  | Sets control name. Use snake_case. |
 | `fieldLabel` | Yes | `string` |  |  | Sets control label. |
-| `required` | No | `bool` | `false` | `true`, `false` | Sets control required. |
-| `disabled` | No | `bool` | `false` | `true`, `false` | Sets control disabled. |
 | `hideLabelFromVision` | No | `bool` | `false` | `true`, `false` | Sets control hide label from vision. |
 | `fieldHelpText` | No | `string` |  |  | Sets control help text. |
 | `className` | No | `string` |  |  | Sets control css class name. |
@@ -21,37 +21,32 @@ Use this config when `fieldType` is `alignment_matrix`.
 | `fieldLabelTextTransform` | No | `string` | `uppercase` | `uppercase`, `capitalize`, `lowercase` | Sets control label text transform. |
 
 
-#### 2) Alignment Matrix Specific Parameters
+#### 2) Group Specific Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `width` | No | `int` | `92` |  | Sets control width. |
-| `width` | No | `int` | `92` |  | Sets control default value. `center`
-`top center`
-`top right`
-`top left`
-`bottom center`
-`bottom right`
-`bottom left`
-`center left`
-`center center`
-`center right` |
+| `layout` | No | `string` | `flex` | `flex`, `grid` | Select layout of the Group field. |
+| `columns` | No | `int` | `3` |  | Column count for grid layout. Only used when layout is `grid`. |
+| `direction` | No | `string` | `columnRow` | `row`, `columnRow`, `column` | Flex direction. `columnRow` is a responsive row that stacks on small screens. Only used when layout is `flex`. |
+| `justify` | No | `string` | `space-between` | `flex-start`, `center`, `flex-end`, `space-between`, `space-around`, `space-evenly` | Justify content alignment. Only used when layout is `flex` and direction is not `column`. |
 
 #### 3) PHP Array Schema
-Here is an example of how to use the alignment matrix control in a post meta configuration:
+Here is an example of how to use the group control in a post meta configuration:
 [
-    'fieldType' => 'alignment_matrix',
-    'name' => 'content_alignment',
-    'fieldLabel' => 'Content Alignment',
-    'default' => 'center center',
-    'required' => false,
-    'disabled' => false,
+    'fieldType' => 'group',
+    'name' => 'post_group',
+    'fieldLabel' => 'Post Group',
     'hideLabelFromVision' => false,
-    'fieldHelpText' => 'Choose alignment.',
+    'fieldHelpText' => 'Group of related fields.',
     'className' => 'custom-class',
     'fieldLabelPosition' => 'top',
     'fieldLabelTextTransform' => 'uppercase',
-    'width' => 92,
+    'layout' => 'flex',
+    'direction' => 'columnRow',
+    'justify' => 'space-between',
+    'fields' => [
+        // child fields go here
+    ],
 ]
 
 #### 3) Hook-Based Example (Post Meta Config)
@@ -75,24 +70,30 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
     }
 
     $configs[ $post_type ]['sections'][] = [
-        'meta_box_id'       => 'layout_settings',
-        'meta_box_title'    => 'Layout Settings',
-        'meta_box_context'  => 'side',
+        'meta_box_id'       => 'post_options',
+        'meta_box_title'    => 'Post Options',
+        'meta_box_context'  => 'normal',
         'meta_box_priority' => 'default',
         'fields'            => [
             [
-            'fieldType' => 'alignment_matrix',
-            'name' => 'content_alignment',
-            'fieldLabel' => 'Content Alignment',
-            'default' => 'center center',
-            'required' => false,
-            'disabled' => false,
+            'fieldType' => 'group',
+            'name' => 'post_group',
+            'fieldLabel' => 'Post Group',
             'hideLabelFromVision' => false,
-            'fieldHelpText' => 'Choose alignment.',
+            'fieldHelpText' => 'Group of related fields.',
             'className' => 'custom-class',
             'fieldLabelPosition' => 'top',
             'fieldLabelTextTransform' => 'uppercase',
-            'width' => 92,
+            'layout' => 'flex',
+            'direction' => 'columnRow',
+            'justify' => 'space-between',
+            'fields' => [
+                [
+                    'fieldType' => 'text',
+                    'name' => 'child_text_field',
+                    'fieldLabel' => 'Child Text Field',
+                ],
+            ],
             ],
         ],
     ];
@@ -105,4 +106,4 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
 | Field Type | Meta Value Type |
 |---|---|
-| alignment_matrix | string (for example "center center") |
+| group | N/A (container field — child fields store their own meta values individually) |

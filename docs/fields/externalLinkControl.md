@@ -1,19 +1,19 @@
 ## PHP Field Configuration Reference
 
-### Alignment Matrix
+### External Link
 
-Use this config when `fieldType` is `alignment_matrix`.
+Use this config when `fieldType` is `external_link`.
+
+This is a display-only component that renders a clickable external link. It does not store user input as meta.
 
 
 #### 1) Base Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `fieldType` | Yes | `string` | `alignment_matrix` | `alignment_matrix` | Sets control type. |
+| `fieldType` | Yes | `string` | `external_link` | `external_link` | Sets control type. |
 | `name` | Yes | `string` |  |  | Sets control name. Use snake_case. |
 | `fieldLabel` | Yes | `string` |  |  | Sets control label. |
-| `required` | No | `bool` | `false` | `true`, `false` | Sets control required. |
-| `disabled` | No | `bool` | `false` | `true`, `false` | Sets control disabled. |
 | `hideLabelFromVision` | No | `bool` | `false` | `true`, `false` | Sets control hide label from vision. |
 | `fieldHelpText` | No | `string` |  |  | Sets control help text. |
 | `className` | No | `string` |  |  | Sets control css class name. |
@@ -21,37 +21,26 @@ Use this config when `fieldType` is `alignment_matrix`.
 | `fieldLabelTextTransform` | No | `string` | `uppercase` | `uppercase`, `capitalize`, `lowercase` | Sets control label text transform. |
 
 
-#### 2) Alignment Matrix Specific Parameters
+#### 2) External Link Specific Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `width` | No | `int` | `92` |  | Sets control width. |
-| `width` | No | `int` | `92` |  | Sets control default value. `center`
-`top center`
-`top right`
-`top left`
-`bottom center`
-`bottom right`
-`bottom left`
-`center left`
-`center center`
-`center right` |
+| `children` | No | `string` |  |  | The content to be displayed within the link. |
+| `href` | No | `string` |  |  | The URL of the external resource. |
 
 #### 3) PHP Array Schema
-Here is an example of how to use the alignment matrix control in a post meta configuration:
+Here is an example of how to use the external link control in a post meta configuration:
 [
-    'fieldType' => 'alignment_matrix',
-    'name' => 'content_alignment',
-    'fieldLabel' => 'Content Alignment',
-    'default' => 'center center',
-    'required' => false,
-    'disabled' => false,
+    'fieldType' => 'external_link',
+    'name' => 'post_external_link',
+    'fieldLabel' => 'Documentation',
     'hideLabelFromVision' => false,
-    'fieldHelpText' => 'Choose alignment.',
+    'fieldHelpText' => 'Link to external resource.',
     'className' => 'custom-class',
     'fieldLabelPosition' => 'top',
     'fieldLabelTextTransform' => 'uppercase',
-    'width' => 92,
+    'children' => 'View Documentation',
+    'href' => 'https://example.com/docs',
 ]
 
 #### 3) Hook-Based Example (Post Meta Config)
@@ -75,24 +64,22 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
     }
 
     $configs[ $post_type ]['sections'][] = [
-        'meta_box_id'       => 'layout_settings',
-        'meta_box_title'    => 'Layout Settings',
+        'meta_box_id'       => 'post_options',
+        'meta_box_title'    => 'Post Options',
         'meta_box_context'  => 'side',
         'meta_box_priority' => 'default',
         'fields'            => [
             [
-            'fieldType' => 'alignment_matrix',
-            'name' => 'content_alignment',
-            'fieldLabel' => 'Content Alignment',
-            'default' => 'center center',
-            'required' => false,
-            'disabled' => false,
+            'fieldType' => 'external_link',
+            'name' => 'post_external_link',
+            'fieldLabel' => 'Documentation',
             'hideLabelFromVision' => false,
-            'fieldHelpText' => 'Choose alignment.',
+            'fieldHelpText' => 'Link to external resource.',
             'className' => 'custom-class',
             'fieldLabelPosition' => 'top',
             'fieldLabelTextTransform' => 'uppercase',
-            'width' => 92,
+            'children' => 'View Documentation',
+            'href' => 'https://example.com/docs',
             ],
         ],
     ];
@@ -105,4 +92,4 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
 | Field Type | Meta Value Type |
 |---|---|
-| alignment_matrix | string (for example "center center") |
+| external_link | N/A (display-only component, no meta value stored) |

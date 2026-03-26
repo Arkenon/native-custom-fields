@@ -1,17 +1,18 @@
 ## PHP Field Configuration Reference
 
-### Alignment Matrix
+### Number
 
-Use this config when `fieldType` is `alignment_matrix`.
+Use this config when `fieldType` is `number`.
 
 
 #### 1) Base Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `fieldType` | Yes | `string` | `alignment_matrix` | `alignment_matrix` | Sets control type. |
+| `fieldType` | Yes | `string` | `number` | `number` | Sets control type. |
 | `name` | Yes | `string` |  |  | Sets control name. Use snake_case. |
 | `fieldLabel` | Yes | `string` |  |  | Sets control label. |
+| `default` | No | `string` |  |  | Sets control default value. |
 | `required` | No | `bool` | `false` | `true`, `false` | Sets control required. |
 | `disabled` | No | `bool` | `false` | `true`, `false` | Sets control disabled. |
 | `hideLabelFromVision` | No | `bool` | `false` | `true`, `false` | Sets control hide label from vision. |
@@ -21,37 +22,39 @@ Use this config when `fieldType` is `alignment_matrix`.
 | `fieldLabelTextTransform` | No | `string` | `uppercase` | `uppercase`, `capitalize`, `lowercase` | Sets control label text transform. |
 
 
-#### 2) Alignment Matrix Specific Parameters
+#### 2) Number Specific Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `width` | No | `int` | `92` |  | Sets control width. |
-| `width` | No | `int` | `92` |  | Sets control default value. `center`
-`top center`
-`top right`
-`top left`
-`bottom center`
-`bottom right`
-`bottom left`
-`center left`
-`center center`
-`center right` |
+| `min` | No | `int` |  |  | Minimum value for the field. Default is -infinity. |
+| `max` | No | `int` |  |  | Maximum value for the field. Default is infinity. |
+| `step` | No | `int` | `1` |  | Amount by which the value is changed when incrementing/decrementing. |
+| `shiftStep` | No | `int` |  |  | Amount to increment by when the SHIFT key is held down. Default is 10. |
+| `dragDirection` | No | `string` | `n` | `n`, `e`, `s`, `w` | Determines the drag axis to increment/decrement the value. |
+| `spinControls` | No | `string` | `native` | `native`, `custom`, `none` | The type of spin controls to display. |
+| `isShiftStepEnabled` | No | `bool` | `true` | `true`, `false` | If true, pressing UP or DOWN with the SHIFT key will increment by shiftStep value. |
+| `isDragEnabled` | No | `bool` | `false` | `true`, `false` | If true, enables mouse drag gesture to increment/decrement the number value. |
+| `dragThreshold` | No | `int` |  |  | The amount of px to drag before the value changes. Only relevant if isDragEnabled is true. |
 
 #### 3) PHP Array Schema
-Here is an example of how to use the alignment matrix control in a post meta configuration:
+Here is an example of how to use the number control in a post meta configuration:
 [
-    'fieldType' => 'alignment_matrix',
-    'name' => 'content_alignment',
-    'fieldLabel' => 'Content Alignment',
-    'default' => 'center center',
+    'fieldType' => 'number',
+    'name' => 'post_number',
+    'fieldLabel' => 'Post Number',
     'required' => false,
     'disabled' => false,
     'hideLabelFromVision' => false,
-    'fieldHelpText' => 'Choose alignment.',
+    'fieldHelpText' => 'Enter a numeric value.',
     'className' => 'custom-class',
     'fieldLabelPosition' => 'top',
     'fieldLabelTextTransform' => 'uppercase',
-    'width' => 92,
+    'min' => 0,
+    'max' => 100,
+    'step' => 1,
+    'spinControls' => 'native',
+    'isShiftStepEnabled' => true,
+    'isDragEnabled' => false,
 ]
 
 #### 3) Hook-Based Example (Post Meta Config)
@@ -75,24 +78,28 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
     }
 
     $configs[ $post_type ]['sections'][] = [
-        'meta_box_id'       => 'layout_settings',
-        'meta_box_title'    => 'Layout Settings',
+        'meta_box_id'       => 'post_options',
+        'meta_box_title'    => 'Post Options',
         'meta_box_context'  => 'side',
         'meta_box_priority' => 'default',
         'fields'            => [
             [
-            'fieldType' => 'alignment_matrix',
-            'name' => 'content_alignment',
-            'fieldLabel' => 'Content Alignment',
-            'default' => 'center center',
+            'fieldType' => 'number',
+            'name' => 'post_number',
+            'fieldLabel' => 'Post Number',
             'required' => false,
             'disabled' => false,
             'hideLabelFromVision' => false,
-            'fieldHelpText' => 'Choose alignment.',
+            'fieldHelpText' => 'Enter a numeric value.',
             'className' => 'custom-class',
             'fieldLabelPosition' => 'top',
             'fieldLabelTextTransform' => 'uppercase',
-            'width' => 92,
+            'min' => 0,
+            'max' => 100,
+            'step' => 1,
+            'spinControls' => 'native',
+            'isShiftStepEnabled' => true,
+            'isDragEnabled' => false,
             ],
         ],
     ];
@@ -105,4 +112,4 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
 | Field Type | Meta Value Type |
 |---|---|
-| alignment_matrix | string (for example "center center") |
+| number | string (numeric value stored as string, for example `"42"`) |

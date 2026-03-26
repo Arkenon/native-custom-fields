@@ -1,15 +1,17 @@
 ## PHP Field Configuration Reference
 
-### Alignment Matrix
+### Repeater
 
-Use this config when `fieldType` is `alignment_matrix`.
+Use this config when `fieldType` is `repeater`.
+
+A repeater allows users to add multiple rows of grouped fields. Each row can contain any supported field types.
 
 
 #### 1) Base Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `fieldType` | Yes | `string` | `alignment_matrix` | `alignment_matrix` | Sets control type. |
+| `fieldType` | Yes | `string` | `repeater` | `repeater` | Sets control type. |
 | `name` | Yes | `string` |  |  | Sets control name. Use snake_case. |
 | `fieldLabel` | Yes | `string` |  |  | Sets control label. |
 | `required` | No | `bool` | `false` | `true`, `false` | Sets control required. |
@@ -21,37 +23,36 @@ Use this config when `fieldType` is `alignment_matrix`.
 | `fieldLabelTextTransform` | No | `string` | `uppercase` | `uppercase`, `capitalize`, `lowercase` | Sets control label text transform. |
 
 
-#### 2) Alignment Matrix Specific Parameters
+#### 2) Repeater Specific Parameters
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `width` | No | `int` | `92` |  | Sets control width. |
-| `width` | No | `int` | `92` |  | Sets control default value. `center`
-`top center`
-`top right`
-`top left`
-`bottom center`
-`bottom right`
-`bottom left`
-`center left`
-`center center`
-`center right` |
+| `layout` | No | `string` | `table` | `table`, `panel` | Set repeater layout. |
+| `addButtonText` | No | `string` | `Add Item` |  | Text for the add new item button. |
+| `min` | No | `int` | `0` |  | Minimum number of items allowed. |
+| `max` | No | `int` | `50` |  | Maximum number of items allowed. |
+| `initialOpen` | No | `bool` | `false` | `true`, `false` | Whether repeater item panels are open initially. Only used when layout is `panel`. |
 
 #### 3) PHP Array Schema
-Here is an example of how to use the alignment matrix control in a post meta configuration:
+Here is an example of how to use the repeater control in a post meta configuration:
 [
-    'fieldType' => 'alignment_matrix',
-    'name' => 'content_alignment',
-    'fieldLabel' => 'Content Alignment',
-    'default' => 'center center',
+    'fieldType' => 'repeater',
+    'name' => 'post_repeater',
+    'fieldLabel' => 'Post Repeater',
     'required' => false,
     'disabled' => false,
     'hideLabelFromVision' => false,
-    'fieldHelpText' => 'Choose alignment.',
+    'fieldHelpText' => 'Add multiple items.',
     'className' => 'custom-class',
     'fieldLabelPosition' => 'top',
     'fieldLabelTextTransform' => 'uppercase',
-    'width' => 92,
+    'layout' => 'table',
+    'addButtonText' => 'Add Item',
+    'min' => 0,
+    'max' => 50,
+    'fields' => [
+        // child fields go here
+    ],
 ]
 
 #### 3) Hook-Based Example (Post Meta Config)
@@ -75,24 +76,38 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
     }
 
     $configs[ $post_type ]['sections'][] = [
-        'meta_box_id'       => 'layout_settings',
-        'meta_box_title'    => 'Layout Settings',
-        'meta_box_context'  => 'side',
+        'meta_box_id'       => 'post_options',
+        'meta_box_title'    => 'Post Options',
+        'meta_box_context'  => 'normal',
         'meta_box_priority' => 'default',
         'fields'            => [
             [
-            'fieldType' => 'alignment_matrix',
-            'name' => 'content_alignment',
-            'fieldLabel' => 'Content Alignment',
-            'default' => 'center center',
+            'fieldType' => 'repeater',
+            'name' => 'post_repeater',
+            'fieldLabel' => 'Post Repeater',
             'required' => false,
             'disabled' => false,
             'hideLabelFromVision' => false,
-            'fieldHelpText' => 'Choose alignment.',
+            'fieldHelpText' => 'Add multiple items.',
             'className' => 'custom-class',
             'fieldLabelPosition' => 'top',
             'fieldLabelTextTransform' => 'uppercase',
-            'width' => 92,
+            'layout' => 'table',
+            'addButtonText' => 'Add Item',
+            'min' => 0,
+            'max' => 50,
+            'fields' => [
+                [
+                    'fieldType' => 'text',
+                    'name' => 'item_title',
+                    'fieldLabel' => 'Title',
+                ],
+                [
+                    'fieldType' => 'textarea',
+                    'name' => 'item_description',
+                    'fieldLabel' => 'Description',
+                ],
+            ],
             ],
         ],
     ];
@@ -105,4 +120,4 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
 | Field Type | Meta Value Type |
 |---|---|
-| alignment_matrix | string (for example "center center") |
+| repeater | string (serialized JSON array of row objects, for example `[{"item_title":"Row 1","item_description":"Description 1"},{"item_title":"Row 2","item_description":"Description 2"}]`) |
