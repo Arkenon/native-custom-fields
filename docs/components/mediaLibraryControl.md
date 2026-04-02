@@ -30,6 +30,7 @@ Use this config when `fieldType` is `media_library`.
 
 #### 3) PHP Array Schema
 Here is an example of how to use the media library control in a post meta configuration:
+```php
 [
     'fieldType' => 'media_library',
     'name' => 'post_media_library',
@@ -44,6 +45,7 @@ Here is an example of how to use the media library control in a post meta config
     'allowedTypes' => '["image"]',
     'multiple' => false,
 ]
+```
 
 #### 3) Hook-Based Example (Post Meta Config)
 
@@ -55,6 +57,7 @@ Available hooks:
 - native_custom_fields_user_meta_fields
 - native_custom_fields_options_page_fields
 
+```php
 add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ): array {
     $post_type = 'book';
 
@@ -90,6 +93,7 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
     return $configs;
 } );
+```
 
 
 #### 4) Stored Value Type

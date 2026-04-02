@@ -25,6 +25,7 @@ This is a display-only component that renders a text string with highlighted occ
 
 #### 3) PHP Array Schema
 Here is an example of how to use the text highlight control in a post meta configuration:
+```php
 [
     'fieldType' => 'text_highlight',
     'name' => 'post_text_highlight',
@@ -32,6 +33,7 @@ Here is an example of how to use the text highlight control in a post meta confi
     'text' => 'The quick brown fox jumps over the lazy dog.',
     'highlight' => 'fox',
 ]
+```
 
 #### 3) Hook-Based Example (Post Meta Config)
 
@@ -43,6 +45,7 @@ Available hooks:
 - native_custom_fields_user_meta_fields
 - native_custom_fields_options_page_fields
 
+```php
 add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ): array {
     $post_type = 'book';
 
@@ -71,6 +74,7 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
     return $configs;
 } );
+```
 
 
 #### 4) Stored Value Type

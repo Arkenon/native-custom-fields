@@ -30,6 +30,7 @@ This is a display-only component that renders a clickable external link. It does
 
 #### 3) PHP Array Schema
 Here is an example of how to use the external link control in a post meta configuration:
+```php
 [
     'fieldType' => 'external_link',
     'name' => 'post_external_link',
@@ -42,6 +43,7 @@ Here is an example of how to use the external link control in a post meta config
     'children' => 'View Documentation',
     'href' => 'https://example.com/docs',
 ]
+```
 
 #### 3) Hook-Based Example (Post Meta Config)
 
@@ -53,6 +55,7 @@ Available hooks:
 - native_custom_fields_user_meta_fields
 - native_custom_fields_options_page_fields
 
+```php
 add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ): array {
     $post_type = 'book';
 
@@ -86,6 +89,7 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
     return $configs;
 } );
+```
 
 
 #### 4) Stored Value Type

@@ -36,6 +36,7 @@ Use this config when `fieldType` is `border_box`.
 
 #### 3) PHP Array Schema
 Here is an example of how to use the border box control in a post meta configuration:
+```php
 [
     'fieldType' => 'border_box',
     'name' => 'post_border_box',
@@ -55,6 +56,7 @@ Here is an example of how to use the border box control in a post meta configura
     'enableStyle' => true,
     'colors' => '[{"color": "#72aee6", "name": "Blue 20"}, {"color": "#3582c4", "name": "Blue 40"}]',
 ]
+```
 
 #### 3) Hook-Based Example (Post Meta Config)
 
@@ -66,6 +68,7 @@ Available hooks:
 - native_custom_fields_user_meta_fields
 - native_custom_fields_options_page_fields
 
+```php
 add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ): array {
     $post_type = 'book';
 
@@ -106,6 +109,7 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
     return $configs;
 } );
+```
 
 
 #### 4) Stored Value Type

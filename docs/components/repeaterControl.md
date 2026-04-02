@@ -35,6 +35,7 @@ A repeater allows users to add multiple rows of grouped fields. Each row can con
 
 #### 3) PHP Array Schema
 Here is an example of how to use the repeater control in a post meta configuration:
+```php
 [
     'fieldType' => 'repeater',
     'name' => 'post_repeater',
@@ -54,6 +55,7 @@ Here is an example of how to use the repeater control in a post meta configurati
         // child fields go here
     ],
 ]
+```
 
 #### 3) Hook-Based Example (Post Meta Config)
 
@@ -65,6 +67,7 @@ Available hooks:
 - native_custom_fields_user_meta_fields
 - native_custom_fields_options_page_fields
 
+```php
 add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ): array {
     $post_type = 'book';
 
@@ -114,6 +117,7 @@ add_filter( 'native_custom_fields_post_meta_fields', function( array $configs ):
 
     return $configs;
 } );
+```
 
 
 #### 4) Stored Value Type
