@@ -26,16 +26,7 @@ Use this config when `fieldType` is `alignment_matrix`.
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
 | `width` | No | `int` | `92` |  | Sets control width. |
-| `width` | No | `int` | `92` |  | Sets control default value. `center`
-`top center`
-`top right`
-`top left`
-`bottom center`
-`bottom right`
-`bottom left`
-`center left`
-`center center`
-`center right` |
+| `default` | No | `string` |  | `center`, `top center`, `top right`,`top left`,`bottom center`,`bottom right`,`bottom left`,`center left`,`center center`,`center right` | Sets control default value. |
 
 #### 3) PHP Array Schema
 Here is an example of how to use the alignment matrix control in a post meta configuration:
