@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Additional Plugin Constants
  * (Base constant defined in the main plugin php file)
@@ -9,9 +10,10 @@
 
 namespace NativeCustomFields\Common;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class Constants {
+class Constants
+{
 	public const NAME = 'native_custom_fields';
 	public const INCLUDES_PATH = NATIVE_CUSTOM_FIELDS_PATH . 'includes/';
 	public const INCLUDES_URL = NATIVE_CUSTOM_FIELDS_URL . '/includes/';

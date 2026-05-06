@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Custom fields model for meta boxes of post types
  *
@@ -12,9 +13,10 @@ namespace NativeCustomFields\Models\PostMeta;
 
 use NativeCustomFields\Models\Common\FieldsConfigModel;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class PostMetaFieldsConfigModel extends FieldsConfigModel {
+class PostMetaFieldsConfigModel extends FieldsConfigModel
+{
 	public string $post_type;
 	public array $values = [];
 }

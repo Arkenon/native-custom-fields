@@ -20,7 +20,7 @@ use NativeCustomFields\Repositories\OptionRepository;
 use NativeCustomFields\Services\Interfaces\OptionServiceInterface;
 
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 /**
  * Class Options
@@ -28,7 +28,8 @@ defined( 'ABSPATH' ) || exit;
  * @package NativeCustomFields\Options
  * @since 1.0.0
  */
-class OptionService implements OptionServiceInterface {
+class OptionService implements OptionServiceInterface
+{
 
 	/**
 	 * Option repository
@@ -38,7 +39,8 @@ class OptionService implements OptionServiceInterface {
 	 */
 	private OptionRepository $optionRepository;
 
-	public function __construct( OptionRepository $optionRepository ) {
+	public function __construct(OptionRepository $optionRepository)
+	{
 		//Inject dependencies
 		$this->optionRepository = $optionRepository;
 	}
@@ -52,17 +54,18 @@ class OptionService implements OptionServiceInterface {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function getOptionsPages(): OptionsMenuListResponseModel {
+	public function getOptionsPages(): OptionsMenuListResponseModel
+	{
 		//Get options pages configurations
 		$options_pages = $this->getOptionsPagesConfigurationsFiltered();
 
 		// Set response model
 		$result = new OptionsMenuListResponseModel();
 
-		if ( ! empty( $options_pages ) ) {
+		if (! empty($options_pages)) {
 			//Add menu items to the response model
 			$i = 1;
-			foreach ( $options_pages as $menu_slug => $menu ) {
+			foreach ($options_pages as $menu_slug => $menu) {
 				// Create item from array data
 				$item             = new OptionsMenuListItemModel();
 				$item->no         = $i;
@@ -73,7 +76,7 @@ class OptionService implements OptionServiceInterface {
 
 				$result->options_menu_list[] = $item;
 
-				$i ++;
+				$i++;
 			}
 		}
 
@@ -88,8 +91,9 @@ class OptionService implements OptionServiceInterface {
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function getOptionsPagesConfigurations( string $menu_slug = 'native_custom_fields_options_pages_config' ): array {
-		return $this->optionRepository->getConfigurations( $menu_slug );
+	public function getOptionsPagesConfigurations(string $menu_slug = 'native_custom_fields_options_pages_config'): array
+	{
+		return $this->optionRepository->getConfigurations($menu_slug);
 	}
 
 	/**+
@@ -101,11 +105,12 @@ class OptionService implements OptionServiceInterface {
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function getOptionsPagesConfigurationsFiltered( string $menu_slug = 'native_custom_fields_options_pages_config' ): array {
-		$options_pages = $this->optionRepository->getConfigurations( $menu_slug );
+	public function getOptionsPagesConfigurationsFiltered(string $menu_slug = 'native_custom_fields_options_pages_config'): array
+	{
+		$options_pages = $this->optionRepository->getConfigurations($menu_slug);
 
 		// Apply filter to allow modification of options pages list
-		return apply_filters( 'native_custom_fields_options_pages', $options_pages );
+		return apply_filters('native_custom_fields_options_pages', $options_pages);
 	}
 
 	/***
@@ -117,27 +122,28 @@ class OptionService implements OptionServiceInterface {
 	 * @throws Exception
 	 *
 	 */
-	public function getOptionsPageConfigByMenuSlug( string $menu_slug ): OptionMenuConfigResponseModel {
+	public function getOptionsPageConfigByMenuSlug(string $menu_slug): OptionMenuConfigResponseModel
+	{
 
 		//Set response model
 		$result = new OptionMenuConfigResponseModel();
 
-		if ( empty( $menu_slug ) ) {
+		if (empty($menu_slug)) {
 			$result->status  = false;
-			$result->message = __( 'Invalid menu slug provided.', 'native-custom-fields' );
+			$result->message = __('Invalid menu slug provided.', 'native-custom-fields');
 
 			return $result;
 		}
 
 		// Check if it is a page builder page - there is no config, return the base model
-		if ( Helper::isBuilderPage( $menu_slug ) ) {
+		if (Helper::isBuilderPage($menu_slug)) {
 			//Return base response with empty config model
 			$result->config_model = new OptionMenuConfigModel();
 		} else {
 			try {
 				// Build config model from arrays
-				$result->config_model = $this->buildConfigModel( $menu_slug );
-			} catch ( Exception $e ) {
+				$result->config_model = $this->buildConfigModel($menu_slug);
+			} catch (Exception $e) {
 				$result->status  = false;
 				$result->message = $e->getMessage();
 
@@ -159,39 +165,40 @@ class OptionService implements OptionServiceInterface {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function saveOptions( string $menu_slug, array $values, bool $reset = false ): ResponseModel {
+	public function saveOptions(string $menu_slug, array $values, bool $reset = false): ResponseModel
+	{
 
 		//Set response model
 		$response = new ResponseModel();
 
-		if ( empty( $menu_slug ) ) {
+		if (empty($menu_slug)) {
 			$response->status  = false;
-			$response->message = __( 'Invalid parameters provided.', 'native-custom-fields' );
+			$response->message = __('Invalid parameters provided.', 'native-custom-fields');
 
 			return $response;
 		}
 
 		//If is not a form reset action, fire hooks before saving options
-		if ( ! $reset ) {
+		if (! $reset) {
 			// Fire action before saving options
-			do_action( 'native_custom_fields_save_options_before', $menu_slug, $values );
+			do_action('native_custom_fields_save_options_before', $menu_slug, $values);
 		}
 
 		//Get saved values from the database
-		$saved = $this->optionRepository->saveOptions( $values, $menu_slug );
+		$saved = $this->optionRepository->saveOptions($values, $menu_slug);
 
-		if ( ! $saved ) {
+		if (! $saved) {
 			$response->status  = false;
-			$response->message = __( 'Failed to save options.', 'native-custom-fields' );
+			$response->message = __('Failed to save options.', 'native-custom-fields');
 		} else {
 			$response->status  = true;
-			$response->message = __( 'Options saved successfully.', 'native-custom-fields' );
+			$response->message = __('Options saved successfully.', 'native-custom-fields');
 		}
 
 		//If is not a form reset action, fire hooks after saving options
-		if ( ! $reset ) {
+		if (! $reset) {
 			// Fire action after saving options
-			do_action( 'native_custom_fields_save_options_after', $response );
+			do_action('native_custom_fields_save_options_after', $response);
 		}
 
 		return $response;
@@ -208,27 +215,28 @@ class OptionService implements OptionServiceInterface {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function saveOptionsPageConfig( string $menu_slug, array $values ): ResponseModel {
+	public function saveOptionsPageConfig(string $menu_slug, array $values): ResponseModel
+	{
 
 		//Set response model
 		$response = new ResponseModel();
 
 		//Check if menu slug starts with 'native_custom_fields_options_page_builder' and if not, return false.
 		//Because this method is only for the options page builder
-		if ( strpos( $menu_slug, 'native_custom_fields_options_page_builder' ) !== 0 ) {
+		if (strpos($menu_slug, 'native_custom_fields_options_page_builder') !== 0) {
 			$response->status  = false;
-			$response->message = __( 'It is not a builder form.', 'native-custom-fields' );
+			$response->message = __('It is not a builder form.', 'native-custom-fields');
 
 			return $response;
 		}
 
 		//Get values from create options page form
-		$menu_data = Helper::sanitizeArray( $values['native_custom_fields_create_options_page'] );
+		$menu_data = Helper::sanitizeArray($values['native_custom_fields_create_options_page']);
 
 		//Check if required values from the create options page form exist
-		if ( ! isset( $menu_data['menu_slug'] ) && ! isset( $menu_data['page_title'] ) ) {
+		if (! isset($menu_data['menu_slug']) && ! isset($menu_data['page_title'])) {
 			$response->status  = false;
-			$response->message = __( 'Menu slug and page title are required.', 'native-custom-fields' );
+			$response->message = __('Menu slug and page title are required.', 'native-custom-fields');
 
 			return $response;
 		}
@@ -243,19 +251,18 @@ class OptionService implements OptionServiceInterface {
 		$get_config = $this->getOptionsPagesConfigurations();
 
 		//Add new options page configurations data into the existing configurations
-		$get_config[ $menu_data['menu_slug'] ] = $menu_data;
+		$get_config[$menu_data['menu_slug']] = $menu_data;
 
 		//Save options page configurations (add or update)
-		$save_config = $this->optionRepository->saveConfigurations( $get_config, 'native_custom_fields_options_pages_config' );
+		$save_config = $this->optionRepository->saveConfigurations($get_config, 'native_custom_fields_options_pages_config');
 
-		if ( $save_config ) {
-			$response->message = __( 'Options saved successfully.', 'native-custom-fields' );
+		if ($save_config) {
+			$response->message = __('Options saved successfully.', 'native-custom-fields');
 		} else {
-			$response->message = __( 'No changes detected. Options already up to date.', 'native-custom-fields' );
+			$response->message = __('No changes detected. Options already up to date.', 'native-custom-fields');
 		}
 
 		return $response;
-
 	}
 
 	/**
@@ -267,13 +274,14 @@ class OptionService implements OptionServiceInterface {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function deleteOptionsPageConfigurationsByMenuSlug( string $menu_slug ): ResponseModel {
+	public function deleteOptionsPageConfigurationsByMenuSlug(string $menu_slug): ResponseModel
+	{
 		//Set response model
 		$result = new ResponseModel();
 
 		//Delete options page configurations
-		$result->status  = $this->optionRepository->deleteConfigurations( 'native_custom_fields_options_pages_config', $menu_slug );
-		$result->message = $result->status ? __( 'Options page deleted successfully.', 'native-custom-fields' ) : __( 'Options page can not be deleted.', 'native-custom-fields' );
+		$result->status  = $this->optionRepository->deleteConfigurations('native_custom_fields_options_pages_config', $menu_slug);
+		$result->message = $result->status ? __('Options page deleted successfully.', 'native-custom-fields') : __('Options page can not be deleted.', 'native-custom-fields');
 
 		return $result;
 	}
@@ -286,9 +294,10 @@ class OptionService implements OptionServiceInterface {
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function getOptionsPagesFieldsConfigurations(): array {
+	public function getOptionsPagesFieldsConfigurations(): array
+	{
 		//Get saved configurations from the database
-		return $this->optionRepository->getConfigurations( 'native_custom_fields_options_pages_fields_config' );
+		return $this->optionRepository->getConfigurations('native_custom_fields_options_pages_fields_config');
 	}
 
 	/**
@@ -301,15 +310,16 @@ class OptionService implements OptionServiceInterface {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function saveOptionPageFieldsConfig( string $menu_slug, array $values ): ResponseModel {
+	public function saveOptionPageFieldsConfig(string $menu_slug, array $values): ResponseModel
+	{
 
 		//Set response model
 		$response = new ResponseModel();
 
 		//Check if menu slug starts with 'builder'. If not, return.
-		if ( strpos( sanitize_text_field( $menu_slug ), 'native_custom_fields_options_page_fields_builder' ) !== 0 ) {
+		if (strpos(sanitize_text_field($menu_slug), 'native_custom_fields_options_page_fields_builder') !== 0) {
 			$response->status  = false;
-			$response->message = __( 'It is not a builder form.', 'native-custom-fields' );
+			$response->message = __('It is not a builder form.', 'native-custom-fields');
 
 			return $response;
 		}
@@ -322,9 +332,9 @@ class OptionService implements OptionServiceInterface {
 
 		//Prepare fields configuration
 		$menu_sections = [];
-		foreach ( $page_sections as $page_section ) {
+		foreach ($page_sections as $page_section) {
 
-			$field_list = $this->prepareFieldList( $page_section['fields'] );
+			$field_list = $this->prepareFieldList($page_section['fields']);
 
 			$menu_sections[] = [
 				'section_name'  => $page_section['name'] ?? '',
@@ -344,13 +354,13 @@ class OptionService implements OptionServiceInterface {
 		$get_config = $this->getOptionsPagesConfigurations();
 
 		//Set options page configurations data
-		$get_config[ $config_menu_slug ] = $fields_config_array;
+		$get_config[$config_menu_slug] = $fields_config_array;
 
 		//Save options page configurations (add or update)
-		$save_config = $this->optionRepository->saveConfigurations( $get_config, 'native_custom_fields_options_pages_fields_config' );
+		$save_config = $this->optionRepository->saveConfigurations($get_config, 'native_custom_fields_options_pages_fields_config');
 
-		if ( $save_config ) {
-			$response->message = __( 'Option page fields saved successfully.', 'native-custom-fields' );
+		if ($save_config) {
+			$response->message = __('Option page fields saved successfully.', 'native-custom-fields');
 		}
 
 		return $response;
@@ -367,7 +377,8 @@ class OptionService implements OptionServiceInterface {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	private function buildConfigModel( string $menu_slug ): OptionMenuConfigModel {
+	private function buildConfigModel(string $menu_slug): OptionMenuConfigModel
+	{
 		//Get all options pages configurations stored in the database
 		$options_pages_config = $this->getOptionsPagesConfigurationsFiltered();
 
@@ -377,18 +388,18 @@ class OptionService implements OptionServiceInterface {
 		//Create config model
 		$config_model = new OptionMenuConfigModel();
 		$config_model->menu_slug = $menu_slug;
-		$config_model->layout = $options_pages_config[ $menu_slug ]['layout'] ?? 'stacked';
+		$config_model->layout = $options_pages_config[$menu_slug]['layout'] ?? 'stacked';
 
 		//Get sections from fields configuration
-		if ( ! empty( $fields_config[ $menu_slug ]['sections'] ) ) {
-			$config_model->sections = $fields_config[ $menu_slug ]['sections'];
+		if (! empty($fields_config[$menu_slug]['sections'])) {
+			$config_model->sections = $fields_config[$menu_slug]['sections'];
 		}
 
 		//Get saved values from the database
-		$config_model->values = $this->optionRepository->getOptions( $menu_slug );
+		$config_model->values = $this->optionRepository->getOptions($menu_slug);
 
 		//Apply filter to allow modification of sections before returning
-		$config_model->sections = apply_filters( 'native_custom_fields_options_page_fields', $config_model->sections, $menu_slug );
+		$config_model->sections = apply_filters('native_custom_fields_options_page_fields', $config_model->sections, $menu_slug);
 
 		return $config_model;
 	}
@@ -401,41 +412,42 @@ class OptionService implements OptionServiceInterface {
 	 * @return array
 	 * @since 1.0.0
 	 */
-	private function prepareFieldList( array $fields ): array {
+	private function prepareFieldList(array $fields): array
+	{
 		$field_list = [];
 
 
-		foreach ( $fields as $field ) {
+		foreach ($fields as $field) {
 
 			// Get field data from option groups
 			$field_base_info = $field['field_base_info'];
 
 			//Get custom field data by field type
 			$field_custom_info = [];
-			if ( ! empty( $field['fieldType'] ) ) {
+			if (! empty($field['fieldType'])) {
 				$custom_key = 'field_custom_info_' . $field['fieldType'];
-				if ( isset( $field[ $custom_key ] ) ) {
-					$field_custom_info = $field[ $custom_key ];
+				if (isset($field[$custom_key])) {
+					$field_custom_info = $field[$custom_key];
 				}
 
 				// Recursive handling for group and repeater fields
 				// Sub-fields are in $field['fields'], not in $field_custom_info['fields']
-				if ( ( $field['fieldType'] === 'group' || $field['fieldType'] === 'repeater' ) && ! empty( $field['fields'] ) ) {
-					$field_custom_info['fields'] = $this->prepareFieldList( $field['fields'] );
+				if (($field['fieldType'] === 'group' || $field['fieldType'] === 'repeater') && ! empty($field['fields'])) {
+					$field_custom_info['fields'] = $this->prepareFieldList($field['fields']);
 
 					// For repeater fields with table layout, hide labels and tags of inner fields
-					if ( $field['fieldType'] === 'repeater' && isset( $field_custom_info['layout'] ) && $field_custom_info['layout'] === 'table' ) {
+					if ($field['fieldType'] === 'repeater' && isset($field_custom_info['layout']) && $field_custom_info['layout'] === 'table') {
 						$field_custom_info['hideRepeaterItemTag'] = true;
-						foreach ( $field_custom_info['fields'] as &$item ) {
+						foreach ($field_custom_info['fields'] as &$item) {
 							$item['hideLabel'] = true;
 						}
-						unset( $item );
+						unset($item);
 					}
 				}
 			}
 
 			// Condition to set default value for date and date time picker fields
-			if ( ( $field['fieldType'] === 'date_picker' || $field['fieldType'] === 'date_time_picker' ) ) {
+			if (($field['fieldType'] === 'date_picker' || $field['fieldType'] === 'date_time_picker')) {
 				$field['default'] = $field_custom_info['currentDate'] ?? null;
 			}
 
@@ -449,7 +461,7 @@ class OptionService implements OptionServiceInterface {
 				],
 				$field_base_info,
 				$field_custom_info,
-				[ 'dependencies' => $field['field_dependency_info'] ?? [] ]
+				['dependencies' => $field['field_dependency_info'] ?? []]
 			);
 
 			$field_list[] = $field_info;

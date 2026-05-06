@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Post type list item model class
  * Responsible for handling list item data for post types
@@ -9,13 +10,13 @@
 
 namespace NativeCustomFields\Models\PostMeta;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class PostTypeListItemModel {
+class PostTypeListItemModel
+{
 
 	public int $no = 1;
 	public string $post_type = '';
 	public string $post_type_slug = '';
-    public string $created_by = '';
-
+	public string $created_by = '';
 }

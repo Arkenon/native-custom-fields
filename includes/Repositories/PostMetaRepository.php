@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Post Meta Repository
  * Responsible for handling post metadata
@@ -9,9 +10,10 @@
 
 namespace NativeCustomFields\Repositories;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class PostMetaRepository extends BaseRepository {
+class PostMetaRepository extends BaseRepository
+{
 
 	/**
 	 * Get field values for a post
@@ -25,8 +27,9 @@ class PostMetaRepository extends BaseRepository {
 	 *               An empty array if a valid but non-existing post ID is passed and $single is false.
 	 *               An empty string if a valid but non-existing post ID is passed and $single is true.
 	 */
-	public function getPostMeta( string $field_name, int $post_id ) {
-		return get_post_meta( $post_id, $field_name, true );
+	public function getPostMeta(string $field_name, int $post_id)
+	{
+		return get_post_meta($post_id, $field_name, true);
 	}
 
 	/**
@@ -39,7 +42,8 @@ class PostMetaRepository extends BaseRepository {
 	 * @return bool|int
 	 * @since 1.0.0
 	 */
-	public function savePostMeta( int $post_id, string $meta_key, $value ) {
-		return update_post_meta( $post_id, $meta_key, $value );
+	public function savePostMeta(int $post_id, string $meta_key, $value)
+	{
+		return update_post_meta($post_id, $meta_key, $value);
 	}
 }

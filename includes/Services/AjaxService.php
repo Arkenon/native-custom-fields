@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ajax Service class for handling AJAX requests
  *

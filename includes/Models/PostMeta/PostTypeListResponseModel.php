@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Post type list model class
  * Responsible for handling post types data for Create Post Type page
@@ -11,8 +12,9 @@ namespace NativeCustomFields\Models\PostMeta;
 
 use NativeCustomFields\Models\Common\ResponseModel;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class PostTypeListResponseModel extends ResponseModel {
+class PostTypeListResponseModel extends ResponseModel
+{
 	public array $post_type_list = [];
 }

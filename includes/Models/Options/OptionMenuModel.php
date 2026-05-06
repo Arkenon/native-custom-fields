@@ -10,9 +10,10 @@
 
 namespace NativeCustomFields\Models\Options;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class OptionMenuModel {
+class OptionMenuModel
+{
 	public string $page_title;
 	public string $menu_title = '';
 	public string $capability = 'manage_options';
@@ -22,9 +23,9 @@ class OptionMenuModel {
 	public string $layout = '';
 	/**@var ?int|?float $position */
 	public $position = 60;
-    public string $created_by = 'external_plugin';
-    public array $sections = [];
-    public array $values = [];
+	public string $created_by = 'external_plugin';
+	public array $sections = [];
+	public array $values = [];
 
 	/**
 	 * Create an OptionMenuModel instance from an array
@@ -35,12 +36,13 @@ class OptionMenuModel {
 	 * @return self
 	 * @since 1.0.0
 	 */
-	public static function fromArray( array $data, string $menu_slug = '' ): self {
+	public static function fromArray(array $data, string $menu_slug = ''): self
+	{
 		$model               = new self();
 		$model->page_title   = $data['page_title'] ?? '';
 		$model->menu_title   = $data['menu_title'] ?? '';
 		$model->capability   = $data['capability'] ?? 'manage_options';
-		$model->menu_slug    = $menu_slug ?: ( $data['menu_slug'] ?? '' );
+		$model->menu_slug    = $menu_slug ?: ($data['menu_slug'] ?? '');
 		$model->callback     = $data['callback'] ?? '';
 		$model->icon_url     = $data['icon_url'] ?? 'dashicons-admin-generic';
 		$model->layout       = $data['layout'] ?? '';
@@ -51,5 +53,4 @@ class OptionMenuModel {
 
 		return $model;
 	}
-
 }

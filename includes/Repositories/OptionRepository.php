@@ -9,9 +9,10 @@
 
 namespace NativeCustomFields\Repositories;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class OptionRepository extends BaseRepository {
+class OptionRepository extends BaseRepository
+{
 
 	/**
 	 * Get option values
@@ -25,8 +26,9 @@ class OptionRepository extends BaseRepository {
 	 *               an array is returned.
 	 * @since 1.0.0
 	 */
-	public function getOptions( string $option_name ) {
-		return get_option( $option_name, [] );
+	public function getOptions(string $option_name)
+	{
+		return get_option($option_name, []);
 	}
 
 
@@ -39,13 +41,14 @@ class OptionRepository extends BaseRepository {
 	 * @return bool True, if saved successfully, array with an error message otherwise
 	 * @since 1.0.0
 	 */
-	public function saveOptions( array $values, string $option_name ): bool {
-		$current_values = $this->getOptions( $option_name );
+	public function saveOptions(array $values, string $option_name): bool
+	{
+		$current_values = $this->getOptions($option_name);
 
-		if ( $current_values === $values ) {
+		if ($current_values === $values) {
 			return true;
 		}
 
-		return update_option( $option_name, $values );
+		return update_option($option_name, $values);
 	}
 }

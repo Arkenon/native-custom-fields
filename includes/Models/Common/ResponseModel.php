@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Error model class
  * Contains default parameters for error response
@@ -9,9 +10,10 @@
 
 namespace NativeCustomFields\Models\Common;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class ResponseModel {
+class ResponseModel
+{
 	public bool $status = true;
 	public string $message = 'Success.';
 }

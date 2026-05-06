@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UserMetaController class
  * Responsible for handling user meta fields and related REST API endpoints.
@@ -10,7 +11,7 @@
 
 namespace NativeCustomFields\Presentation\Admin\Controllers;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 use Exception;
 use NativeCustomFields\Common\Helper;
@@ -19,7 +20,8 @@ use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class UserMetaController {
+class UserMetaController
+{
 
 	/**
 	 * Inject UserMetaService
@@ -29,13 +31,13 @@ class UserMetaController {
 	 */
 	private UserMetaService $userMetaService;
 
-	public function __construct( UserMetaService $user_meta_service ) {
+	public function __construct(UserMetaService $user_meta_service)
+	{
 
 		$this->userMetaService = $user_meta_service;
 
 		// Register rest api routes
-		add_action( 'rest_api_init', [ $this, 'registerRestRoutes' ] );
-
+		add_action('rest_api_init', [$this, 'registerRestRoutes']);
 	}
 
 	/**
@@ -44,13 +46,14 @@ class UserMetaController {
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function registerRestRoutes(): void {
+	public function registerRestRoutes(): void
+	{
 		//Rest API route for save user meta configuration
-		register_rest_route( 'native-custom-fields/v1', 'user-meta/save-user-meta-fields-config', [
+		register_rest_route('native-custom-fields/v1', 'user-meta/save-user-meta-fields-config', [
 			'methods'             => 'POST',
-			'callback'            => [ $this, 'saveUserMetaFieldsConfig' ],
+			'callback'            => [$this, 'saveUserMetaFieldsConfig'],
 			'permission_callback' => function () {
-				return current_user_can( 'manage_options' );
+				return current_user_can('manage_options');
 			},
 			'args'                => [
 				'menu_slug' => [
@@ -62,7 +65,7 @@ class UserMetaController {
 					'type'     => 'object',
 				],
 			],
-		] );
+		]);
 	}
 
 	/**
@@ -74,13 +77,14 @@ class UserMetaController {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function saveUserMetaFieldsConfig( WP_REST_Request $request ) {
+	public function saveUserMetaFieldsConfig(WP_REST_Request $request)
+	{
 
-		$menu_slug = sanitize_text_field( $request->get_param( 'menu_slug' ) );
-		$values    = Helper::sanitizeArray( $request->get_param( 'values' ) );
+		$menu_slug = sanitize_text_field($request->get_param('menu_slug'));
+		$values    = Helper::sanitizeArray($request->get_param('values'));
 
-		$result = $this->userMetaService->saveUserMetaFieldsConfig( $menu_slug, $values );
+		$result = $this->userMetaService->saveUserMetaFieldsConfig($menu_slug, $values);
 
-		return rest_ensure_response( $result );
+		return rest_ensure_response($result);
 	}
 }

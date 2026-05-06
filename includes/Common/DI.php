@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dependency Injection Container Configurations
  * @package NativeCustomFields
@@ -8,22 +9,24 @@
 
 namespace NativeCustomFields\Common;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 use DI\Container;
 use DI\ContainerBuilder;
 use Exception;
 
-class DI {
+class DI
+{
 	/**
 	 * Dependency Injection Container
 	 * @return Container
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public static function container(): Container {
+	public static function container(): Container
+	{
 		$containerBuilder = new ContainerBuilder();
-		$containerBuilder->useAutowiring( true );
+		$containerBuilder->useAutowiring(true);
 		return $containerBuilder->build();
 	}
 }

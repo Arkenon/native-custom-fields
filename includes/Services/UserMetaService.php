@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User Meta Service for handling user meta fields
  *
@@ -17,9 +18,10 @@ use NativeCustomFields\Services\Interfaces\BaseMetaServiceInterface;
 use NativeCustomFields\Services\Interfaces\UserMetaServiceInterface;
 use WP_User;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterface {
+class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterface
+{
 
 	/**
 	 * Term meta repository
@@ -37,21 +39,21 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	 */
 	private static bool $hooksRegistered = false;
 
-	public function __construct( UserMetaRepository $user_meta_repository ) {
+	public function __construct(UserMetaRepository $user_meta_repository)
+	{
 		$this->userMetaRepository = $user_meta_repository;
 
-		if ( ! self::$hooksRegistered ) {
+		if (! self::$hooksRegistered) {
 			// Add form field hooks for the user meta fields
-			add_action( "show_user_profile", [ $this, 'renderFields' ] );
-			add_action( "edit_user_profile", [ $this, 'renderFields' ] );
+			add_action("show_user_profile", [$this, 'renderFields']);
+			add_action("edit_user_profile", [$this, 'renderFields']);
 
 			// Add save hooks
-			add_action( "personal_options_update", [ $this, 'saveUserMeta' ] );
-			add_action( "edit_user_profile_update", [ $this, 'saveUserMeta' ] );
+			add_action("personal_options_update", [$this, 'saveUserMeta']);
+			add_action("edit_user_profile_update", [$this, 'saveUserMeta']);
 
 			self::$hooksRegistered = true;
 		}
-
 	}
 
 	/**
@@ -64,28 +66,29 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function saveUserMetaFieldsConfig( string $menu_slug, array $values ): ResponseModel {
+	public function saveUserMetaFieldsConfig(string $menu_slug, array $values): ResponseModel
+	{
 		$result = new ResponseModel();
 
 		//Check if menu slug starts with 'builder'
-		if ( strpos( $menu_slug, 'native_custom_fields_user_meta_fields_builder' ) !== 0 ) {
+		if (strpos($menu_slug, 'native_custom_fields_user_meta_fields_builder') !== 0) {
 			$result->status  = false;
-			$result->message = __( 'It is not a user meta fields builder.', 'native-custom-fields' );
+			$result->message = __('It is not a user meta fields builder.', 'native-custom-fields');
 
 			return $result;
 		}
 
 		// Sanitize fields in the values (uses sanitize_text_fields)
-		$values = Helper::sanitizeArray( $values );
+		$values = Helper::sanitizeArray($values);
 
 		// Get sections (sections_or_meta_boxes) from values
 		$sections = $values['sections_or_meta_boxes'] ?? [];
 
 		//Prepare fields configuration from sections
 		$prepared_sections = [];
-		foreach ( $sections as $section ) {
+		foreach ($sections as $section) {
 
-			$field_list = $this->prepareFieldList( $section['fields'] ?? [] );
+			$field_list = $this->prepareFieldList($section['fields'] ?? []);
 
 			$prepared_sections[] = [
 				'section_name'  => $section['name'] ?? '',
@@ -105,15 +108,15 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 		$get_config = $this->getUserMetaFieldsConfigurations();
 
 		//Set user role configurations data as array (only all_users for now)
-		$get_config[ $config_array['user_role'] ] = $config_array;
+		$get_config[$config_array['user_role']] = $config_array;
 
 		//Save user meta fields configurations (add or update)
-		$save_user_meta_config = $this->userMetaRepository->saveConfigurations( $get_config, 'native_custom_fields_user_meta_fields_config' );
+		$save_user_meta_config = $this->userMetaRepository->saveConfigurations($get_config, 'native_custom_fields_user_meta_fields_config');
 
-		if ( $save_user_meta_config ) {
-			$result->message = __( 'User meta fields data saved successfully.', 'native-custom-fields' );
+		if ($save_user_meta_config) {
+			$result->message = __('User meta fields data saved successfully.', 'native-custom-fields');
 		} else {
-			$result->message = __( 'No changes detected. User meta fields data already up to date.', 'native-custom-fields' );
+			$result->message = __('No changes detected. User meta fields data already up to date.', 'native-custom-fields');
 		}
 
 		return $result;
@@ -124,9 +127,10 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function getUserMetaFieldsConfigurations(): array {
+	public function getUserMetaFieldsConfigurations(): array
+	{
 		//Get saved configurations from database
-		return $this->userMetaRepository->getConfigurations( 'native_custom_fields_user_meta_fields_config' );
+		return $this->userMetaRepository->getConfigurations('native_custom_fields_user_meta_fields_config');
 	}
 
 	/**
@@ -135,19 +139,20 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function getUserMetaFieldsConfigurationsFiltered(): array {
+	public function getUserMetaFieldsConfigurationsFiltered(): array
+	{
 		//Get saved configurations from database
-		$get_user_meta_fields = $this->userMetaRepository->getConfigurations( 'native_custom_fields_user_meta_fields_config' );
+		$get_user_meta_fields = $this->userMetaRepository->getConfigurations('native_custom_fields_user_meta_fields_config');
 
 		// Apply filter
-		$filtered = apply_filters( 'native_custom_fields_user_meta_fields_config', $get_user_meta_fields );
+		$filtered = apply_filters('native_custom_fields_user_meta_fields_config', $get_user_meta_fields);
 
 		// Normalize: Convert model objects to arrays (backward compatibility)
-		if ( is_array( $filtered ) ) {
-			foreach ( $filtered as $key => $config ) {
+		if (is_array($filtered)) {
+			foreach ($filtered as $key => $config) {
 				// If config is a model object, cast it to array
-				if ( is_object( $config ) ) {
-					$filtered[ $key ] = (array) $config;
+				if (is_object($config)) {
+					$filtered[$key] = (array) $config;
 				}
 			}
 		}
@@ -163,23 +168,24 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	 *
 	 * @return array Field values
 	 */
-	public function getFieldValues( array $fields, int $id = 0 ): array {
+	public function getFieldValues(array $fields, int $id = 0): array
+	{
 		$values = [];
-		foreach ( $fields as $field ) {
-			if ( ! isset( $field['name'] ) ) {
+		foreach ($fields as $field) {
+			if (! isset($field['name'])) {
 				continue;
 			}
 
 			$get_default_value = $field['default'] ?? '';
 
-			if ( $id === 0 ) {
-				$values[ $field['name'] ] = $get_default_value;
+			if ($id === 0) {
+				$values[$field['name']] = $get_default_value;
 			} else {
-				$get_value = $this->userMetaRepository->getUserMeta( $field['name'], $id );
-				if ( empty( $get_value ) ) {
-					$values[ $field['name'] ] = $get_default_value;
+				$get_value = $this->userMetaRepository->getUserMeta($field['name'], $id);
+				if (empty($get_value)) {
+					$values[$field['name']] = $get_default_value;
 				} else {
-					$values[ $field['name'] ] = $get_value;
+					$values[$field['name']] = $get_value;
 				}
 			}
 		}
@@ -195,67 +201,68 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	 * @return void
 	 * @throws Exception
 	 */
-	public function renderFields( WP_User $user ): void {
+	public function renderFields(WP_User $user): void
+	{
 
 		$user_meta_fields_config = $this->getUserMetaFieldsConfigurationsFiltered();
 
 		// Only supports 'all_users' role for now
-		if ( empty( $user_meta_fields_config ) || ! array_key_exists( 'all_users', $user_meta_fields_config ) ) {
+		if (empty($user_meta_fields_config) || ! array_key_exists('all_users', $user_meta_fields_config)) {
 			return;
 		}
 
 		$config = $user_meta_fields_config['all_users'];
 
 		// Get sections from config (already in array format)
-		$sections = Helper::getSectionsFromConfig( $config );
+		$sections = Helper::getSectionsFromConfig($config);
 
-		if ( empty( $sections ) ) {
+		if (empty($sections)) {
 			return;
 		}
 
-		wp_nonce_field( 'native_custom_fields_user_meta_nonce', 'native_custom_fields_user_meta_nonce' );
+		wp_nonce_field('native_custom_fields_user_meta_nonce', 'native_custom_fields_user_meta_nonce');
 
 		$allowed_html = Helper::getAllowedHiddenInputHtml();
 
 		echo '<table class="form-table">';
 
 		// Render each section separately
-		foreach ( $sections as $section ) {
-			$section_title = $section['section_title'] ?? __( 'Custom Fields', 'native-custom-fields' );
+		foreach ($sections as $section) {
+			$section_title = $section['section_title'] ?? __('Custom Fields', 'native-custom-fields');
 			$section_icon  = $section['section_icon'] ?? '';
 			$fields        = $section['fields'] ?? [];
 
-			if ( empty( $fields ) ) {
+			if (empty($fields)) {
 				continue;
 			}
 
 			// Hidden fields
 			$hidden_fields_html = '';
-			foreach ( $fields as $field ) {
-				if ( empty( $field['name'] ) ) {
+			foreach ($fields as $field) {
+				if (empty($field['name'])) {
 					continue;
 				}
 
 				// Get the value of the field
-				$value = $this->userMetaRepository->getUserMeta( $field['name'], $user->ID );
+				$value = $this->userMetaRepository->getUserMeta($field['name'], $user->ID);
 
 				// Convert array values to JSON string
-				if ( is_array( $value ) ) {
-					$value = wp_json_encode( $value );
+				if (is_array($value)) {
+					$value = wp_json_encode($value);
 				}
 
 				//Skip fields that already have input tag
-				if ( in_array( $field['fieldType'] ?? '', Helper::fieldsAlreadyHaveInput(), true ) ) {
+				if (in_array($field['fieldType'] ?? '', Helper::fieldsAlreadyHaveInput(), true)) {
 					continue;
 				}
 
-				$hidden_fields_html .= '<input type="hidden" name="' . esc_attr( $field['name'] ) . '" value="' . esc_attr( (string) $value ) . '">';
+				$hidden_fields_html .= '<input type="hidden" name="' . esc_attr($field['name']) . '" value="' . esc_attr((string) $value) . '">';
 			}
 
 			// Section title with icon
-			$section_header = esc_html( $section_title );
-			if ( ! empty( $section_icon ) ) {
-				$section_header = '<span class="dashicons dashicons-' . esc_attr( $section_icon ) . '"></span> ' . '<span class="native-custom-fields-meta-th-header">'.$section_header.'</span>';
+			$section_header = esc_html($section_title);
+			if (! empty($section_icon)) {
+				$section_header = '<span class="dashicons dashicons-' . esc_attr($section_icon) . '"></span> ' . '<span class="native-custom-fields-meta-th-header">' . $section_header . '</span>';
 			}
 
 			$html = '<tr class="form-field user-meta-wrap user-meta-section-wrap">';
@@ -267,11 +274,11 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 			$html .= '</tr>';
 
 			echo sprintf(
-				wp_kses_post( $html ),
+				wp_kses_post($html),
 				$section_header, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $section_header is already escaped via esc_html() and esc_attr() above.
-				esc_attr( wp_json_encode( $fields ) ),
-				esc_attr( wp_json_encode( $this->getFieldValues( $fields, $user->ID ) ) ),
-				wp_kses( $hidden_fields_html, $allowed_html )
+				esc_attr(wp_json_encode($fields)),
+				esc_attr(wp_json_encode($this->getFieldValues($fields, $user->ID))),
+				wp_kses($hidden_fields_html, $allowed_html)
 			);
 		}
 
@@ -286,71 +293,72 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	 * @return void
 	 * @throws Exception
 	 */
-	public function saveUserMeta( int $user_id ): void {
+	public function saveUserMeta(int $user_id): void
+	{
 		// Check nonce
 		if (
-			! isset( $_POST['native_custom_fields_user_meta_nonce'] ) ||
-			! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['native_custom_fields_user_meta_nonce'] ) ), 'native_custom_fields_user_meta_nonce' )
+			! isset($_POST['native_custom_fields_user_meta_nonce']) ||
+			! wp_verify_nonce(sanitize_key(wp_unslash($_POST['native_custom_fields_user_meta_nonce'])), 'native_custom_fields_user_meta_nonce')
 		) {
 			return;
 		}
 
 		// Check permissions
-		if ( ! current_user_can( 'edit_user', $user_id ) ) {
+		if (! current_user_can('edit_user', $user_id)) {
 			return;
 		}
 
 
 		$user_meta_fields_config = $this->getUserMetaFieldsConfigurationsFiltered();
 		$config = $user_meta_fields_config['all_users'];
-		if ( empty( $config ) ) {
+		if (empty($config)) {
 			return;
 		}
 
 		// Get sections from config (already in array format)
-		$sections = Helper::getSectionsFromConfig( $config );
+		$sections = Helper::getSectionsFromConfig($config);
 
 		// Collect all fields from all sections
 		$fields = [];
-		if ( ! empty( $sections ) ) {
-			foreach ( $sections as $section ) {
-				if ( isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
-					$fields = array_merge( $fields, $section['fields'] );
+		if (! empty($sections)) {
+			foreach ($sections as $section) {
+				if (isset($section['fields']) && is_array($section['fields'])) {
+					$fields = array_merge($fields, $section['fields']);
 				}
 			}
 		}
 
-		if ( empty( $fields ) ) {
+		if (empty($fields)) {
 			return;
 		}
 
-		foreach ( $fields as $field ) {
+		foreach ($fields as $field) {
 
 			$meta_key   = $field['name'];
 
-			if ( ! isset( $meta_key ) ) {
+			if (! isset($meta_key)) {
 				continue;
 			}
 
-			$meta_value = Helper::sanitize( $meta_key, 'post' );
+			$meta_value = Helper::sanitize($meta_key, 'post');
 
 			// Always save the value, even if it's empty (important for checkboxes and radios)
-			$value = wp_unslash( $meta_value );
+			$value = wp_unslash($meta_value);
 
 			// Try to decode JSON if the value is a JSON string
-			if ( Helper::isJson( $value ) ) {
-				$value = json_decode( $value, true );
+			if (Helper::isJson($value)) {
+				$value = json_decode($value, true);
 			}
 
 			// Check if the value is an array and sanitize it
-			if ( is_array( $value ) ) {
-				$value = Helper::sanitizeArray( $value );
+			if (is_array($value)) {
+				$value = Helper::sanitizeArray($value);
 			} else {
-				$value = sanitize_text_field( $value );
+				$value = sanitize_text_field($value);
 			}
 
 			// Save the value to the database
-			$this->userMetaRepository->saveUserMeta( $user_id, $meta_key, $value );
+			$this->userMetaRepository->saveUserMeta($user_id, $meta_key, $value);
 		}
 	}
 
@@ -362,40 +370,41 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function prepareFieldList( array $fields ): array {
+	public function prepareFieldList(array $fields): array
+	{
 		$field_list = [];
 
-		foreach ( $fields as $field ) {
+		foreach ($fields as $field) {
 
 			// Get field data from option groups
 			$field_base_info = $field['field_base_info'] ?? [];
 
 			//Get custom field data by field type
 			$field_custom_info = [];
-			if ( ! empty( $field['fieldType'] ) ) {
+			if (! empty($field['fieldType'])) {
 				$custom_key = 'field_custom_info_' . $field['fieldType'];
-				if ( isset( $field[ $custom_key ] ) ) {
-					$field_custom_info = $field[ $custom_key ];
+				if (isset($field[$custom_key])) {
+					$field_custom_info = $field[$custom_key];
 				}
 
 				// Recursive handling for group and repeater fields
 				// Sub-fields are in $field['fields'], not in $field_custom_info['fields']
-				if ( ( $field['fieldType'] === 'group' || $field['fieldType'] === 'repeater' ) && ! empty( $field['fields'] ) ) {
-					$field_custom_info['fields'] = $this->prepareFieldList( $field['fields'] );
+				if (($field['fieldType'] === 'group' || $field['fieldType'] === 'repeater') && ! empty($field['fields'])) {
+					$field_custom_info['fields'] = $this->prepareFieldList($field['fields']);
 
 					// For repeater fields with table layout, hide labels and tags of inner fields
-					if ( $field['fieldType'] === 'repeater' && isset( $field_custom_info['layout'] ) && $field_custom_info['layout'] === 'table' ) {
+					if ($field['fieldType'] === 'repeater' && isset($field_custom_info['layout']) && $field_custom_info['layout'] === 'table') {
 						$field_custom_info['hideRepeaterItemTag'] = true;
-						foreach ( $field_custom_info['fields'] as &$item ) {
+						foreach ($field_custom_info['fields'] as &$item) {
 							$item['hideLabel'] = true;
 						}
-						unset( $item );
+						unset($item);
 					}
 				}
 			}
 
 			// Condition to set default value for date and date time picker fields
-			if ( ( $field['fieldType'] === 'date_picker' || $field['fieldType'] === 'date_time_picker' ) ) {
+			if (($field['fieldType'] === 'date_picker' || $field['fieldType'] === 'date_time_picker')) {
 				$field['default'] = $field_custom_info['currentDate'] ?? null;
 			}
 
@@ -409,7 +418,7 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 				],
 				$field_base_info,
 				$field_custom_info,
-				[ 'dependencies' => $field['field_dependency_info'] ?? [] ]
+				['dependencies' => $field['field_dependency_info'] ?? []]
 			);
 
 			$field_list[] = $field_info;

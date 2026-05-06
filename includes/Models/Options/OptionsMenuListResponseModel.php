@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Option Menu list model class
  * Responsible for handling option menu data for Create Options page
@@ -11,8 +12,9 @@ namespace NativeCustomFields\Models\Options;
 
 use NativeCustomFields\Models\Common\ResponseModel;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class OptionsMenuListResponseModel extends ResponseModel {
+class OptionsMenuListResponseModel extends ResponseModel
+{
 	public array $options_menu_list = [];
 }

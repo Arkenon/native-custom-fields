@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Deactivation service class for the plugin
  * @package NativeCustomFields

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Taxonomy list item model class
  * Responsible for handling list item data for taxonomies
@@ -9,12 +10,12 @@
 
 namespace NativeCustomFields\Models\TermMeta;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class TaxonomyListItemModel {
+class TaxonomyListItemModel
+{
 	public int $no = 1;
 	public string $taxonomy = '';
 	public string $taxonomy_slug = '';
 	public string $created_by = '';
-
 }

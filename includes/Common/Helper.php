@@ -365,7 +365,8 @@ class Helper
         $screen = get_current_screen();
         $id = str_replace('toplevel_page_', '', $screen->id);
 
-        $html = sprintf('<div class="%s" id="%s"></div>',
+        $html = sprintf(
+            '<div class="%s" id="%s"></div>',
             esc_attr($wrapperClass),
             esc_attr($id)
         );

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Default model for meta fields
  *
@@ -10,9 +11,10 @@
 namespace NativeCustomFields\Models\Common;
 
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class FieldsConfigModel {
+class FieldsConfigModel
+{
     // Sections of the fields
-	public array $sections = [];
+    public array $sections = [];
 }

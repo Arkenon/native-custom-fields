@@ -154,8 +154,8 @@ function DashboardSidebar() {
                             {[
                                 __('Options Pages & Fields', 'native-custom-fields'),
                                 __('Import & Export', 'native-custom-fields'),
+                                __('AI Integration & Abilities', 'native-custom-fields'),
                                 __('Frontend Forms (Soon)', 'native-custom-fields'),
-                                __('AI Integration (Soon)', 'native-custom-fields'),
                             ].map((feature, i) => (
                                 <HStack key={i} spacing={2} alignment="left">
                                     <Icon icon={check} size={14} style={{ fill: '#fff', flexShrink: 0 }} />

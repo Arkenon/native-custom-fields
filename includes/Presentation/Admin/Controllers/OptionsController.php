@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OptionsController class
  * Handles the options pages and their configurations

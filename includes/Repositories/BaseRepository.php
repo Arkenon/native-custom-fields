@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base repository class for the plugin
  * @package NativeCustomFields
@@ -8,9 +9,10 @@
 
 namespace NativeCustomFields\Repositories;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class BaseRepository {
+class BaseRepository
+{
 	/**
 	 * Get configurations data
 	 *
@@ -19,8 +21,9 @@ class BaseRepository {
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function getConfigurations( string $config_name ): array {
-		return get_option( $config_name, [] );
+	public function getConfigurations(string $config_name): array
+	{
+		return get_option($config_name, []);
 	}
 
 	/**
@@ -32,8 +35,9 @@ class BaseRepository {
 	 * @return bool
 	 * @since 1.0.0
 	 */
-	public function saveConfigurations( array $config, string $config_name ): bool {
-		return update_option( $config_name, $config );
+	public function saveConfigurations(array $config, string $config_name): bool
+	{
+		return update_option($config_name, $config);
 	}
 
 	/**
@@ -45,16 +49,16 @@ class BaseRepository {
 	 * @return bool
 	 * @since 1.0.0
 	 */
-	public function deleteConfigurations( string $config_name, string $object_type_key ): bool {
-		$get_config = $this->getConfigurations( $config_name );
+	public function deleteConfigurations(string $config_name, string $object_type_key): bool
+	{
+		$get_config = $this->getConfigurations($config_name);
 
-		foreach ( $get_config as $key => $config ) {
-			if ( $key === $object_type_key ) {
-				unset( $get_config[ $key ] );
+		foreach ($get_config as $key => $config) {
+			if ($key === $object_type_key) {
+				unset($get_config[$key]);
 			}
 		}
 
-		return $this->saveConfigurations( $get_config, $config_name );
-
+		return $this->saveConfigurations($get_config, $config_name);
 	}
 }

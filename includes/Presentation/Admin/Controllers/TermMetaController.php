@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TermMetaController class
  * Responsible for handling custom taxonomies, term meta fields, and related REST API endpoints.
@@ -17,9 +18,10 @@ use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
-class TermMetaController {
+class TermMetaController
+{
 
 	/**
 	 * Inject PostMetaRepository
@@ -29,13 +31,13 @@ class TermMetaController {
 	 */
 	private TermMetaService $termMetaService;
 
-	public function __construct( TermMetaService $term_meta_service ) {
+	public function __construct(TermMetaService $term_meta_service)
+	{
 
 		$this->termMetaService = $term_meta_service;
 
 		// Register rest api routes
-		add_action( 'rest_api_init', [ $this, 'registerRestRoutes' ] );
-
+		add_action('rest_api_init', [$this, 'registerRestRoutes']);
 	}
 
 	#region Rest Routes and Callbacks
@@ -46,23 +48,24 @@ class TermMetaController {
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function registerRestRoutes(): void {
+	public function registerRestRoutes(): void
+	{
 
 		//Rest API route for get post taxonomy list
-		register_rest_route( 'native-custom-fields/v1', 'term-meta/get-taxonomies', [
+		register_rest_route('native-custom-fields/v1', 'term-meta/get-taxonomies', [
 			'methods'             => 'GET',
-			'callback'            => [ $this, 'getTaxonomies' ],
+			'callback'            => [$this, 'getTaxonomies'],
 			'permission_callback' => function () {
-				return current_user_can( 'edit_posts' );
+				return current_user_can('edit_posts');
 			}
-		] );
+		]);
 
 		//Rest API route for save custom taxonomy configuration
-		register_rest_route( 'native-custom-fields/v1', 'term-meta/save-custom-taxonomy-config', [
+		register_rest_route('native-custom-fields/v1', 'term-meta/save-custom-taxonomy-config', [
 			'methods'             => 'POST',
-			'callback'            => [ $this, 'saveCustomTaxonomyConfig' ],
+			'callback'            => [$this, 'saveCustomTaxonomyConfig'],
 			'permission_callback' => function () {
-				return current_user_can( 'manage_options' );
+				return current_user_can('manage_options');
 			},
 			'args'                => [
 				'menu_slug' => [
@@ -74,14 +77,14 @@ class TermMetaController {
 					'type'     => 'object',
 				],
 			],
-		] );
+		]);
 
 		//Rest API route for term meta configuration
-		register_rest_route( 'native-custom-fields/v1', 'term-meta/save-term-meta-fields-config', [
+		register_rest_route('native-custom-fields/v1', 'term-meta/save-term-meta-fields-config', [
 			'methods'             => 'POST',
-			'callback'            => [ $this, 'saveTermMetaFieldsConfig' ],
+			'callback'            => [$this, 'saveTermMetaFieldsConfig'],
 			'permission_callback' => function () {
-				return current_user_can( 'manage_options' );
+				return current_user_can('manage_options');
 			},
 			'args'                => [
 				'menu_slug' => [
@@ -93,15 +96,15 @@ class TermMetaController {
 					'type'     => 'object',
 				],
 			],
-		] );
+		]);
 
 		//Rest API route for to delete taxonomy by slug
-		register_rest_route( 'native-custom-fields/v1', '/term-meta/delete-taxonomy', [
+		register_rest_route('native-custom-fields/v1', '/term-meta/delete-taxonomy', [
 			[
 				'methods'             => 'DELETE',
-				'callback'            => [ $this, 'deleteTaxonomyConfigBySlug' ],
+				'callback'            => [$this, 'deleteTaxonomyConfigBySlug'],
 				'permission_callback' => function () {
-					return current_user_can( 'manage_categories' );
+					return current_user_can('manage_categories');
 				},
 				'args'                => [
 					'taxonomy_slug' => [
@@ -110,7 +113,7 @@ class TermMetaController {
 					],
 				],
 			],
-		] );
+		]);
 	}
 
 
@@ -121,11 +124,12 @@ class TermMetaController {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function getTaxonomies(): WP_REST_Response {
+	public function getTaxonomies(): WP_REST_Response
+	{
 
 		$result = $this->termMetaService->getTaxonomies();
 
-		return rest_ensure_response( $result );
+		return rest_ensure_response($result);
 	}
 
 	/**
@@ -137,13 +141,14 @@ class TermMetaController {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function deleteTaxonomyConfigBySlug( WP_REST_Request $request ): WP_REST_Response {
+	public function deleteTaxonomyConfigBySlug(WP_REST_Request $request): WP_REST_Response
+	{
 
-		$taxonomy_slug = sanitize_text_field( $request->get_param( 'taxonomy_slug' ) );
+		$taxonomy_slug = sanitize_text_field($request->get_param('taxonomy_slug'));
 
-		$result = $this->termMetaService->deleteTaxonomyConfigBySlug( $taxonomy_slug );
+		$result = $this->termMetaService->deleteTaxonomyConfigBySlug($taxonomy_slug);
 
-		return rest_ensure_response( $result );
+		return rest_ensure_response($result);
 	}
 
 	/**
@@ -155,14 +160,15 @@ class TermMetaController {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function saveCustomTaxonomyConfig( WP_REST_Request $request ) {
+	public function saveCustomTaxonomyConfig(WP_REST_Request $request)
+	{
 
-		$menu_slug = sanitize_text_field( $request->get_param( 'menu_slug' ) );
-		$values    = Helper::sanitizeArray( $request->get_param( 'values' ) );
+		$menu_slug = sanitize_text_field($request->get_param('menu_slug'));
+		$values    = Helper::sanitizeArray($request->get_param('values'));
 
-		$result = $this->termMetaService->saveCustomTaxonomyConfig( $menu_slug, $values );
+		$result = $this->termMetaService->saveCustomTaxonomyConfig($menu_slug, $values);
 
-		return rest_ensure_response( $result );
+		return rest_ensure_response($result);
 	}
 
 	/**
@@ -174,14 +180,15 @@ class TermMetaController {
 	 * @throws Exception
 	 * @since 1.0.0
 	 */
-	public function saveTermMetaFieldsConfig( WP_REST_Request $request ) {
+	public function saveTermMetaFieldsConfig(WP_REST_Request $request)
+	{
 
-		$menu_slug = sanitize_text_field( $request->get_param( 'menu_slug' ) );
-		$values    = Helper::sanitizeArray( $request->get_param( 'values' ) );
+		$menu_slug = sanitize_text_field($request->get_param('menu_slug'));
+		$values    = Helper::sanitizeArray($request->get_param('values'));
 
-		$result = $this->termMetaService->saveTermMetaFieldsConfig( $menu_slug, $values );
+		$result = $this->termMetaService->saveTermMetaFieldsConfig($menu_slug, $values);
 
-		return rest_ensure_response( $result );
+		return rest_ensure_response($result);
 	}
 	#endregion
 }
