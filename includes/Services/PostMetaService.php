@@ -233,10 +233,72 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 		$labels_data                  = [];
 		$labels_data['name']          = $general['label'];
 		$labels_data['singular_name'] = $general['singular_name'];
+
+		$plural         = $general['label'];
+		$singular       = $general['singular_name'];
+		$plural_lower   = strtolower($plural);
+		$singular_lower = strtolower($singular);
+
+		$label_defaults = [
+			'add_new'                  => __('Add New', 'native-custom-fields'),
+			'menu_name'                => $singular,
+			'name_admin_bar'           => $singular,
+			/* translators: %s: singular post type name */
+			'add_new_item'             => sprintf(__('Add New %s', 'native-custom-fields'), $singular),
+			/* translators: %s: singular post type name */
+			'edit_item'                => sprintf(__('Edit %s', 'native-custom-fields'), $singular),
+			/* translators: %s: singular post type name */
+			'new_item'                 => sprintf(__('New %s', 'native-custom-fields'), $singular),
+			/* translators: %s: singular post type name */
+			'view_item'                => sprintf(__('View %s', 'native-custom-fields'), $singular),
+			/* translators: %s: plural post type name */
+			'view_items'               => sprintf(__('View %s', 'native-custom-fields'), $plural),
+			/* translators: %s: plural post type name */
+			'all_items'                => sprintf(__('All %s', 'native-custom-fields'), $plural),
+			/* translators: %s: plural post type name */
+			'search_items'             => sprintf(__('Search %s', 'native-custom-fields'), $plural),
+			/* translators: %s: singular post type name */
+			'parent_item_colon'        => sprintf(__('Parent %s:', 'native-custom-fields'), $singular),
+			/* translators: %s: plural post type name (lowercase) */
+			'not_found'                => sprintf(__('No %s found', 'native-custom-fields'), $plural_lower),
+			/* translators: %s: plural post type name (lowercase) */
+			'not_found_in_trash'       => sprintf(__('No %s found in Trash', 'native-custom-fields'), $plural_lower),
+			/* translators: %s: singular post type name */
+			'archives'                 => sprintf(__('%s Archives', 'native-custom-fields'), $singular),
+			/* translators: %s: singular post type name */
+			'attributes'               => sprintf(__('%s Attributes', 'native-custom-fields'), $singular),
+			/* translators: %s: singular post type name (lowercase) */
+			'insert_into_item'         => sprintf(__('Insert into %s', 'native-custom-fields'), $singular_lower),
+			/* translators: %s: singular post type name (lowercase) */
+			'uploaded_to_this_item'    => sprintf(__('Uploaded to this %s', 'native-custom-fields'), $singular_lower),
+			'featured_image'           => __('Featured Image', 'native-custom-fields'),
+			'set_featured_image'       => __('Set featured image', 'native-custom-fields'),
+			'remove_featured_image'    => __('Remove featured image', 'native-custom-fields'),
+			'use_featured_image'       => __('Use as featured image', 'native-custom-fields'),
+			/* translators: %s: plural post type name (lowercase) */
+			'filter_items_list'        => sprintf(__('Filter %s list', 'native-custom-fields'), $plural_lower),
+			/* translators: %s: plural post type name */
+			'items_list_navigation'    => sprintf(__('%s list navigation', 'native-custom-fields'), $plural),
+			/* translators: %s: plural post type name */
+			'items_list'               => sprintf(__('%s list', 'native-custom-fields'), $plural),
+			/* translators: %s: singular post type name */
+			'item_published'           => sprintf(__('%s published', 'native-custom-fields'), $singular),
+			/* translators: %s: singular post type name */
+			'item_published_privately' => sprintf(__('%s published privately', 'native-custom-fields'), $singular),
+			/* translators: %s: singular post type name */
+			'item_reverted_to_draft'   => sprintf(__('%s reverted to draft', 'native-custom-fields'), $singular),
+			/* translators: %s: singular post type name */
+			'item_scheduled'           => sprintf(__('%s scheduled', 'native-custom-fields'), $singular),
+			/* translators: %s: singular post type name */
+			'item_updated'             => sprintf(__('%s updated', 'native-custom-fields'), $singular),
+		];
+
 		foreach ($labels as $key => $value) {
 			if ($key !== 'section_name' && $key !== 'section_title' && $key !== 'section_icon') {
 				if (! empty($value)) {
 					$labels_data[$key] = $value;
+				} elseif (isset($label_defaults[$key])) {
+					$labels_data[$key] = $label_defaults[$key];
 				}
 			}
 		}
