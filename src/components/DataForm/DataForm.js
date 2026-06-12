@@ -48,7 +48,8 @@ const DataForm = (
 		_isBuilderOptions = false,
 		_builderType = null,
 		_resetForm = true,
-		_redirectTo = null
+		_redirectTo = null,
+		_onFieldChange = null
 	}
 ) => {
 	const [sections, setSections] = useState(_sections);
@@ -223,6 +224,21 @@ const DataForm = (
 
 					// Update the value in the correct section.
 					newValues[section.section_name][name] = value;
+
+					// Apply cross-field auto-fill if a handler is provided.
+					if (_onFieldChange) {
+						const extraUpdates = _onFieldChange(name, value, newValues);
+						if (extraUpdates) {
+							for (const [sectionName, fieldUpdates] of Object.entries(extraUpdates)) {
+								if (!newValues[sectionName] || typeof newValues[sectionName] !== 'object') {
+									newValues[sectionName] = {};
+								}
+								for (const [fieldName, fieldValue] of Object.entries(fieldUpdates)) {
+									newValues[sectionName][fieldName] = fieldValue;
+								}
+							}
+						}
+					}
 
 					// The change has been made, so the loop can be exited.
 					setHasChanges(true);

@@ -154,175 +154,146 @@ export const postTypesConfigurations = [
                 fieldType: 'text',
                 name: 'add_new',
                 fieldLabel: __('Add New', 'native-custom-fields'),
-                placeholder: 'Add New'
             },
             {
                 fieldType: 'text',
                 name: 'menu_name',
                 fieldLabel: __('Menu Name', 'native-custom-fields'),
-                placeholder: 'Book'
             },
             {
                 fieldType: 'text',
                 name: 'name_admin_bar',
                 fieldLabel: __('Admin Bar Name', 'native-custom-fields'),
-                placeholder: 'Book'
             },
             {
                 fieldType: 'text',
                 name: 'add_new_item',
                 fieldLabel: __('Add New Item', 'native-custom-fields'),
-                placeholder: 'Add New Book'
             },
             {
                 fieldType: 'text',
                 name: 'edit_item',
                 fieldLabel: __('Edit Item', 'native-custom-fields'),
-                placeholder: 'Edit Book'
             },
             {
                 fieldType: 'text',
                 name: 'new_item',
                 fieldLabel: __('New Item', 'native-custom-fields'),
-                placeholder: 'New Book'
             },
             {
                 fieldType: 'text',
                 name: 'view_item',
                 fieldLabel: __('View Item', 'native-custom-fields'),
-                placeholder: 'View Book'
             },
             {
                 fieldType: 'text',
                 name: 'view_items',
                 fieldLabel: __('View Items', 'native-custom-fields'),
-                placeholder: 'View Books'
             },
             {
                 fieldType: 'text',
                 name: 'all_items',
                 fieldLabel: __('All Items', 'native-custom-fields'),
-                placeholder: 'All Books'
             },
             {
                 fieldType: 'text',
                 name: 'search_items',
                 fieldLabel: __('Search Items', 'native-custom-fields'),
-                placeholder: 'Search Books'
             },
             {
                 fieldType: 'text',
                 name: 'parent_item_colon',
                 fieldLabel: __('Parent Item Colon', 'native-custom-fields'),
-                placeholder: 'Parent Book:'
             },
             {
                 fieldType: 'text',
                 name: 'not_found',
                 fieldLabel: __('Not Found', 'native-custom-fields'),
-                placeholder: 'No books found'
             },
             {
                 fieldType: 'text',
                 name: 'not_found_in_trash',
                 fieldLabel: __('Not Found in Trash', 'native-custom-fields'),
-                placeholder: 'No books found in Trash'
             },
             {
                 fieldType: 'text',
                 name: 'archives',
                 fieldLabel: __('Archives', 'native-custom-fields'),
-                placeholder: 'Book Archives'
             },
             {
                 fieldType: 'text',
                 name: 'attributes',
                 fieldLabel: __('Attributes', 'native-custom-fields'),
-                placeholder: 'Book Attributes'
             },
             {
                 fieldType: 'text',
                 name: 'insert_into_item',
                 fieldLabel: __('Insert In to Item Text', 'native-custom-fields'),
-                placeholder: 'Insert in to book'
             },
             {
                 fieldType: 'text',
                 name: 'uploaded_to_this_item',
                 fieldLabel: __('Uploaded to this Item', 'native-custom-fields'),
-                placeholder: 'Uploaded to this book'
             },
             {
                 fieldType: 'text',
                 name: 'featured_image',
                 fieldLabel: __('Featured Image', 'native-custom-fields'),
-                placeholder: 'Featured Image'
             },
             {
                 fieldType: 'text',
                 name: 'set_featured_image',
                 fieldLabel: __('Set Featured Image', 'native-custom-fields'),
-                placeholder: 'Set featured image'
             },
             {
                 fieldType: 'text',
                 name: 'remove_featured_image',
                 fieldLabel: __('Remove Featured Image', 'native-custom-fields'),
-                placeholder: 'Remove featured image'
             },
             {
                 fieldType: 'text',
                 name: 'use_featured_image',
                 fieldLabel: __('Use Featured Image', 'native-custom-fields'),
-                placeholder: 'Use as featured image'
             },
             {
                 fieldType: 'text',
                 name: 'filter_items_list',
                 fieldLabel: __('Filter Items List', 'native-custom-fields'),
-                placeholder: 'Filter books list'
             },
             {
                 fieldType: 'text',
                 name: 'items_list_navigation',
                 fieldLabel: __('Items List Navigation', 'native-custom-fields'),
-                placeholder: 'Books list navigation'
             },
             {
                 fieldType: 'text',
                 name: 'items_list',
                 fieldLabel: __('Items List', 'native-custom-fields'),
-                placeholder: 'Books list'
             },
             {
                 fieldType: 'text',
                 name: 'item_published',
                 fieldLabel: __('Item Published', 'native-custom-fields'),
-                placeholder: 'Book published'
             },
             {
                 fieldType: 'text',
                 name: 'item_published_privately',
                 fieldLabel: __('Item Published Privately', 'native-custom-fields'),
-                placeholder: 'Book published privately'
             },
             {
                 fieldType: 'text',
                 name: 'item_reverted_to_draft',
                 fieldLabel: __('Item Reverted to Draft', 'native-custom-fields'),
-                placeholder: 'Book reverted to draft'
             },
             {
                 fieldType: 'text',
                 name: 'item_scheduled',
                 fieldLabel: __('Item Scheduled', 'native-custom-fields'),
-                placeholder: 'Book scheduled'
             },
             {
                 fieldType: 'text',
                 name: 'item_updated',
                 fieldLabel: __('Item Updated', 'native-custom-fields'),
-                placeholder: 'Book updated'
             }
         ]
     },
