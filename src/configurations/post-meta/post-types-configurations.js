@@ -12,14 +12,12 @@ export const postTypesConfigurations = [
                 fieldLabel: __('Post Type Slug', 'native-custom-fields'),
                 fieldHelpText: __('Post type key. Must not exceed 20 characters and may only contain lowercase alphanumeric characters, dashes, and underscores.', 'native-custom-fields'),
                 required: true,
-                placeholder: 'book'
             },
             {
                 fieldType: 'text',
                 name: 'label',
                 fieldLabel: __('Label', 'native-custom-fields'),
                 fieldHelpText: __('Name of the post type shown in the menu. Usually plural.', 'native-custom-fields'),
-                placeholder: 'Books',
                 required: true
             },
             {
@@ -27,7 +25,6 @@ export const postTypesConfigurations = [
                 name: 'singular_name',
                 fieldLabel: __('Singular Name', 'native-custom-fields'),
                 fieldHelpText: __('Name for one object of this post type.', 'native-custom-fields'),
-                placeholder: 'Book',
                 required: true
             },
             {
@@ -35,7 +32,6 @@ export const postTypesConfigurations = [
                 name: 'description',
                 fieldLabel: __('Description', 'native-custom-fields'),
                 fieldHelpText: __('A short descriptive summary of what the post type is.', 'native-custom-fields'),
-                placeholder: 'A collection of books...',
             },
             {
                 fieldType: 'number',
@@ -406,7 +402,6 @@ export const postTypesConfigurations = [
                 name: 'rest_base',
                 fieldLabel: __('REST API Base', 'native-custom-fields'),
                 fieldHelpText: __('To change the base URL of REST API route. Default is post type slug.', 'native-custom-fields'),
-                placeholder: 'book'
             },
             {
                 fieldType: 'text',

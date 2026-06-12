@@ -39,14 +39,12 @@ export const taxonomyConfigurations = [
 				fieldLabel: __('Taxonomy Slug', 'native-custom-fields'),
 				fieldHelpText: __('Taxonomy key. Must not exceed 32 characters and may only contain lowercase alphanumeric characters, dashes, and underscores.', 'native-custom-fields'),
 				required: true,
-				placeholder: 'book-categories'
 			},
 			{
 				fieldType: 'text',
 				name: 'label',
 				fieldLabel: __('Label', 'native-custom-fields'),
 				fieldHelpText: __('General name for the taxonomy, usually plural. ', 'native-custom-fields'),
-				placeholder: 'Book Categories',
 				required: true
 			},
 			{
@@ -54,7 +52,6 @@ export const taxonomyConfigurations = [
 				name: 'singular_name',
 				fieldLabel: __('Singular Name', 'native-custom-fields'),
 				fieldHelpText: __('Name for one object of this taxonomy.', 'native-custom-fields'),
-				placeholder: 'Book Category',
 				required: true
 			},
 			{
@@ -72,7 +69,6 @@ export const taxonomyConfigurations = [
 				name: 'description',
 				fieldLabel: __('Description', 'native-custom-fields'),
 				fieldHelpText: __('A short descriptive summary of what the taxonomy is for.', 'native-custom-fields'),
-				placeholder: 'A collection of book categories...',
 			},
 			{
 				fieldType: 'toggle',
@@ -152,31 +148,26 @@ export const taxonomyConfigurations = [
 				fieldType: 'text',
 				name: 'menu_name',
 				fieldLabel: __('Menu Name', 'native-custom-fields'),
-				placeholder: 'Book Categories'
 			},
 			{
 				fieldType: 'text',
 				name: 'name_admin_bar',
-				fieldLabel: __('Admin Bar Name', 'native-custom-fields'),
-				placeholder: 'Book Categories'
+				fieldLabel: __('Admin Bar Name', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'add_new_item',
-				fieldLabel: __('Add New Item', 'native-custom-fields'),
-				placeholder: 'Add New Book Category'
+				fieldLabel: __('Add New Item', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'new_item_name',
-				fieldLabel: __('Add New Item Name', 'native-custom-fields'),
-				placeholder: 'Add New Book Category Name'
+				fieldLabel: __('Add New Item Name', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'template_name',
 				fieldLabel: __('Archive Name', 'native-custom-fields'),
-				placeholder: 'Book Category Archive'
 			},
 			{
 				fieldType: 'text',
@@ -199,68 +190,57 @@ export const taxonomyConfigurations = [
 			{
 				fieldType: 'text',
 				name: 'choose_from_most_used',
-				fieldLabel: __('Choose from Most Used', 'native-custom-fields'),
-				placeholder: 'Choose from the most used Book Categories',
+				fieldLabel: __('Choose from Most Used', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'back_to_items',
 				fieldLabel: __('Back to Items', 'native-custom-fields'),
-				placeholder: 'Back to Book Categories'
 			},
 			{
 				fieldType: 'text',
 				name: 'item_link',
 				fieldLabel: __('Item Link', 'native-custom-fields'),
-				placeholder: 'Book Category Link'
 			},
 			{
 				fieldType: 'text',
 				name: 'item_link_description',
 				fieldLabel: __('Item Link', 'native-custom-fields'),
-				placeholder: 'A link to a Book Category'
 			},
 			{
 				fieldType: 'text',
 				name: 'all_items',
-				fieldLabel: __('All Items', 'native-custom-fields'),
-				placeholder: 'All Book Categories'
+				fieldLabel: __('All Items', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'view_item',
-				fieldLabel: __('View Item', 'native-custom-fields'),
-				placeholder: 'View Book Category'
+				fieldLabel: __('View Item', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'update_item',
-				fieldLabel: __('Update Item', 'native-custom-fields'),
-				placeholder: 'Update Book Category'
+				fieldLabel: __('Update Item', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'search_items',
-				fieldLabel: __('Search Items', 'native-custom-fields'),
-				placeholder: 'Search Books'
+				fieldLabel: __('Search Items', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'popular_items',
-				fieldLabel: __('Popular Items', 'native-custom-fields'),
-				placeholder: 'Popular Book Categories'
+				fieldLabel: __('Popular Items', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'parent_item',
-				fieldLabel: __('Parent Item Colon', 'native-custom-fields'),
-				placeholder: 'Parent Book Category'
+				fieldLabel: __('Parent Item Colon', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'parent_item_colon',
-				fieldLabel: __('Parent Item Colon', 'native-custom-fields'),
-				placeholder: 'Parent Book Category:'
+				fieldLabel: __('Parent Item Colon', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
@@ -289,32 +269,27 @@ export const taxonomyConfigurations = [
 			{
 				fieldType: 'text',
 				name: 'not_found',
-				fieldLabel: __('Not Found', 'native-custom-fields'),
-				placeholder: 'No book categories found'
+				fieldLabel: __('Not Found', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'no_terms',
-				fieldLabel: __('Not Terms', 'native-custom-fields'),
-				placeholder: 'No book categories'
+				fieldLabel: __('Not Terms', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'filter_by_item',
-				fieldLabel: __('Filter by Item', 'native-custom-fields'),
-				placeholder: 'Filter by book category'
+				fieldLabel: __('Filter by Item', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'items_list_navigation',
-				fieldLabel: __('Items List Navigation', 'native-custom-fields'),
-				placeholder: 'Book Category list navigation'
+				fieldLabel: __('Items List Navigation', 'native-custom-fields')
 			},
 			{
 				fieldType: 'text',
 				name: 'items_list',
-				fieldLabel: __('Items List', 'native-custom-fields'),
-				placeholder: 'Book Category list'
+				fieldLabel: __('Items List', 'native-custom-fields')
 			}
 		]
 	},
@@ -437,7 +412,6 @@ export const taxonomyConfigurations = [
 				name: 'rest_base',
 				fieldLabel: __('REST API Base', 'native-custom-fields'),
 				fieldHelpText: __('To change the base url of REST API route. Default is taxonomy slug.', 'native-custom-fields'),
-				placeholder: 'book-categories'
 			},
 			{
 				fieldType: 'text',
