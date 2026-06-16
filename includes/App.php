@@ -14,6 +14,7 @@ use Exception;
 use NativeCustomFields\Common\DI;
 use NativeCustomFields\Presentation\ControllerInit;
 use NativeCustomFields\Services\AjaxService;
+use NativeCustomFields\Services\ImportExportService;
 use NativeCustomFields\Services\OptionService;
 use NativeCustomFields\Services\PostMetaService;
 use NativeCustomFields\Services\TermMetaService;
@@ -33,7 +34,8 @@ final class App {
         OptionService::class,
         PostMetaService::class,
 		TermMetaService::class,
-        UserMetaService::class
+        UserMetaService::class,
+        ImportExportService::class
     ];
 
     /**

@@ -26,6 +26,9 @@ if (dashboardPageWrapper) {
 	);
 }
 
+// Initialize Create Options Page
+renderCreateOptionsPages();
+
 // Initialize options fields
 renderOptionsFields();
 

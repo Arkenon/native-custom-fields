@@ -13,7 +13,9 @@ defined( 'ABSPATH' ) || exit;
 
 use Exception;
 use NativeCustomFields\Common\DI;
+use NativeCustomFields\Presentation\Admin\Controllers\AbilityContoller;
 use NativeCustomFields\Presentation\Admin\Controllers\AdminController;
+use NativeCustomFields\Presentation\Admin\Controllers\ImportExportController;
 use NativeCustomFields\Presentation\Admin\Controllers\OptionsController;
 use NativeCustomFields\Presentation\Admin\Controllers\PostMetaController;
 use NativeCustomFields\Presentation\Admin\Controllers\TermMetaController;
@@ -31,7 +33,9 @@ final class ControllerInit {
 		OptionsController::class,
 		PostMetaController::class,
 		TermMetaController::class,
-		UserMetaController::class
+		UserMetaController::class,
+		ImportExportController::class,
+		AbilityContoller::class
 	];
 
 	/**

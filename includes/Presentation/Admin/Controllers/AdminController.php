@@ -160,6 +160,16 @@ final class AdminController
 			'native-custom-fields-user-meta-builder',
 			[$this, 'renderUserMetaBuilderPage'],
 		);
+
+		//Options Page Builder
+		add_submenu_page(
+			'native-custom-fields',
+			__( 'Options Page Builder', 'native-custom-fields' ),
+			__( 'Options Pages', 'native-custom-fields' ),
+			'manage_options',
+			'native-custom-fields-options-page-builder',
+			[ $this, 'renderOptionsBuilderPage' ]
+		);
 	}
 
 
@@ -194,5 +204,15 @@ final class AdminController
 	public function renderUserMetaBuilderPage()
 	{
 		Helper::renderBuilderPage('native-custom-fields-user-meta-builder-wrapper');
+	}
+
+	/**
+	 * Render the Options Page Builder page.
+	 *
+	 * @return void
+	 * @since 1.0.5
+	 */
+	public function renderOptionsBuilderPage(): void {
+		Helper::renderBuilderPage( 'native-custom-fields-options-page-builder-wrapper' );
 	}
 }

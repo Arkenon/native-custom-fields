@@ -1,10 +1,10 @@
 === Native Custom Fields - Custom Content Types and Meta Fields ===
 Contributors: arkenon
 Tags: custom fields, custom post type, meta box, gutenberg, block editor
-Requires at least: 6.0
+Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,16 +43,18 @@ The result is a clean, lightweight, and maintainable solution.
 
 = Key Features =
 
-= Content Types =
 * Register Custom Post Types
 * Register Custom Taxonomies
+* Import / Export via JSON or PHP
+* Options Page & Fields Builder
+* AI Integration with Abilities API & WordPress AI Client
 
 = Meta Fields =
 Create field groups and attach them to:
 * Post Types
 * Taxonomies
 * User Profiles
-* Options Pages (Pro)
+* Options Pages
 
 = Supported Components =
 * Input Control
@@ -95,7 +97,7 @@ Custom Components:
 * Strict Types compatible
 * Modern React-based admin UI
 * Clean and extendable architecture
-* Import / Export via JSON or PHP (Pro)
+* Import / Export via JSON or PHP
 
 = Performance-Focused =
 * Minimum admin UI bloat
@@ -132,15 +134,11 @@ Yes. The plugin is built around the Block Editor architecture and uses native Wo
 
 Yes. The free version has Repeater and Group fields. These are custom components built using WordPress native components recursively or grouped.
 
-= What includes the Pro version? =
-
-* Import / Export via JSON or PHP
-* Options Page & Fields Builder
-* Frontend Forms (Such as Contact Form) (Coming Soon)
-* AI Integration with Abilities API & WordPress AI Client (Coming Soon)
-
 
 == Changelog ==
+
+= 1.0.5 =
+* Moved: Pro features into free plugin: Import&Export Module & Options Page Builder & AI Integration.
 
 = 1.0.4 =
 * Added: Auto generate empty labels for post types.

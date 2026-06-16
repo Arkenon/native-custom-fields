@@ -133,7 +133,7 @@ function DashboardSidebar() {
                 </CardBody>
             </Card>
 
-            <Card style={{
+            {/* <Card style={{
                 background: 'linear-gradient(135deg, var(--wp-admin-theme-color, #3858e9) 0%, #7b2ff7 100%)',
                 border: 'none'
             }}>
@@ -180,7 +180,7 @@ function DashboardSidebar() {
                         </Button>
                     </VStack>
                 </CardBody>
-            </Card>
+            </Card> */}
 
             <Card>
                 <CardHeader>

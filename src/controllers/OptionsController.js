@@ -1,6 +1,41 @@
 import {fieldInitializationError} from "@nativecustomfields/common/helper.js";
 import {createRoot} from "@wordpress/element";
 import {DataForm} from "@nativecustomfields/components";
+import EditOrSaveOptionsPage from "@nativecustomfields/admin/pages/create-options/EditOrSaveOptionsPage.js";
+import EditOrSaveOptionsPageFields from "@nativecustomfields/admin/pages/create-options/EditOrSaveOptionsPageFields.js";
+import OptionsPageListTable from "@nativecustomfields/admin/pages/create-options/OptionsPageListTable.js";
+
+/**
+ * Renders the options page creation and editing interface.
+ * The interface allows users to create new options pages, edit existing ones,
+ * and manage the fields associated with those pages.
+ * The rendering is based on the current step in the process, determined by URL parameters.
+ * @returns {void}
+ * @since 1.0.5
+ */
+export const renderCreateOptionsPages = () => {
+	const optionsPageBuilderWrapper = document.querySelector('.native-custom-fields-options-page-builder-wrapper');
+
+	// Get URL parameters
+	const urlParams = new URLSearchParams(window.location.search);
+	const step = urlParams.get('step');
+
+	if (optionsPageBuilderWrapper) {
+		const root = createRoot(optionsPageBuilderWrapper);
+		root.render(
+			<>
+				{
+					step === 'edit-or-save-fields' ? <EditOrSaveOptionsPageFields/> :
+						step === 'edit-or-save-menu-page' ? <EditOrSaveOptionsPage/> :
+								<div className="native-custom-fields-app">
+									<OptionsPageListTable/>
+								</div>
+				}
+			</>
+		);
+	}
+}
+
 
 /**
  * Renders options fields on the page.
