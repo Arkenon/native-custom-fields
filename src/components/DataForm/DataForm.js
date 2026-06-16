@@ -21,7 +21,6 @@ import apiFetch from '@wordpress/api-fetch';
  */
 import {validateRequiredFields} from '@nativecustomfields/common/helper';
 import {ActionButtons, NavigationLayout, TabPanelLayout, StackedSectionsLayout} from '@nativecustomfields/components';
-import ToggleGroupField from "@nativecustomfields/components/ToggleGroup/ToggleGroupField.js";
 
 /**
  * Render fields as a form
@@ -312,13 +311,6 @@ const DataForm = (
 							response = await saveData('/native-custom-fields/v1/options/save-options', builder_menu_slug);
 						}
 						break;
-					/*	case 'optionsPageFields':
-							const saveOptionsPageFieldsConfig = await saveData('/native-custom-fields/v1/options/save-option-page-fields-config', _menuSlug);
-
-							if (saveOptionsPageFieldsConfig.status) {
-								response = await saveData('/native-custom-fields/v1/options/save-options', _menuSlug);
-							}
-							break;*/
 					case 'postType':
 						const savePostTypeConfig = await saveData('/native-custom-fields/v1/post-meta/save-post-type-config', _menuSlug);
 
@@ -330,13 +322,6 @@ const DataForm = (
 							response = await saveData('/native-custom-fields/v1/options/save-options', builder_menu_slug);
 						}
 						break;
-					/*case 'postMetaFields':
-						const savePostMetaFieldsConfig = await saveData('/native-custom-fields/v1/post-meta/save-post-meta-fields-config', _menuSlug);
-
-						if (savePostMetaFieldsConfig.status) {
-							response = await saveData('/native-custom-fields/v1/options/save-options', _menuSlug);
-						}
-						break;*/
 					case 'customTaxonomy':
 						const saveCustomTaxonomyConfig = await saveData('/native-custom-fields/v1/term-meta/save-custom-taxonomy-config', _menuSlug);
 
@@ -346,20 +331,6 @@ const DataForm = (
 							response = await saveData('/native-custom-fields/v1/options/save-options', builder_menu_slug);
 						}
 						break;
-					/*	case 'termMetaFields':
-							const saveTermMetaFieldsConfig = await saveData('/native-custom-fields/v1/term-meta/save-term-meta-fields-config', _menuSlug);
-
-							if (saveTermMetaFieldsConfig.status) {
-								response = await saveData('/native-custom-fields/v1/options/save-options', _menuSlug);
-							}
-							break;*/
-					/*	case 'userMetaFields':
-							const saveUserMetaFieldsConfig = await saveData('/native-custom-fields/v1/user-meta/save-user-meta-fields-config', _menuSlug);
-
-							if (saveUserMetaFieldsConfig.status) {
-								response = await saveData('/native-custom-fields/v1/options/save-options', _menuSlug);
-							}
-							break;*/
 				}
 			}
 

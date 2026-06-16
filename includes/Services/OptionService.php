@@ -184,6 +184,8 @@ class OptionService implements OptionServiceInterface
 			do_action('native_custom_fields_save_options_before', $menu_slug, $values);
 		}
 
+		error_log(print_r($values, true));
+
 		//Get saved values from the database
 		$saved = $this->optionRepository->saveOptions($values, $menu_slug);
 

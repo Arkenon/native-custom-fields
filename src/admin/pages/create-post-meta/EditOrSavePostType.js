@@ -85,9 +85,7 @@ const EditOrSavePostType = () => {
 			const currentVal = currentLabels[key];
 			// Update the field if: it is empty, OR its current value still matches
 			// what auto-fill previously wrote (meaning the user hasn't customised it).
-			if (!currentVal || currentVal === prevAutoFilled[key]) {
-				updates[key] = autoVal;
-			}
+			updates[key] = autoVal;
 		}
 
 		// Remember what was auto-filled so the next keystroke can detect it.

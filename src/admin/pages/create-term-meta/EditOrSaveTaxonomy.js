@@ -75,9 +75,7 @@ const EditOrSaveTaxonomy = () => {
 		const updates = {};
 		for (const [key, autoVal] of Object.entries(defaults)) {
 			const currentVal = currentLabels[key];
-			if (!currentVal || currentVal === prevAutoFilled[key]) {
-				updates[key] = autoVal;
-			}
+			updates[key] = autoVal;
 		}
 
 		prevAutoFilledRef.current = { ...prevAutoFilled, ...updates };

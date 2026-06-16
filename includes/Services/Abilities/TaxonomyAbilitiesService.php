@@ -114,6 +114,60 @@ class TaxonomyAbilitiesService
 
             $menu_slug = 'native_custom_fields_taxonomy_builder_' . $taxonomy;
 
+            // Prepare labels array
+            $plural         = $label;
+            $singular       = $input['singular_name'] ?? $label;
+            $plural_lower   = strtolower($plural);
+            $singular_lower = strtolower($singular);
+
+            $labels_data = [
+                'menu_name'                  => $plural,
+                'name_admin_bar'             => $singular,
+                /* translators: %s: singular taxonomy name */
+                'add_new_item'               => sprintf(__('Add New %s', 'native-custom-fields'), $singular),
+                /* translators: %s: singular taxonomy name */
+                'new_item_name'              => sprintf(__('New %s Name', 'native-custom-fields'), $singular),
+                /* translators: %s: singular taxonomy name */
+                'template_name'              => sprintf(__('%s Template Name', 'native-custom-fields'), $singular),
+                /* translators: %s: plural taxonomy name (lowercase) */
+                'separate_items_with_commas' => sprintf(__('Separate %s with commas', 'native-custom-fields'), $plural_lower),
+                /* translators: %s: plural taxonomy name (lowercase) */
+                'add_or_remove_items'        => sprintf(__('Add or remove %s', 'native-custom-fields'), $plural_lower),
+                'most_used'                  => __('Most Used', 'native-custom-fields'),
+                /* translators: %s: plural taxonomy name (lowercase) */
+                'choose_from_most_used'      => sprintf(__('Choose from the most used %s', 'native-custom-fields'), $plural_lower),
+                /* translators: %s: plural taxonomy name */
+                'back_to_items'              => sprintf(__('← Back to %s', 'native-custom-fields'), $plural),
+                /* translators: %s: singular taxonomy name */
+                'item_link'                  => sprintf(__('%s Link', 'native-custom-fields'), $singular),
+                /* translators: %s: singular taxonomy name (lowercase) */
+                'item_link_description'      => sprintf(__('A link to a %s', 'native-custom-fields'), $singular_lower),
+                /* translators: %s: plural taxonomy name */
+                'all_items'                  => sprintf(__('All %s', 'native-custom-fields'), $plural),
+                /* translators: %s: singular taxonomy name */
+                'view_item'                  => sprintf(__('View %s', 'native-custom-fields'), $singular),
+                /* translators: %s: singular taxonomy name */
+                'update_item'                => sprintf(__('Update %s', 'native-custom-fields'), $singular),
+                /* translators: %s: plural taxonomy name */
+                'search_items'               => sprintf(__('Search %s', 'native-custom-fields'), $plural),
+                /* translators: %s: plural taxonomy name */
+                'popular_items'              => sprintf(__('Popular %s', 'native-custom-fields'), $plural),
+                /* translators: %s: singular taxonomy name */
+                'parent_item'                => sprintf(__('Parent %s', 'native-custom-fields'), $singular),
+                /* translators: %s: singular taxonomy name */
+                'parent_item_colon'          => sprintf(__('Parent %s:', 'native-custom-fields'), $singular),
+                /* translators: %s: plural taxonomy name (lowercase) */
+                'not_found'                  => sprintf(__('No %s found', 'native-custom-fields'), $plural_lower),
+                /* translators: %s: plural taxonomy name (lowercase) */
+                'no_terms'                   => sprintf(__('No %s', 'native-custom-fields'), $plural_lower),
+                /* translators: %s: singular taxonomy name (lowercase) */
+                'filter_by_item'             => sprintf(__('Filter by %s', 'native-custom-fields'), $singular_lower),
+                /* translators: %s: plural taxonomy name */
+                'items_list_navigation'      => sprintf(__('%s list navigation', 'native-custom-fields'), $plural),
+                /* translators: %s: plural taxonomy name */
+                'items_list'                 => sprintf(__('%s list', 'native-custom-fields'), $plural),
+            ];
+
             $values = [
                 'native_custom_fields_create_taxonomy_general' => [
                     'taxonomy'               => $taxonomy,
@@ -130,7 +184,7 @@ class TaxonomyAbilitiesService
                         'default_term_description' => '',
                     ],
                 ],
-                'native_custom_fields_create_taxonomy_labels'       => [],
+                'native_custom_fields_create_taxonomy_labels'       => $labels_data,
                 'native_custom_fields_create_taxonomy_visibility'   => [
                     'public'              => $input['public'] ?? true,
                     'hierarchical'        => $input['hierarchical'] ?? true,
@@ -174,5 +228,4 @@ class TaxonomyAbilitiesService
             return ['status' => false, 'message' => $e->getMessage()];
         }
     }
-
 }

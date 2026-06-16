@@ -215,74 +215,6 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 		$rest_api     = Helper::sanitizeArray($values['native_custom_fields_create_taxonomy_rest_api']);
 		$permalinks   = Helper::sanitizeArray($values['native_custom_fields_create_taxonomy_permalinks']);
 
-		// Prepare labels array
-		$labels_data                  = [];
-		$labels_data['name']          = $general['label'];
-		$labels_data['singular_name'] = $general['singular_name'];
-
-		$plural         = $general['label'];
-		$singular       = $general['singular_name'];
-		$plural_lower   = strtolower($plural);
-		$singular_lower = strtolower($singular);
-
-		$label_defaults = [
-			'menu_name'                  => $plural,
-			'name_admin_bar'             => $singular,
-			/* translators: %s: singular taxonomy name */
-			'add_new_item'               => sprintf(__('Add New %s', 'native-custom-fields'), $singular),
-			/* translators: %s: singular taxonomy name */
-			'new_item_name'              => sprintf(__('New %s Name', 'native-custom-fields'), $singular),
-			/* translators: %s: singular taxonomy name */
-			'template_name'              => sprintf(__('%s Template Name', 'native-custom-fields'), $singular),
-			/* translators: %s: plural taxonomy name (lowercase) */
-			'separate_items_with_commas' => sprintf(__('Separate %s with commas', 'native-custom-fields'), $plural_lower),
-			/* translators: %s: plural taxonomy name (lowercase) */
-			'add_or_remove_items'        => sprintf(__('Add or remove %s', 'native-custom-fields'), $plural_lower),
-			'most_used'                  => __('Most Used', 'native-custom-fields'),
-			/* translators: %s: plural taxonomy name (lowercase) */
-			'choose_from_most_used'      => sprintf(__('Choose from the most used %s', 'native-custom-fields'), $plural_lower),
-			/* translators: %s: plural taxonomy name */
-			'back_to_items'              => sprintf(__('← Back to %s', 'native-custom-fields'), $plural),
-			/* translators: %s: singular taxonomy name */
-			'item_link'                  => sprintf(__('%s Link', 'native-custom-fields'), $singular),
-			/* translators: %s: singular taxonomy name (lowercase) */
-			'item_link_description'      => sprintf(__('A link to a %s', 'native-custom-fields'), $singular_lower),
-			/* translators: %s: plural taxonomy name */
-			'all_items'                  => sprintf(__('All %s', 'native-custom-fields'), $plural),
-			/* translators: %s: singular taxonomy name */
-			'view_item'                  => sprintf(__('View %s', 'native-custom-fields'), $singular),
-			/* translators: %s: singular taxonomy name */
-			'update_item'                => sprintf(__('Update %s', 'native-custom-fields'), $singular),
-			/* translators: %s: plural taxonomy name */
-			'search_items'               => sprintf(__('Search %s', 'native-custom-fields'), $plural),
-			/* translators: %s: plural taxonomy name */
-			'popular_items'              => sprintf(__('Popular %s', 'native-custom-fields'), $plural),
-			/* translators: %s: singular taxonomy name */
-			'parent_item'                => sprintf(__('Parent %s', 'native-custom-fields'), $singular),
-			/* translators: %s: singular taxonomy name */
-			'parent_item_colon'          => sprintf(__('Parent %s:', 'native-custom-fields'), $singular),
-			/* translators: %s: plural taxonomy name (lowercase) */
-			'not_found'                  => sprintf(__('No %s found', 'native-custom-fields'), $plural_lower),
-			/* translators: %s: plural taxonomy name (lowercase) */
-			'no_terms'                   => sprintf(__('No %s', 'native-custom-fields'), $plural_lower),
-			/* translators: %s: singular taxonomy name (lowercase) */
-			'filter_by_item'             => sprintf(__('Filter by %s', 'native-custom-fields'), $singular_lower),
-			/* translators: %s: plural taxonomy name */
-			'items_list_navigation'      => sprintf(__('%s list navigation', 'native-custom-fields'), $plural),
-			/* translators: %s: plural taxonomy name */
-			'items_list'                 => sprintf(__('%s list', 'native-custom-fields'), $plural),
-		];
-
-		foreach ($labels as $key => $value) {
-			if ($key !== 'section_name' && $key !== 'section_title' && $key !== 'section_icon') {
-				if (! empty($value)) {
-					$labels_data[$key] = $value;
-				} elseif (isset($label_defaults[$key])) {
-					$labels_data[$key] = $label_defaults[$key];
-				}
-			}
-		}
-
 		//Prepare capabilities settings
 		$get_capabilities      = ! empty($capabilities['capabilities']) ? $capabilities['capabilities'] : [];
 		$selected_capabilities = [];
@@ -335,7 +267,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 
 		//Set taxonomy arguments
 		$taxonomy_args                          = [];
-		$taxonomy_args['labels']                = $labels_data;
+		$taxonomy_args['labels']                = $labels;
 		$taxonomy_args['description']           = $general['description'] ?? null;
 		$taxonomy_args['query_var']             = $query_var;
 		$taxonomy_args['default_term']          = $default_term;
