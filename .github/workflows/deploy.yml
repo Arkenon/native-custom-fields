@@ -1,0 +1,35 @@
+name: Deploy to WordPress.org
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to deploy (must match readme.txt Stable tag and the plugin header Version)"
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy to WordPress.org SVN
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify version matches plugin files
+        run: |
+          PLUGIN_VERSION=$(grep -m1 "Version:" native-custom-fields.php | sed -E 's/.*Version:[[:space:]]*//')
+          STABLE_TAG=$(grep -m1 "^Stable tag:" readme.txt | sed -E 's/Stable tag:[[:space:]]*//')
+          echo "Plugin header version: $PLUGIN_VERSION"
+          echo "Readme stable tag: $STABLE_TAG"
+          echo "Requested deploy version: ${{ inputs.version }}"
+          if [ "$PLUGIN_VERSION" != "${{ inputs.version }}" ] || [ "$STABLE_TAG" != "${{ inputs.version }}" ]; then
+            echo "::error::Version mismatch between input (${{ inputs.version }}), plugin header ($PLUGIN_VERSION) and readme.txt stable tag ($STABLE_TAG)."
+            exit 1
+          fi
+
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          VERSION: ${{ inputs.version }}
