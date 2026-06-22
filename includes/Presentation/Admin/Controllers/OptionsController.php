@@ -327,8 +327,7 @@ class OptionsController
      */
     public function renderPage()
     {
-        $screen = get_current_screen();
-        $menu_slug = str_replace('toplevel_page_', '', $screen->id);
+        $menu_slug = Helper::sanitize('page', 'get');
 
         $html = '<div class="native-custom-fields-wrapper" data-menu="' . esc_attr($menu_slug) . '" data-page-title="' . esc_attr(get_admin_page_title()) . '"></div>';
         echo wp_kses_post($html);
