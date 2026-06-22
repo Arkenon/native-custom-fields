@@ -30,6 +30,13 @@ export const optionsPagesConfigurations = [
 				placeholder: __('My Options Page', 'native-custom-fields'),
 			},
 			{
+				fieldType: 'text',
+				name: 'parent_slug',
+				fieldLabel: __('Parent Slug', 'native-custom-fields'),
+				fieldHelpText: __('Type the slug of the parent menu to add this page as a submenu. Leave empty to create a top-level menu.', 'native-custom-fields'),
+				placeholder: 'parent_menu_slug',
+			},
+			{
 				fieldType: 'select',
 				name: 'layout',
 				fieldLabel: __('Select a Layout', 'native-custom-fields'),

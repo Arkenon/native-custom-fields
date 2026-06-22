@@ -296,15 +296,26 @@ class OptionsController
             $menuModel = OptionMenuModel::fromArray($menu, $menu_slug);
 
             //Add menu pages into admin menu
-            add_menu_page(
-                $menuModel->page_title,
-                $menuModel->menu_title,
-                $menuModel->capability,
-                $menu_slug,
-                [$this, 'renderPage'], //Always use default callback
-                $menuModel->icon_url,
-                $menuModel->position
-            );
+            if (!empty($menuModel->parent_slug)) {
+                add_submenu_page(
+                    $menuModel->parent_slug,
+                    $menuModel->page_title,
+                    $menuModel->menu_title ?: $menuModel->page_title,
+                    $menuModel->capability,
+                    $menu_slug,
+                    [$this, 'renderPage']
+                );
+            } else {
+                add_menu_page(
+                    $menuModel->page_title,
+                    $menuModel->menu_title,
+                    $menuModel->capability,
+                    $menu_slug,
+                    [$this, 'renderPage'],
+                    $menuModel->icon_url,
+                    $menuModel->position
+                );
+            }
         }
     }
 
