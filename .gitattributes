@@ -1,0 +1,13 @@
+# Files/directories excluded from Composer package export
+.github/            export-ignore
+.gitattributes      export-ignore
+.gitignore          export-ignore
+.distignore         export-ignore
+src/                export-ignore
+docs/               export-ignore
+node_modules/       export-ignore
+webpack.config.js   export-ignore
+package.json        export-ignore
+package-lock.json   export-ignore
+phpcs.xml           export-ignore
+composer.lock       export-ignore
