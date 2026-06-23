@@ -137,6 +137,11 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 == Changelog ==
 
+= 1.2.6 =
+* Add: Static boot method for external usage in another plugins.
+* Test: Added Composer package capability.
+* Test: Added GitHub Actions workflow for testing.
+
 = 1.2.3 =
 * Add: Into Packagist repository
 
