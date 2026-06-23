@@ -10,6 +10,7 @@
 
 namespace NativeCustomFields\Presentation\Client\Controllers;
 
+use NativeCustomFields\Common\Constants;
 use NativeCustomFields\Services\FieldService;
 
 defined('ABSPATH') || exit;
@@ -71,7 +72,7 @@ final class ClientController
             'native-custom-fields',
             NATIVE_CUSTOM_FIELDS_URL . '/build/client/index.css',
             ['wp-components'],
-            NATIVE_CUSTOM_FIELDS_VERSION
+            Constants::VERSION
         );
     }
 }

@@ -23,6 +23,7 @@ class Constants
 	public const EMAIL = 'info@kadimgultekin.com';
 	public const PHP_VERSION = '7.4';
 	public const WP_VERSION = '5.0';
+	public const VERSION = '1.2.6';
 
 	public const BUILDER_MENU_SLUGS = [
 		'native_custom_fields_options_page_builder',

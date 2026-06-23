@@ -11,6 +11,7 @@
 namespace NativeCustomFields\Presentation\Admin\Controllers;
 
 use Exception;
+use NativeCustomFields\Common\Constants;
 use NativeCustomFields\Common\Helper;
 use NativeCustomFields\Services\ImportExportService;
 use WP_REST_Request;
@@ -50,7 +51,7 @@ final class ImportExportController
             'native-custom-fields-import-export-admin',
             NATIVE_CUSTOM_FIELDS_URL . 'includes/Presentation/Admin/Assets/css/native-custom-fields-import-export.css',
             [],
-            NATIVE_CUSTOM_FIELDS_VERSION
+            Constants::VERSION
         );
     }
 
@@ -203,7 +204,7 @@ final class ImportExportController
     {
         ob_start();
         try {
-            include NATIVE_CUSTOM_FIELDS_INCLUDES_PATH . 'Presentation/Admin/Views/admin-import-export-page.php';
+            include Constants::INCLUDES_PATH . '/Presentation/Admin/Views/admin-import-export-page.php';
             echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         } catch (Exception $e) {
             ob_end_clean();

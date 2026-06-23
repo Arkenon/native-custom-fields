@@ -85,7 +85,7 @@ final class AdminController
 			'native-custom-fields',
 			NATIVE_CUSTOM_FIELDS_URL . '/build/admin/index.css',
 			['wp-components'],
-			NATIVE_CUSTOM_FIELDS_VERSION
+			Constants::VERSION
 		);
 	}
 

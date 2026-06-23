@@ -48,6 +48,12 @@ final class App {
         ControllerInit::class
     ];
 
+    /**
+     * Flag to prevent multiple initializations
+     * @var bool
+     * @since 1.2.6
+     */
+    private static bool $booted = false;
 
     public function __construct()
     {
@@ -57,6 +63,38 @@ final class App {
             $this->services
         );
     }
+
+	/**
+	 * Boot the plugin
+     * Would be called when plugin using with composer or externally
+	 * @return void
+	 * @since 1.2.6
+	 */
+	public static function boot(array $config = []): void
+	{
+        if ( self::$booted ) {
+            return;
+        }
+
+        self::$booted = true;
+
+        if ( ! defined( 'NATIVE_CUSTOM_FIELDS_URL' ) ) {
+            define( 'NATIVE_CUSTOM_FIELDS_URL', $config['url'] );
+        }
+
+        if ( ! defined( 'NATIVE_CUSTOM_FIELDS_PATH' ) ) {
+            define( 'NATIVE_CUSTOM_FIELDS_PATH', $config['path'] );
+        }
+
+        if ( ! defined( 'NATIVE_CUSTOM_FIELDS_INCLUDES_PATH' ) ) {
+            define(
+                'NATIVE_CUSTOM_FIELDS_INCLUDES_PATH',
+                $config['path'] . 'includes/'
+            );
+        }
+
+        ( new self() )->run();
+	}
 
     /**
 	 * Run all services and controllers
