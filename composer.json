@@ -3,13 +3,32 @@
     "description": "A WordPress plugin for creating custom fields using Gutenberg components",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Kadim Gültekin",
+            "homepage": "https://profiles.wordpress.org/arkenon/"
+        }
+    ],
+    "keywords": ["wordpress", "custom-fields", "gutenberg", "meta", "post-meta", "term-meta", "user-meta"],
+    "homepage": "https://nativecustomfields.com",
+    "support": {
+        "issues": "https://github.com/arkenon/native-custom-fields/issues",
+        "source": "https://github.com/arkenon/native-custom-fields"
+    },
+    "require": {
+        "php": ">=7.4",
+        "php-di/php-di": "^7.1.1",
+        "composer/installers": "^2.0"
+    },
     "autoload": {
         "psr-4": {
             "NativeCustomFields\\": "includes/"
         }
     },
-    "require": {
-        "php-di/php-di": "^7.1.1",
-        "php": ">=7.4"
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
     }
 }
