@@ -1,7 +1,7 @@
 {
     "name": "native-custom-fields/native-custom-fields",
     "description": "A WordPress plugin for creating custom fields using Gutenberg components",
-    "type": "wordpress-plugin",
+    "type": "library",
     "license": "GPL-2.0-or-later",
     "authors": [
         {
@@ -17,18 +17,12 @@
     },
     "require": {
         "php": ">=7.4",
-        "php-di/php-di": "^7.1.1",
-        "composer/installers": "^2.0"
+        "php-di/php-di": "^7.1.1"
     },
     "autoload": {
         "psr-4": {
             "NativeCustomFields\\": "includes/"
         }
     },
-    "minimum-stability": "stable",
-    "config": {
-        "allow-plugins": {
-            "composer/installers": true
-        }
-    }
+    "minimum-stability": "stable"
 }
