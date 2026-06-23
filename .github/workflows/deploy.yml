@@ -35,15 +35,26 @@ jobs:
           fi
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --optimize-autoloader --no-interaction
+        run: composer install --no-dev --optimize-autoloader --no-interaction --no-plugins
 
-      - name: Verify vendor directory exists
+      - name: Build deploy package
         run: |
-          if [ ! -d "vendor" ]; then
-            echo "::error::vendor/ directory is missing after composer install. Aborting deploy."
-            exit 1
-          fi
-          echo "vendor/ OK — $(find vendor -name '*.php' | wc -l) PHP files"
+          mkdir _deploy
+
+          rsync -r \
+            --exclude='.git' \
+            --exclude='_deploy' \
+            --exclude-from='.distignore' \
+            ./ _deploy/
+
+          echo "--- Deploy package contents ---"
+          ls -la _deploy/
+          echo "--- vendor/ ---"
+          ls -la _deploy/vendor/
+          echo "--- vendor/php-di/ ---"
+          ls -la _deploy/vendor/php-di/ || { echo "::error::vendor/php-di missing!"; exit 1; }
+
+          echo "Build OK — $(find _deploy/vendor -name '*.php' | wc -l) vendor PHP files"
 
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
@@ -51,3 +62,4 @@ jobs:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           VERSION: ${{ inputs.version }}
+          BUILD_DIR: _deploy
