@@ -1,16 +1,16 @@
 # Post Meta Fields Ability
 
-Bir post tipine bağlı özel alan konfigürasyonu oluşturmak veya güncellemek için kullanılan ability.
+Ability for creating or updating the custom field configuration attached to a post type.
 
 ---
 
 ## `native-custom-fields/save-post-meta-fields`
 
-Bir post tipine ait meta box'lar ve alanların konfigürasyonunu oluşturur veya günceller.
+Creates or updates the meta box and field configuration for a post type. If a configuration already exists for the given `post_type`, it is overwritten.
 
 ---
 
-## Input Şeması
+## Input Schema
 
 ```json
 {
@@ -19,14 +19,14 @@ Bir post tipine ait meta box'lar ve alanların konfigürasyonunu oluşturur veya
 }
 ```
 
-### Üst Düzey Alanlar
+### Top-level Properties
 
-| Alan | Zorunlu | Tip | Açıklama |
+| Property | Required | Type | Description |
 |---|---|---|---|
-| `post_type` | Evet | string | Alanların ekleneceği post tipi slug'ı |
-| `sections` | Evet | array | Meta box tanımları dizisi |
+| `post_type` | Yes | string | Slug of the post type to attach fields to |
+| `sections` | Yes | array | Array of meta box definitions |
 
-### Section (Meta Box) Şeması
+### Section (Meta Box) Schema
 
 ```json
 {
@@ -35,34 +35,34 @@ Bir post tipine ait meta box'lar ve alanların konfigürasyonunu oluşturur veya
 }
 ```
 
-| Alan | Zorunlu | Tip | Varsayılan | Açıklama |
+| Property | Required | Type | Default | Description |
 |---|---|---|---|---|
-| `meta_box_id` | Evet | string | — | Meta box için benzersiz slug |
-| `meta_box_title` | Evet | string | — | Admin ekranında gösterilen meta box başlığı |
-| `meta_box_context` | Hayır | string | `"advanced"` | Meta box'ın konumu: `normal`, `side`, `advanced` |
-| `meta_box_priority` | Hayır | string | `"default"` | Meta box önceliği: `default`, `high`, `core`, `low` |
-| `fields` | Hayır | array | `[]` | Bu meta box içindeki alanlar (bkz. [field-schema.md](field-schema.md)) |
+| `meta_box_id` | Yes | string | — | Unique slug for the meta box |
+| `meta_box_title` | Yes | string | — | Meta box title displayed in the admin screen |
+| `meta_box_context` | No | string | `"advanced"` | Where the meta box appears: `normal`, `side`, `advanced` |
+| `meta_box_priority` | No | string | `"default"` | Meta box priority: `default`, `high`, `core`, `low` |
+| `fields` | No | array | `[]` | Fields inside this meta box (see [field-schema.md](field-schema.md)) |
 
-### `meta_box_context` Değerleri
+### `meta_box_context` Values
 
-| Değer | Açıklama |
+| Value | Description |
 |---|---|
-| `normal` | İçerik editörünün altında, tam genişlikte |
-| `side` | Sağ kenar çubuğunda |
-| `advanced` | Normal alanların altında (varsayılan) |
+| `normal` | Full-width, below the content editor |
+| `side` | In the right sidebar |
+| `advanced` | Below the normal boxes (default) |
 
-### `meta_box_priority` Değerleri
+### `meta_box_priority` Values
 
-| Değer | Açıklama |
+| Value | Description |
 |---|---|
-| `default` | Standart sıralama (varsayılan) |
-| `high` | Bağlamın en üstünde |
-| `core` | Core meta box'larla aynı sıraya alınır |
-| `low` | Bağlamın en altında |
+| `default` | Standard ordering (default) |
+| `high` | At the top of the context |
+| `core` | Sorted with core meta boxes |
+| `low` | At the bottom of the context |
 
 ---
 
-## Output Şeması
+## Output Schema
 
 ```json
 {
@@ -71,49 +71,49 @@ Bir post tipine ait meta box'lar ve alanların konfigürasyonunu oluşturur veya
 }
 ```
 
-| Alan | Tip | Açıklama |
+| Field | Type | Description |
 |---|---|---|
-| `status` | boolean | `true` başarı, `false` hata |
-| `message` | string | İşlem sonucu veya hata mesajı |
+| `status` | boolean | `true` on success, `false` on failure |
+| `message` | string | Result description or error message |
 
 ---
 
-## Dahili Davranış
+## Internal Behaviour
 
-- `post_type` → `sanitize_key()` ile temizlenir.
-- `meta_box_id` → `sanitize_key()` ile temizlenir.
-- `meta_box_title` → `sanitize_text_field()` ile temizlenir.
-- Builder slug biçimi: `native_custom_fields_post_meta_fields_builder_{post_type}`
-- Kayıt başarılıysa aynı değerler `OptionService::saveOptions()` ile de saklanır.
-- Alan değerleri çalışma zamanında `wp_postmeta` tablosunda `{name}` meta key'i ile saklanır.
+- `post_type` is sanitized with `sanitize_key()`.
+- `meta_box_id` is sanitized with `sanitize_key()`.
+- `meta_box_title` is sanitized with `sanitize_text_field()`.
+- Builder slug format: `native_custom_fields_post_meta_fields_builder_{post_type}`
+- On success, the same values are also stored via `OptionService::saveOptions()`.
+- Field values are stored at runtime in the `wp_postmeta` table using the field `name` as the meta key.
 
 ---
 
-## Örnek
+## Example
 
 ```json
 {
-  "post_type": "kitap",
+  "post_type": "book",
   "sections": [
     {
-      "meta_box_id": "kitap_detaylari",
-      "meta_box_title": "Kitap Detayları",
+      "meta_box_id": "book_details",
+      "meta_box_title": "Book Details",
       "meta_box_context": "normal",
       "meta_box_priority": "high",
       "fields": [
         {
           "fieldType": "text",
-          "name": "yazar",
-          "fieldLabel": "Yazar",
+          "name": "author",
+          "fieldLabel": "Author",
           "required": true,
           "field_custom_info": {
-            "placeholder": "Yazar adını girin"
+            "placeholder": "Enter author name"
           }
         },
         {
           "fieldType": "number",
-          "name": "sayfa_sayisi",
-          "fieldLabel": "Sayfa Sayısı",
+          "name": "page_count",
+          "fieldLabel": "Page Count",
           "field_custom_info": {
             "min": 1,
             "max": 9999,
@@ -122,24 +122,24 @@ Bir post tipine ait meta box'lar ve alanların konfigürasyonunu oluşturur veya
         },
         {
           "fieldType": "select",
-          "name": "dil",
-          "fieldLabel": "Dil",
-          "default": "tr",
+          "name": "language",
+          "fieldLabel": "Language",
+          "default": "en",
           "field_custom_info": {
-            "options": "Türkçe:tr, İngilizce:en, Almanca:de"
+            "options": "English:en, German:de, French:fr"
           }
         }
       ]
     },
     {
-      "meta_box_id": "kitap_gorselleri",
-      "meta_box_title": "Görseller",
+      "meta_box_id": "book_media",
+      "meta_box_title": "Media",
       "meta_box_context": "side",
       "fields": [
         {
           "fieldType": "media_library",
-          "name": "kapak_gorseli",
-          "fieldLabel": "Kapak Görseli"
+          "name": "cover_image",
+          "fieldLabel": "Cover Image"
         }
       ]
     }
@@ -147,7 +147,7 @@ Bir post tipine ait meta box'lar ve alanların konfigürasyonunu oluşturur veya
 }
 ```
 
-### Başarılı Yanıt
+### Success Response
 
 ```json
 {
@@ -156,7 +156,7 @@ Bir post tipine ait meta box'lar ve alanların konfigürasyonunu oluşturur veya
 }
 ```
 
-### Hata Yanıtları
+### Error Responses
 
 ```json
 { "status": false, "message": "post_type is required." }
@@ -165,13 +165,13 @@ Bir post tipine ait meta box'lar ve alanların konfigürasyonunu oluşturur veya
 
 ---
 
-## İzin
+## Permission
 
-`manage_options` WordPress yetkisi gerektirir.
+Requires the `manage_options` WordPress capability.
 
 ---
 
-## İlgili Belgeler
+## Related
 
-- [Field Schema](field-schema.md) — Alan tanımlarında kullanılan ortak şema
-- [Post Type Abilities](post-type.md) — Post tipi oluşturma/güncelleme
+- [Field Schema](field-schema.md) — Shared schema for field definitions
+- [Post Type Abilities](post-type.md) — Creating and updating post types

@@ -1,22 +1,22 @@
 # Post Type Abilities
 
-Özel post tipleri oluşturmak ve güncellemek için kullanılan ability'ler.
+Abilities for creating and updating custom post types.
 
 ---
 
 ## `native-custom-fields/create-post-type`
 
-Yeni bir özel post tipi oluşturur ve konfigürasyonunu kaydeder.
+Creates a new custom post type and saves its configuration.
 
 ## `native-custom-fields/update-post-type`
 
-Mevcut bir özel post tipinin konfigürasyonunu günceller.
+Updates the configuration of an existing custom post type.
 
-> Her iki ability aynı `execute_callback`'i (`savePostType`) ve aynı input şemasını kullanır. `post_type` slug'ı zaten mevcutsa kayıt güncellenir, yoksa yeni oluşturulur.
+> Both abilities share the same `execute_callback` (`savePostType`) and the same input schema. If the `post_type` slug already exists, the record is updated; otherwise a new one is created.
 
 ---
 
-## Input Şeması
+## Input Schema
 
 ```json
 {
@@ -25,31 +25,31 @@ Mevcut bir özel post tipinin konfigürasyonunu günceller.
 }
 ```
 
-### Alanlar
+### Properties
 
-| Alan | Zorunlu | Tip | Varsayılan | Açıklama |
+| Property | Required | Type | Default | Description |
 |---|---|---|---|---|
-| `post_type` | Evet | string | — | Post tipi slug'ı (küçük harf, max 20 karakter, alt çizgi desteklenir) |
-| `label` | Evet | string | — | Çoğul etiket (ör. "Ürünler") |
-| `singular_name` | Hayır | string | `label` değeri | Tekil etiket (ör. "Ürün") |
-| `description` | Hayır | string | `""` | Post tipini açıklayan metin |
-| `menu_position` | Hayır | integer | `null` | Admin menüsündeki sıra konumu |
-| `menu_icon` | Hayır | string | `""` | Dashicons sınıfı veya URL (ör. `dashicons-book`) |
-| `has_archive` | Hayır | boolean | `false` | Arşiv sayfası oluşturulsun mu? |
-| `supports` | Hayır | string[] | `["title","editor","excerpt","comments","author","thumbnail","custom-fields"]` | Post tipinin desteklediği WordPress özellikleri |
-| `taxonomies` | Hayır | string[] | `[]` | Post tipine bağlanacak taksonomi slug'ları |
-| `public` | Hayır | boolean | `true` | Post tipi genel erişilebilir mi? |
-| `hierarchical` | Hayır | boolean | `false` | Sayfa gibi hiyerarşik yapı kullanılsın mı? |
-| `show_in_rest` | Hayır | boolean | `true` | WordPress REST API'de görünsün mü? |
-| `map_meta_cap` | Hayır | boolean | `true` | Dahili meta yetenek yönetimi kullanılsın mı? |
+| `post_type` | Yes | string | — | Post type slug (lowercase, max 20 chars, underscores allowed) |
+| `label` | Yes | string | — | Plural label (e.g. `"Books"`) |
+| `singular_name` | No | string | `label` value | Singular label (e.g. `"Book"`) |
+| `description` | No | string | `""` | Description of the post type |
+| `menu_position` | No | integer | `null` | Admin menu position order |
+| `menu_icon` | No | string | `""` | Dashicons class or URL (e.g. `"dashicons-book"`) |
+| `has_archive` | No | boolean | `false` | Whether to enable an archive page |
+| `supports` | No | string[] | `["title","editor","excerpt","comments","author","thumbnail","custom-fields"]` | WordPress features supported by this post type |
+| `taxonomies` | No | string[] | `[]` | Taxonomy slugs to register for this post type |
+| `public` | No | boolean | `true` | Whether the post type is publicly accessible |
+| `hierarchical` | No | boolean | `false` | Whether the post type is hierarchical (like pages) |
+| `show_in_rest` | No | boolean | `true` | Whether to expose the post type in the WordPress REST API |
+| `map_meta_cap` | No | boolean | `true` | Whether to use the internal default meta capability handling |
 
-### `supports` için Geçerli Değerler
+### Valid `supports` Values
 
 `title`, `editor`, `excerpt`, `comments`, `author`, `thumbnail`, `custom-fields`, `revisions`, `page-attributes`, `post-formats`, `trackbacks`
 
 ---
 
-## Output Şeması
+## Output Schema
 
 ```json
 {
@@ -58,23 +58,23 @@ Mevcut bir özel post tipinin konfigürasyonunu günceller.
 }
 ```
 
-| Alan | Tip | Açıklama |
+| Field | Type | Description |
 |---|---|---|
-| `status` | boolean | `true` başarı, `false` hata |
-| `message` | string | İşlem sonucu veya hata mesajı |
+| `status` | boolean | `true` on success, `false` on failure |
+| `message` | string | Result description or error message |
 
 ---
 
-## Dahili Davranış
+## Internal Behaviour
 
-- `post_type` → `sanitize_key()` ile temizlenir.
-- `supports` dizisi verilmezse varsayılan liste kullanılır.
-- `taxonomies` dizisindeki her değer `sanitize_key()` ile temizlenir.
-- Builder slug biçimi: `native_custom_fields_post_type_builder_{post_type}`
-- Kayıt başarılıysa aynı değerler `OptionService::saveOptions()` ile de saklanır.
-- Etiket çevirileri (add_new_item, edit_item vb.) otomatik olarak `label` ve `singular_name`'den üretilir.
+- `post_type` is sanitized with `sanitize_key()`.
+- If `supports` is not provided, the default list is used.
+- Each value in the `taxonomies` array is sanitized with `sanitize_key()`.
+- Builder slug format: `native_custom_fields_post_type_builder_{post_type}`
+- On success, the same values are also stored via `OptionService::saveOptions()`.
+- Label strings (`add_new_item`, `edit_item`, etc.) are automatically generated from `label` and `singular_name`.
 
-### Otomatik Oluşturulan Görünürlük Ayarları
+### Auto-generated Visibility Settings
 
 ```
 publicly_queryable: true
@@ -84,7 +84,7 @@ show_in_admin_bar:  true
 show_in_nav_menus:  true
 ```
 
-### Otomatik Oluşturulan Permalink Ayarları
+### Auto-generated Permalink Settings
 
 ```
 slug:       {post_type}
@@ -95,25 +95,25 @@ pages:      true
 
 ---
 
-## Örnekler
+## Examples
 
 ### Minimal
 
 ```json
 {
-  "post_type": "kitap",
-  "label": "Kitaplar"
+  "post_type": "book",
+  "label": "Books"
 }
 ```
 
-### Detaylı
+### Full
 
 ```json
 {
-  "post_type": "kitap",
-  "label": "Kitaplar",
-  "singular_name": "Kitap",
-  "description": "Kütüphane katalogu için kitap kayıtları",
+  "post_type": "book",
+  "label": "Books",
+  "singular_name": "Book",
+  "description": "Book records for the library catalogue",
   "menu_position": 25,
   "menu_icon": "dashicons-book-alt",
   "has_archive": true,
@@ -125,7 +125,7 @@ pages:      true
 }
 ```
 
-### Başarılı Yanıt
+### Success Response
 
 ```json
 {
@@ -134,17 +134,15 @@ pages:      true
 }
 ```
 
-### Hata Yanıtı
+### Error Responses
 
 ```json
-{
-  "status": false,
-  "message": "post_type is required."
-}
+{ "status": false, "message": "post_type is required." }
+{ "status": false, "message": "label is required." }
 ```
 
 ---
 
-## İzin
+## Permission
 
-`manage_options` WordPress yetkisi gerektirir.
+Requires the `manage_options` WordPress capability.

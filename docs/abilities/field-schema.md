@@ -1,75 +1,75 @@
-# Alan Şeması (Field Schema)
+# Field Schema
 
-`AbilityFieldAdapterTrait` tarafından sağlanan bu şema, alan içeren tüm ability'lerde (`save-post-meta-fields`, `save-term-meta-fields`, `save-user-meta-fields`, `save-options-page-fields`) ortak olarak kullanılır.
+This schema is provided by `AbilityFieldAdapterTrait` and is shared by all field-bearing abilities: `save-post-meta-fields`, `save-term-meta-fields`, `save-user-meta-fields`, and `save-options-page-fields`.
 
-## Şema
+## Schema
 
 ```json
 {
   "type": "object",
   "required": ["fieldType", "name", "fieldLabel"],
   "properties": {
-    "fieldType":        { "type": "string" },
-    "name":             { "type": "string" },
-    "fieldLabel":       { "type": "string" },
-    "default":          { "type": "string" },
-    "required":         { "type": "boolean", "default": false },
-    "disabled":         { "type": "boolean", "default": false },
+    "fieldType":         { "type": "string" },
+    "name":              { "type": "string" },
+    "fieldLabel":        { "type": "string" },
+    "default":           { "type": "string" },
+    "required":          { "type": "boolean", "default": false },
+    "disabled":          { "type": "boolean", "default": false },
     "field_custom_info": { "type": "object" }
   }
 }
 ```
 
-## Alanlar
+## Properties
 
-| Alan | Zorunlu | Tip | Açıklama |
+| Property | Required | Type | Description |
 |---|---|---|---|
-| `fieldType` | Evet | string | Alan tipi. Desteklenen değerlere bakın. |
-| `name` | Evet | string | Benzersiz meta key slug'ı (`sanitize_key` uygulanır) |
-| `fieldLabel` | Evet | string | Admin arayüzünde gösterilen etiket |
-| `default` | Hayır | string | Varsayılan değer |
-| `required` | Hayır | boolean | Alanı zorunlu yapar (varsayılan: `false`) |
-| `disabled` | Hayır | boolean | Alanı devre dışı bırakır (varsayılan: `false`) |
-| `field_custom_info` | Hayır | object | Alan tipine özgü seçenekler |
+| `fieldType` | Yes | string | Field type. See supported values below. |
+| `name` | Yes | string | Unique meta key slug (`sanitize_key` is applied) |
+| `fieldLabel` | Yes | string | Label shown in the admin interface |
+| `default` | No | string | Default field value |
+| `required` | No | boolean | Makes the field mandatory (default: `false`) |
+| `disabled` | No | boolean | Disables the field (default: `false`) |
+| `field_custom_info` | No | object | Type-specific options (see below) |
 
-## Desteklenen Alan Tipleri (`fieldType`)
+## Supported Field Types (`fieldType`)
 
-| Tip | Açıklama |
+| Type | Description |
 |---|---|
-| `text` | Tek satırlı metin girişi |
-| `textarea` | Çok satırlı metin girişi |
-| `input` | HTML input (tip belirtilebilir) |
-| `number` | Sayı girişi |
-| `range` | Aralık kaydırıcı |
-| `select` | Açılır liste |
-| `radio` | Radyo butonları |
-| `checkbox` | Onay kutusu |
-| `toggle` | Açma/kapatma düğmesi |
-| `toggle_group` | Grup halinde toggle butonları |
-| `combobox` | Arama destekli seçim kutusu |
-| `token_field` | Etiket/token girişi |
-| `date_picker` | Tarih seçici |
-| `date_time_picker` | Tarih ve saat seçici |
-| `time_picker` | Saat seçici |
-| `file_upload` | Dosya yükleme |
-| `media_library` | WordPress medya kütüphanesi seçici |
-| `color_picker` | Renk seçici |
-| `color_palette` | Renk paleti seçici |
-| `font_size` | Yazı boyutu girişi |
-| `unit` | Birim girişi |
-| `repeater` | Tekrarlayan alan grubu\* |
-| `group` | Alan grubu\* |
-| `section` | Bölüm başlığı |
+| `text` | Single-line text input |
+| `textarea` | Multi-line text input |
+| `input` | HTML input (type can be specified) |
+| `number` | Numeric input |
+| `range` | Range slider |
+| `select` | Dropdown list |
+| `radio` | Radio buttons |
+| `checkbox` | Checkbox |
+| `toggle` | On/off toggle switch |
+| `toggle_group` | Group of toggle buttons |
+| `combobox` | Searchable select box |
+| `token_field` | Tag/token input |
+| `date_picker` | Date picker |
+| `date_time_picker` | Date and time picker |
+| `time_picker` | Time picker |
+| `file_upload` | File upload |
+| `media_library` | WordPress media library picker |
+| `color_picker` | Color picker |
+| `color_palette` | Color palette picker |
+| `font_size` | Font size input |
+| `unit` | Unit input |
+| `repeater` | Repeatable field group\* |
+| `group` | Field group\* |
+| `section` | Section heading |
 
-> \* `repeater` ve `group` içindeki iç içe alanlar ability aracılığıyla tanımlanamaz.
+> \* Nested fields inside `repeater` and `group` cannot be defined via ability.
 
-## `field_custom_info` Seçenekleri
+## `field_custom_info` Options
 
 ### `select`, `radio`, `combobox`, `token_field`, `toggle_group`
 
 ```json
 {
-  "options": "Etiket:değer, Etiket2:değer2",
+  "options": "Label:value, Label2:value2",
   "multiple": false
 }
 ```
@@ -113,17 +113,17 @@
 }
 ```
 
-## Örnek Alan Tanımı
+## Example Field Definition
 
 ```json
 {
   "fieldType": "select",
-  "name": "renk_secimi",
-  "fieldLabel": "Renk Seçimi",
-  "default": "mavi",
+  "name": "color_choice",
+  "fieldLabel": "Color Choice",
+  "default": "blue",
   "required": true,
   "field_custom_info": {
-    "options": "Kırmızı:kirmizi, Mavi:mavi, Yeşil:yesil"
+    "options": "Red:red, Blue:blue, Green:green"
   }
 }
 ```

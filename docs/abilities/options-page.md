@@ -1,24 +1,24 @@
 # Options Page Abilities
 
-Admin menüsüne özel seçenekler sayfası oluşturmak, güncellemek ve bu sayfaya özel alanlar eklemek için kullanılan ability'ler.
+Abilities for creating and updating admin options pages, and for saving custom fields on those pages.
 
 ---
 
-## Ability'ler
+## Abilities
 
-| Ability | Açıklama |
+| Ability | Description |
 |---|---|
-| `native-custom-fields/create-options-page` | Yeni bir admin options sayfası oluşturur |
-| `native-custom-fields/update-options-page` | Mevcut bir options sayfasının konfigürasyonunu günceller |
-| `native-custom-fields/save-options-page-fields` | Bir options sayfasına bölümler ve özel alanlar ekler |
+| `native-custom-fields/create-options-page` | Creates a new admin options page |
+| `native-custom-fields/update-options-page` | Updates an existing admin options page |
+| `native-custom-fields/save-options-page-fields` | Creates or updates the field configuration for an options page |
 
 ---
 
 ## `create-options-page` / `update-options-page`
 
-Her iki ability aynı `execute_callback`'i (`saveOptionsPage`) ve aynı input şemasını kullanır. `menu_slug` zaten mevcutsa kayıt güncellenir.
+Both abilities share the same `execute_callback` (`saveOptionsPage`) and the same input schema. If `menu_slug` already exists, the record is updated.
 
-### Input Şeması
+### Input Schema
 
 ```json
 {
@@ -27,43 +27,43 @@ Her iki ability aynı `execute_callback`'i (`saveOptionsPage`) ve aynı input ş
 }
 ```
 
-#### Alanlar
+#### Properties
 
-| Alan | Zorunlu | Tip | Varsayılan | Açıklama |
+| Property | Required | Type | Default | Description |
 |---|---|---|---|---|
-| `menu_slug` | Evet | string | — | Options sayfası için benzersiz slug (`sanitize_key` uygulanır) |
-| `page_title` | Evet | string | — | Tarayıcı/sayfa başlığı |
-| `menu_title` | Hayır | string | `page_title` değeri | Admin kenar çubuğunda gösterilen menü etiketi |
-| `layout` | Hayır | string | `"stacked"` | Sayfa düzeni: `stacked`, `navigation`, `tab_panel` |
-| `icon_url` | Hayır | string | `"dashicons-admin-generic"` | Menü ikonu (Dashicons sınıfı veya URL) |
-| `position` | Hayır | integer | `60` | Admin menüsündeki sıra konumu |
+| `menu_slug` | Yes | string | — | Unique slug for the options page (`sanitize_key` is applied) |
+| `page_title` | Yes | string | — | Browser/page title |
+| `menu_title` | No | string | `page_title` value | Label shown in the admin sidebar |
+| `layout` | No | string | `"stacked"` | Page layout: `stacked`, `navigation`, `tab_panel` |
+| `icon_url` | No | string | `"dashicons-admin-generic"` | Menu icon — Dashicons class or URL |
+| `position` | No | integer | `60` | Admin menu position order |
 
-#### `layout` Değerleri
+#### `layout` Values
 
-| Değer | Açıklama |
+| Value | Description |
 |---|---|
-| `stacked` | Bölümler dikey olarak alt alta sıralanır |
-| `navigation` | Sol tarafta navigasyon menüsü ile bölümler |
-| `tab_panel` | Bölümler sekme (tab) şeklinde gösterilir |
+| `stacked` | Sections stacked vertically one below the other |
+| `navigation` | Left-side navigation menu with sections |
+| `tab_panel` | Sections displayed as tabs |
 
-### Örnekler
+### Examples
 
 #### Minimal
 
 ```json
 {
-  "menu_slug": "site-ayarlari",
-  "page_title": "Site Ayarları"
+  "menu_slug": "site-settings",
+  "page_title": "Site Settings"
 }
 ```
 
-#### Detaylı
+#### Full
 
 ```json
 {
-  "menu_slug": "site-ayarlari",
-  "page_title": "Site Ayarları",
-  "menu_title": "Ayarlar",
+  "menu_slug": "site-settings",
+  "page_title": "Site Settings",
+  "menu_title": "Settings",
   "layout": "tab_panel",
   "icon_url": "dashicons-admin-settings",
   "position": 80
@@ -74,9 +74,9 @@ Her iki ability aynı `execute_callback`'i (`saveOptionsPage`) ve aynı input ş
 
 ## `save-options-page-fields`
 
-Bir options sayfasına bölümler ve özel alanlar ekler veya günceller.
+Creates or updates sections and custom fields on an options page.
 
-### Input Şeması
+### Input Schema
 
 ```json
 {
@@ -85,14 +85,14 @@ Bir options sayfasına bölümler ve özel alanlar ekler veya günceller.
 }
 ```
 
-#### Üst Düzey Alanlar
+#### Top-level Properties
 
-| Alan | Zorunlu | Tip | Açıklama |
+| Property | Required | Type | Description |
 |---|---|---|---|
-| `menu_slug` | Evet | string | Alanların ekleneceği options sayfasının slug'ı |
-| `sections` | Evet | array | Bölüm tanımları dizisi |
+| `menu_slug` | Yes | string | Slug of the options page to add fields to |
+| `sections` | Yes | array | Array of section definitions |
 
-#### Section Şeması
+#### Section Schema
 
 ```json
 {
@@ -101,18 +101,18 @@ Bir options sayfasına bölümler ve özel alanlar ekler veya günceller.
 }
 ```
 
-| Alan | Zorunlu | Tip | Varsayılan | Açıklama |
+| Property | Required | Type | Default | Description |
 |---|---|---|---|---|
-| `section_name` | Evet | string | — | Bölüm için benzersiz slug |
-| `section_title` | Evet | string | — | Admin ekranında gösterilen bölüm başlığı |
-| `section_icon` | Hayır | string | `"admin-generic"` | Dashicon adı (ön ek olmadan) |
-| `fields` | Hayır | array | `[]` | Bu bölümdeki alanlar (bkz. [field-schema.md](field-schema.md)) |
+| `section_name` | Yes | string | — | Unique slug for the section |
+| `section_title` | Yes | string | — | Section title displayed in the admin screen |
+| `section_icon` | No | string | `"admin-generic"` | Dashicon name without the `dashicons-` prefix |
+| `fields` | No | array | `[]` | Fields inside this section (see [field-schema.md](field-schema.md)) |
 
-> `name` alanı `save-options-page-fields` için bir **option key** (seçenek anahtarı) olarak kullanılır; post meta'daki gibi meta key değil.
+> The `name` property of each field acts as an **option key** (not a meta key) when used in options pages.
 
 ---
 
-## Output Şeması (Tüm Ability'ler)
+## Output Schema (All Abilities)
 
 ```json
 {
@@ -121,59 +121,59 @@ Bir options sayfasına bölümler ve özel alanlar ekler veya günceller.
 }
 ```
 
-| Alan | Tip | Açıklama |
+| Field | Type | Description |
 |---|---|---|
-| `status` | boolean | `true` başarı, `false` hata |
-| `message` | string | İşlem sonucu veya hata mesajı |
+| `status` | boolean | `true` on success, `false` on failure |
+| `message` | string | Result description or error message |
 
 ---
 
-## Dahili Davranış
+## Internal Behaviour
 
-- `menu_slug` → `sanitize_key()` ile temizlenir.
-- **create/update** için builder slug: `native_custom_fields_options_page_builder_{menu_slug}`
-- **save-fields** için builder slug: `native_custom_fields_options_page_fields_builder_{menu_slug}`
-- Kayıt başarılıysa `OptionService::saveOptions()` ile de saklanır.
-- Options sayfası değerleri çalışma zamanında `wp_options` tablosunda tek bir serialized kayıt olarak saklanır.
+- `menu_slug` is sanitized with `sanitize_key()`.
+- **create/update** builder slug: `native_custom_fields_options_page_builder_{menu_slug}`
+- **save-fields** builder slug: `native_custom_fields_options_page_fields_builder_{menu_slug}`
+- On success, the same values are also stored via `OptionService::saveOptions()`.
+- Options page values are stored at runtime in the `wp_options` table as a single serialized record keyed by `menu_slug`.
 
 ---
 
-## Tam Örnek (İki Adımlı Kurulum)
+## Full Example (Two-step Setup)
 
-### Adım 1 — Sayfayı Oluştur
+### Step 1 — Create the Page
 
 ```json
 {
-  "menu_slug": "sirket-ayarlari",
-  "page_title": "Şirket Ayarları",
-  "menu_title": "Şirket",
+  "menu_slug": "company-settings",
+  "page_title": "Company Settings",
+  "menu_title": "Company",
   "layout": "navigation",
   "icon_url": "dashicons-building",
   "position": 75
 }
 ```
 
-### Adım 2 — Alanları Kaydet
+### Step 2 — Save the Fields
 
 ```json
 {
-  "menu_slug": "sirket-ayarlari",
+  "menu_slug": "company-settings",
   "sections": [
     {
-      "section_name": "genel",
-      "section_title": "Genel Bilgiler",
+      "section_name": "general",
+      "section_title": "General Information",
       "section_icon": "admin-home",
       "fields": [
         {
           "fieldType": "text",
-          "name": "sirket_adi",
-          "fieldLabel": "Şirket Adı",
+          "name": "company_name",
+          "fieldLabel": "Company Name",
           "required": true
         },
         {
           "fieldType": "input",
-          "name": "sirket_web_sitesi",
-          "fieldLabel": "Web Sitesi",
+          "name": "company_website",
+          "fieldLabel": "Website",
           "field_custom_info": {
             "type": "url",
             "placeholder": "https://..."
@@ -181,33 +181,33 @@ Bir options sayfasına bölümler ve özel alanlar ekler veya günceller.
         },
         {
           "fieldType": "media_library",
-          "name": "sirket_logosu",
-          "fieldLabel": "Şirket Logosu"
+          "name": "company_logo",
+          "fieldLabel": "Company Logo"
         }
       ]
     },
     {
-      "section_name": "iletisim",
-      "section_title": "İletişim Bilgileri",
+      "section_name": "contact",
+      "section_title": "Contact Information",
       "section_icon": "email",
       "fields": [
         {
           "fieldType": "input",
-          "name": "iletisim_email",
-          "fieldLabel": "İletişim E-postası",
+          "name": "contact_email",
+          "fieldLabel": "Contact Email",
           "field_custom_info": {
             "type": "email"
           }
         },
         {
           "fieldType": "text",
-          "name": "iletisim_telefon",
-          "fieldLabel": "Telefon"
+          "name": "contact_phone",
+          "fieldLabel": "Phone"
         },
         {
           "fieldType": "textarea",
-          "name": "adres",
-          "fieldLabel": "Adres",
+          "name": "address",
+          "fieldLabel": "Address",
           "field_custom_info": {
             "rows": 3
           }
@@ -218,14 +218,14 @@ Bir options sayfasına bölümler ve özel alanlar ekler veya günceller.
 }
 ```
 
-### Başarılı Yanıtlar
+### Success Responses
 
 ```json
 { "status": true, "message": "Options page saved successfully." }
 { "status": true, "message": "Options page fields saved successfully." }
 ```
 
-### Hata Yanıtları
+### Error Responses
 
 ```json
 { "status": false, "message": "menu_slug is required." }
@@ -235,27 +235,27 @@ Bir options sayfasına bölümler ve özel alanlar ekler veya günceller.
 
 ---
 
-## Verilere Erişim
+## Accessing Saved Data
 
-Options sayfasına kaydedilen değerler `wp_options` tablosunda `menu_slug` ile tek bir kayıt olarak saklanır:
+Options page values are stored in `wp_options` as a single serialized record keyed by `menu_slug`:
 
 ```php
-// Tüm options sayfası verilerini al
-$ayarlar = get_option( 'sirket-ayarlari' );
+// Get all options page data
+$settings = get_option( 'company-settings' );
 
-// Belirli bir değere eriş
-$sirket_adi = $ayarlar['sirket_adi'] ?? '';
-$logo_id    = $ayarlar['sirket_logosu'] ?? '';
+// Access individual values
+$company_name = $settings['company_name'] ?? '';
+$logo_id      = $settings['company_logo'] ?? '';
 ```
 
 ---
 
-## İzin
+## Permission
 
-`manage_options` WordPress yetkisi gerektirir.
+Requires the `manage_options` WordPress capability.
 
 ---
 
-## İlgili Belgeler
+## Related
 
-- [Field Schema](field-schema.md) — Alan tanımlarında kullanılan ortak şema
+- [Field Schema](field-schema.md) — Shared schema for field definitions

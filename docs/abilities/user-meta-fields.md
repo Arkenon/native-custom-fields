@@ -1,18 +1,16 @@
 # User Meta Fields Ability
 
-Kullanıcı profil sayfasına özel alan konfigürasyonu oluşturmak veya güncellemek için kullanılan ability.
+Ability for creating or updating the custom field configuration shown on user profile pages.
 
 ---
 
 ## `native-custom-fields/save-user-meta-fields`
 
-Tüm kullanıcıların profil/düzenleme sayfasında görüntülenecek özel alan konfigürasyonunu oluşturur veya günceller.
-
-> Bu ability kullanıcı başına değil, **tüm kullanıcılara** uygulanacak global bir konfigürasyon tanımlar.
+Creates or updates the custom field configuration displayed on the user profile and edit pages. The configuration applies **globally to all users** — it is not per-user.
 
 ---
 
-## Input Şeması
+## Input Schema
 
 ```json
 {
@@ -21,13 +19,13 @@ Tüm kullanıcıların profil/düzenleme sayfasında görüntülenecek özel ala
 }
 ```
 
-### Üst Düzey Alanlar
+### Top-level Properties
 
-| Alan | Zorunlu | Tip | Açıklama |
+| Property | Required | Type | Description |
 |---|---|---|---|
-| `sections` | Evet | array | Kullanıcı profil sayfasında gösterilecek bölüm tanımları |
+| `sections` | Yes | array | Field sections to display on the user profile/edit page |
 
-### Section Şeması
+### Section Schema
 
 ```json
 {
@@ -36,16 +34,16 @@ Tüm kullanıcıların profil/düzenleme sayfasında görüntülenecek özel ala
 }
 ```
 
-| Alan | Zorunlu | Tip | Varsayılan | Açıklama |
+| Property | Required | Type | Default | Description |
 |---|---|---|---|---|
-| `section_name` | Evet | string | — | Bölüm için benzersiz slug |
-| `section_title` | Evet | string | — | Kullanıcı profil sayfasında gösterilen bölüm başlığı |
-| `section_icon` | Hayır | string | `""` | Dashicon adı (ön ek olmadan, ör. `"admin-users"`) |
-| `fields` | Hayır | array | `[]` | Bu bölümdeki alanlar (bkz. [field-schema.md](field-schema.md)) |
+| `section_name` | Yes | string | — | Unique slug for the section |
+| `section_title` | Yes | string | — | Section title displayed on the user profile page |
+| `section_icon` | No | string | `""` | Dashicon name without the `dashicons-` prefix (e.g. `"admin-users"`) |
+| `fields` | No | array | `[]` | Fields inside this section (see [field-schema.md](field-schema.md)) |
 
 ---
 
-## Output Şeması
+## Output Schema
 
 ```json
 {
@@ -54,66 +52,66 @@ Tüm kullanıcıların profil/düzenleme sayfasında görüntülenecek özel ala
 }
 ```
 
-| Alan | Tip | Açıklama |
+| Field | Type | Description |
 |---|---|---|
-| `status` | boolean | `true` başarı, `false` hata |
-| `message` | string | İşlem sonucu veya hata mesajı |
+| `status` | boolean | `true` on success, `false` on failure |
+| `message` | string | Result description or error message |
 
 ---
 
-## Dahili Davranış
+## Internal Behaviour
 
-- `section_name` → `sanitize_key()` ile temizlenir.
-- `section_title` → `sanitize_text_field()` ile temizlenir.
-- Builder slug sabittir: `native_custom_fields_user_meta_fields_builder_all_users`
-- Kayıt başarılıysa aynı değerler `OptionService::saveOptions()` ile de saklanır.
-- Alan değerleri çalışma zamanında `wp_usermeta` tablosunda `{name}` meta key'i ile saklanır.
-- Bölümler dahili olarak `fieldType: "section"` ile işaretlenerek `UserMetaService::saveUserMetaFieldsConfig()` metoduna iletilir.
+- `section_name` is sanitized with `sanitize_key()`.
+- `section_title` is sanitized with `sanitize_text_field()`.
+- Builder slug is fixed: `native_custom_fields_user_meta_fields_builder_all_users`
+- On success, the same values are also stored via `OptionService::saveOptions()`.
+- Field values are stored at runtime in the `wp_usermeta` table using the field `name` as the meta key.
+- Sections are internally tagged with `fieldType: "section"` before being passed to `UserMetaService::saveUserMetaFieldsConfig()`.
 
 ---
 
-## Örnek
+## Example
 
 ```json
 {
   "sections": [
     {
-      "section_name": "kisisel_bilgiler",
-      "section_title": "Kişisel Bilgiler",
+      "section_name": "personal_info",
+      "section_title": "Personal Information",
       "section_icon": "admin-users",
       "fields": [
         {
           "fieldType": "text",
-          "name": "unvan",
-          "fieldLabel": "Unvan",
+          "name": "title",
+          "fieldLabel": "Title",
           "field_custom_info": {
-            "placeholder": "Dr., Prof., vb."
+            "placeholder": "Dr., Prof., etc."
           }
         },
         {
           "fieldType": "text",
-          "name": "telefon",
-          "fieldLabel": "Telefon Numarası"
+          "name": "phone",
+          "fieldLabel": "Phone Number"
         },
         {
           "fieldType": "select",
-          "name": "departman",
-          "fieldLabel": "Departman",
+          "name": "department",
+          "fieldLabel": "Department",
           "field_custom_info": {
-            "options": "Yazılım:yazilim, Tasarım:tasarim, Pazarlama:pazarlama, İK:ik"
+            "options": "Engineering:engineering, Design:design, Marketing:marketing, HR:hr"
           }
         }
       ]
     },
     {
-      "section_name": "sosyal_medya",
-      "section_title": "Sosyal Medya",
+      "section_name": "social_media",
+      "section_title": "Social Media",
       "section_icon": "share",
       "fields": [
         {
           "fieldType": "input",
           "name": "linkedin_url",
-          "fieldLabel": "LinkedIn Profili",
+          "fieldLabel": "LinkedIn Profile",
           "field_custom_info": {
             "type": "url",
             "placeholder": "https://linkedin.com/in/..."
@@ -122,7 +120,7 @@ Tüm kullanıcıların profil/düzenleme sayfasında görüntülenecek özel ala
         {
           "fieldType": "input",
           "name": "github_url",
-          "fieldLabel": "GitHub Profili",
+          "fieldLabel": "GitHub Profile",
           "field_custom_info": {
             "type": "url",
             "placeholder": "https://github.com/..."
@@ -134,7 +132,7 @@ Tüm kullanıcıların profil/düzenleme sayfasında görüntülenecek özel ala
 }
 ```
 
-### Başarılı Yanıt
+### Success Response
 
 ```json
 {
@@ -143,7 +141,7 @@ Tüm kullanıcıların profil/düzenleme sayfasında görüntülenecek özel ala
 }
 ```
 
-### Hata Yanıtı
+### Error Response
 
 ```json
 { "status": false, "message": "sections is required." }
@@ -151,23 +149,23 @@ Tüm kullanıcıların profil/düzenleme sayfasında görüntülenecek özel ala
 
 ---
 
-## Verilere Erişim
+## Accessing Saved Data
 
-Kaydedilen kullanıcı meta verilerine WordPress'in native fonksiyonuyla erişilir:
+Field values saved to user meta are retrieved using the native WordPress function:
 
 ```php
-$unvan = get_user_meta( $user_id, 'unvan', true );
-$departman = get_user_meta( $user_id, 'departman', true );
+$title      = get_user_meta( $user_id, 'title', true );
+$department = get_user_meta( $user_id, 'department', true );
 ```
 
 ---
 
-## İzin
+## Permission
 
-`manage_options` WordPress yetkisi gerektirir.
+Requires the `manage_options` WordPress capability.
 
 ---
 
-## İlgili Belgeler
+## Related
 
-- [Field Schema](field-schema.md) — Alan tanımlarında kullanılan ortak şema
+- [Field Schema](field-schema.md) — Shared schema for field definitions

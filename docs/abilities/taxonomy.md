@@ -1,22 +1,22 @@
 # Taxonomy Abilities
 
-Özel taksonomi oluşturmak ve güncellemek için kullanılan ability'ler.
+Abilities for creating and updating custom taxonomies.
 
 ---
 
 ## `native-custom-fields/create-taxonomy`
 
-Yeni bir özel taksonomi oluşturur ve konfigürasyonunu kaydeder.
+Creates a new custom taxonomy and saves its configuration.
 
 ## `native-custom-fields/update-taxonomy`
 
-Mevcut bir özel taksonominin konfigürasyonunu günceller.
+Updates the configuration of an existing custom taxonomy.
 
-> Her iki ability aynı `execute_callback`'i (`saveTaxonomy`) ve aynı input şemasını kullanır. `taxonomy` slug'ı zaten mevcutsa kayıt güncellenir, yoksa yeni oluşturulur.
+> Both abilities share the same `execute_callback` (`saveTaxonomy`) and the same input schema. If the `taxonomy` slug already exists, the record is updated; otherwise a new one is created.
 
 ---
 
-## Input Şeması
+## Input Schema
 
 ```json
 {
@@ -25,23 +25,23 @@ Mevcut bir özel taksonominin konfigürasyonunu günceller.
 }
 ```
 
-### Alanlar
+### Properties
 
-| Alan | Zorunlu | Tip | Varsayılan | Açıklama |
+| Property | Required | Type | Default | Description |
 |---|---|---|---|---|
-| `taxonomy` | Evet | string | — | Taksonomi slug'ı (küçük harf, max 32 karakter) |
-| `label` | Evet | string | — | Çoğul etiket (ör. "Türler") |
-| `object_type` | Evet | string[] | — | Taksonominin bağlanacağı post tipi slug'ları (ör. `["post","kitap"]`) |
-| `singular_name` | Hayır | string | `label` değeri | Tekil etiket (ör. "Tür") |
-| `description` | Hayır | string | `""` | Taksonomiyi açıklayan metin |
-| `public` | Hayır | boolean | `true` | Taksonomi genel erişilebilir mi? |
-| `hierarchical` | Hayır | boolean | `true` | Kategori gibi hiyerarşik mi, yoksa etiket gibi düz mü? |
-| `show_admin_column` | Hayır | boolean | `false` | Post listesi ekranında taksonomi kolonu gösterilsin mi? |
-| `show_in_rest` | Hayır | boolean | `true` | WordPress REST API'de görünsün mü? |
+| `taxonomy` | Yes | string | — | Taxonomy slug (lowercase, max 32 chars) |
+| `label` | Yes | string | — | Plural label (e.g. `"Genres"`) |
+| `object_type` | Yes | string[] | — | Post type slugs to attach this taxonomy to (e.g. `["post", "book"]`) |
+| `singular_name` | No | string | `label` value | Singular label (e.g. `"Genre"`) |
+| `description` | No | string | `""` | Description of the taxonomy |
+| `public` | No | boolean | `true` | Whether the taxonomy is publicly accessible |
+| `hierarchical` | No | boolean | `true` | `true` for category-like (hierarchical), `false` for tag-like (flat) |
+| `show_admin_column` | No | boolean | `false` | Whether to show a taxonomy column on the post type list screen |
+| `show_in_rest` | No | boolean | `true` | Whether to expose the taxonomy in the WordPress REST API |
 
 ---
 
-## Output Şeması
+## Output Schema
 
 ```json
 {
@@ -50,22 +50,22 @@ Mevcut bir özel taksonominin konfigürasyonunu günceller.
 }
 ```
 
-| Alan | Tip | Açıklama |
+| Field | Type | Description |
 |---|---|---|
-| `status` | boolean | `true` başarı, `false` hata |
-| `message` | string | İşlem sonucu veya hata mesajı |
+| `status` | boolean | `true` on success, `false` on failure |
+| `message` | string | Result description or error message |
 
 ---
 
-## Dahili Davranış
+## Internal Behaviour
 
-- `taxonomy` → `sanitize_key()` ile temizlenir.
-- `object_type` dizisindeki her değer `sanitize_key()` ile temizlenir.
-- Builder slug biçimi: `native_custom_fields_taxonomy_builder_{taxonomy}`
-- Kayıt başarılıysa aynı değerler `OptionService::saveOptions()` ile de saklanır.
-- Etiket çevirileri (add_new_item, all_items, search_items vb.) otomatik olarak `label` ve `singular_name`'den üretilir.
+- `taxonomy` is sanitized with `sanitize_key()`.
+- Each value in the `object_type` array is sanitized with `sanitize_key()`.
+- Builder slug format: `native_custom_fields_taxonomy_builder_{taxonomy}`
+- On success, the same values are also stored via `OptionService::saveOptions()`.
+- Label strings (`add_new_item`, `all_items`, `search_items`, etc.) are automatically generated from `label` and `singular_name`.
 
-### Otomatik Oluşturulan Görünürlük Ayarları
+### Auto-generated Visibility Settings
 
 ```
 publicly_queryable:  true
@@ -76,7 +76,7 @@ show_in_quick_edit:  true
 show_in_nav_menus:   true
 ```
 
-### Otomatik Oluşturulan Permalink Ayarları
+### Auto-generated Permalink Settings
 
 ```
 slug:         {taxonomy}
@@ -87,27 +87,27 @@ ep_mask:      EP_NONE
 
 ---
 
-## Örnekler
+## Examples
 
 ### Minimal
 
 ```json
 {
-  "taxonomy": "tur",
-  "label": "Türler",
-  "object_type": ["kitap"]
+  "taxonomy": "genre",
+  "label": "Genres",
+  "object_type": ["book"]
 }
 ```
 
-### Detaylı
+### Full
 
 ```json
 {
-  "taxonomy": "tur",
-  "label": "Türler",
-  "singular_name": "Tür",
-  "object_type": ["kitap", "post"],
-  "description": "Kitap türleri için taksonomi",
+  "taxonomy": "genre",
+  "label": "Genres",
+  "singular_name": "Genre",
+  "object_type": ["book", "post"],
+  "description": "Taxonomy for book genres",
   "public": true,
   "hierarchical": true,
   "show_admin_column": true,
@@ -115,7 +115,7 @@ ep_mask:      EP_NONE
 }
 ```
 
-### Başarılı Yanıt
+### Success Response
 
 ```json
 {
@@ -124,7 +124,7 @@ ep_mask:      EP_NONE
 }
 ```
 
-### Hata Yanıtları
+### Error Responses
 
 ```json
 { "status": false, "message": "taxonomy is required." }
@@ -134,6 +134,6 @@ ep_mask:      EP_NONE
 
 ---
 
-## İzin
+## Permission
 
-`manage_options` WordPress yetkisi gerektirir.
+Requires the `manage_options` WordPress capability.

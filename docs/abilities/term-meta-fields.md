@@ -1,16 +1,16 @@
 # Term Meta Fields Ability
 
-Bir taksonomiye bağlı özel alan konfigürasyonu oluşturmak veya güncellemek için kullanılan ability.
+Ability for creating or updating the custom field configuration attached to a taxonomy.
 
 ---
 
 ## `native-custom-fields/save-term-meta-fields`
 
-Bir taksonomiyle ilişkili terimlerin (term) düzenleme sayfasında gösterilecek özel alan konfigürasyonunu oluşturur veya günceller.
+Creates or updates the field configuration displayed on the term edit pages of a given taxonomy. If a configuration already exists for the given `taxonomy`, it is overwritten.
 
 ---
 
-## Input Şeması
+## Input Schema
 
 ```json
 {
@@ -19,14 +19,14 @@ Bir taksonomiyle ilişkili terimlerin (term) düzenleme sayfasında gösterilece
 }
 ```
 
-### Üst Düzey Alanlar
+### Top-level Properties
 
-| Alan | Zorunlu | Tip | Açıklama |
+| Property | Required | Type | Description |
 |---|---|---|---|
-| `taxonomy` | Evet | string | Alanların ekleneceği taksonomi slug'ı |
-| `sections` | Evet | array | Bölüm tanımları dizisi |
+| `taxonomy` | Yes | string | Slug of the taxonomy to attach fields to |
+| `sections` | Yes | array | Array of section definitions |
 
-### Section Şeması
+### Section Schema
 
 ```json
 {
@@ -35,16 +35,16 @@ Bir taksonomiyle ilişkili terimlerin (term) düzenleme sayfasında gösterilece
 }
 ```
 
-| Alan | Zorunlu | Tip | Varsayılan | Açıklama |
+| Property | Required | Type | Default | Description |
 |---|---|---|---|---|
-| `section_name` | Evet | string | — | Bölüm için benzersiz slug |
-| `section_title` | Evet | string | — | Admin ekranında gösterilen bölüm başlığı |
-| `section_icon` | Hayır | string | `"admin-generic"` | Dashicon adı (ön ek olmadan, ör. `"tag"`) |
-| `fields` | Hayır | array | `[]` | Bu bölümdeki alanlar (bkz. [field-schema.md](field-schema.md)) |
+| `section_name` | Yes | string | — | Unique slug for the section |
+| `section_title` | Yes | string | — | Section title displayed in the admin screen |
+| `section_icon` | No | string | `"admin-generic"` | Dashicon name without the `dashicons-` prefix (e.g. `"tag"`) |
+| `fields` | No | array | `[]` | Fields inside this section (see [field-schema.md](field-schema.md)) |
 
 ---
 
-## Output Şeması
+## Output Schema
 
 ```json
 {
@@ -53,54 +53,54 @@ Bir taksonomiyle ilişkili terimlerin (term) düzenleme sayfasında gösterilece
 }
 ```
 
-| Alan | Tip | Açıklama |
+| Field | Type | Description |
 |---|---|---|
-| `status` | boolean | `true` başarı, `false` hata |
-| `message` | string | İşlem sonucu veya hata mesajı |
+| `status` | boolean | `true` on success, `false` on failure |
+| `message` | string | Result description or error message |
 
 ---
 
-## Dahili Davranış
+## Internal Behaviour
 
-- `taxonomy` → `sanitize_key()` ile temizlenir.
-- `section_name` → `sanitize_key()` ile temizlenir.
-- `section_title` → `sanitize_text_field()` ile temizlenir.
-- Builder slug biçimi: `native_custom_fields_term_meta_fields_builder_{taxonomy}`
-- Kayıt başarılıysa aynı değerler `OptionService::saveOptions()` ile de saklanır.
-- Alan değerleri çalışma zamanında `wp_termmeta` tablosunda `{name}` meta key'i ile saklanır.
-- Bölümler dahili olarak `fieldType: "section"` ile işaretlenerek `TermMetaService::saveTermMetaFieldsConfig()` metoduna iletilir.
+- `taxonomy` is sanitized with `sanitize_key()`.
+- `section_name` is sanitized with `sanitize_key()`.
+- `section_title` is sanitized with `sanitize_text_field()`.
+- Builder slug format: `native_custom_fields_term_meta_fields_builder_{taxonomy}`
+- On success, the same values are also stored via `OptionService::saveOptions()`.
+- Field values are stored at runtime in the `wp_termmeta` table using the field `name` as the meta key.
+- Sections are internally tagged with `fieldType: "section"` before being passed to `TermMetaService::saveTermMetaFieldsConfig()`.
 
 ---
 
-## Örnek
+## Example
 
 ```json
 {
-  "taxonomy": "tur",
+  "taxonomy": "genre",
   "sections": [
     {
-      "section_name": "tur_detaylari",
-      "section_title": "Tür Detayları",
+      "section_name": "genre_details",
+      "section_title": "Genre Details",
       "section_icon": "tag",
       "fields": [
         {
           "fieldType": "textarea",
-          "name": "tur_aciklamasi",
-          "fieldLabel": "Uzun Açıklama",
+          "name": "long_description",
+          "fieldLabel": "Long Description",
           "field_custom_info": {
             "rows": 5,
-            "placeholder": "Türü detaylıca açıklayın"
+            "placeholder": "Describe this genre in detail"
           }
         },
         {
           "fieldType": "media_library",
-          "name": "tur_gorseli",
-          "fieldLabel": "Tür Görseli"
+          "name": "genre_image",
+          "fieldLabel": "Genre Image"
         },
         {
           "fieldType": "color_picker",
-          "name": "tur_rengi",
-          "fieldLabel": "Tür Rengi",
+          "name": "genre_color",
+          "fieldLabel": "Genre Color",
           "default": "#3498db"
         }
       ]
@@ -109,7 +109,7 @@ Bir taksonomiyle ilişkili terimlerin (term) düzenleme sayfasında gösterilece
 }
 ```
 
-### Başarılı Yanıt
+### Success Response
 
 ```json
 {
@@ -118,7 +118,7 @@ Bir taksonomiyle ilişkili terimlerin (term) düzenleme sayfasında gösterilece
 }
 ```
 
-### Hata Yanıtları
+### Error Responses
 
 ```json
 { "status": false, "message": "taxonomy is required." }
@@ -127,13 +127,13 @@ Bir taksonomiyle ilişkili terimlerin (term) düzenleme sayfasında gösterilece
 
 ---
 
-## İzin
+## Permission
 
-`manage_options` WordPress yetkisi gerektirir.
+Requires the `manage_options` WordPress capability.
 
 ---
 
-## İlgili Belgeler
+## Related
 
-- [Field Schema](field-schema.md) — Alan tanımlarında kullanılan ortak şema
-- [Taxonomy Abilities](taxonomy.md) — Taksonomi oluşturma/güncelleme
+- [Field Schema](field-schema.md) — Shared schema for field definitions
+- [Taxonomy Abilities](taxonomy.md) — Creating and updating taxonomies
