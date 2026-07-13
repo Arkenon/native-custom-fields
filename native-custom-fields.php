@@ -5,7 +5,7 @@ declare(strict_types=1);
  * Plugin Name: Native Custom Fields
  * Plugin URI: https://nativecustomfields.com
  * Description: A WordPress plugin for creating custom fields using Gutenberg components
- * Version: 1.2.7
+ * Version: 1.2.8
  * Author: Kadim Gültekin
  * Author URI: https://profiles.wordpress.org/arkenon/
  * Text Domain: native-custom-fields
@@ -25,9 +25,15 @@ if (is_readable(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
-define('NATIVE_CUSTOM_FIELDS_URL', rtrim(plugin_dir_url(__FILE__), '/') . '/');
-define('NATIVE_CUSTOM_FIELDS_PATH', plugin_dir_path(__FILE__));
-define('NATIVE_CUSTOM_FIELDS_INCLUDES_PATH', plugin_dir_path(__FILE__) . 'includes/');
+if (!defined('NATIVE_CUSTOM_FIELDS_URL')) {
+    define('NATIVE_CUSTOM_FIELDS_URL', rtrim(plugin_dir_url(__FILE__), '/') . '/');
+}
+if (!defined('NATIVE_CUSTOM_FIELDS_PATH')) {
+    define('NATIVE_CUSTOM_FIELDS_PATH', plugin_dir_path(__FILE__));
+}
+if (!defined('NATIVE_CUSTOM_FIELDS_INCLUDES_PATH')) {
+    define('NATIVE_CUSTOM_FIELDS_INCLUDES_PATH', plugin_dir_path(__FILE__) . 'includes/');
+}
 
 //Activation
 if (!function_exists('nativeCustomFieldsInitActivation')) {

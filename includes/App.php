@@ -77,8 +77,6 @@ final class App {
             return;
         }
 
-        self::$booted = true;
-
         $url = isset( $config['url'] )
             ? sanitize_text_field( $config['url'] )
             : ( defined( 'NATIVE_CUSTOM_FIELDS_URL' ) ? NATIVE_CUSTOM_FIELDS_URL : '' );
@@ -117,6 +115,12 @@ final class App {
 	 * @since 1.0.0
 	 */
 	public function run(): void {
+        if ( self::$booted ) {
+            return;
+        }
+
+        self::$booted = true;
+
         //Define a hook run before initializing the plugin
         do_action( 'native_custom_fields_before_init' );
 
