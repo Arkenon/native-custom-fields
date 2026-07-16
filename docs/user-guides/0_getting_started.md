@@ -23,3 +23,6 @@ Extend your categories and tags by adding custom metadata fields.
 
 ### 6) User Meta Fields
 Learn how to add custom fields to user profiles for richer user information.
+
+### 7) Options Pages
+Learn how to create options pages for your plugin.

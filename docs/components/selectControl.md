@@ -46,7 +46,11 @@ Here is an example of how to use the select control in a post meta configuration
     'className' => 'custom-class',
     'fieldLabelPosition' => 'top',
     'fieldLabelTextTransform' => 'uppercase',
-    'options' => 'Option 1 : option_1, Option 2 : option_2',
+    'options' => [
+        ['label' => 'Option 1', 'value' => 'option_1'],
+        ['label' => 'Option 2', 'value' => 'option_2']
+    ],
+    // Or 'options' => 'Option 1 : option_1, Option 2 : option_2'
     'variant' => 'default',
     'multiple' => false,
 ]

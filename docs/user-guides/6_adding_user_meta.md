@@ -1,10 +1,10 @@
 ## 6. Adding User Meta Fields
 
-Need to add a "Twitter Profile" or "Biography Image" to user accounts?
+You can enrich user profiles by adding custom metadata (e.g., social links, biography images, or extra contact details). The process is similar to adding taxonomy fields, utilizing **Sections** to group your fields.
 
-1. Create a new *Field Group*.
-2. Set the *Location* to *User Profile*.
-3. Add the desired fields (e.g., *Text Control* for social links).
-4. Go to *Users > Profile* or *Users > Edit*. You will find your custom fields integrated into the profile settings.
+1. **Add a Section**: Navigate to the Edit User Meta Fields screen. Click the **Add Section** button located at the top right.
+2. **Configure Section**: Fill in the required details for the Section in the settings panel (e.g., Field Name and Label) to organize your user fields.
+3. **Add Fields**: Click the **+** button inside your newly created Section in the List View. Choose the desired field type from the modal.
+4. **Save**: Click **Save Changes** at the bottom of the screen. Your fields will now appear on the user profile pages.
 
 ---
