@@ -124,8 +124,9 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 		//Get saved configurations from database
 		$get_user_meta_fields = $this->userMetaRepository->getConfigurations('native_custom_fields_user_meta_fields_config');
 
-		// Apply filter
-		$filtered = apply_filters('native_custom_fields_user_meta_fields_config', $get_user_meta_fields);
+		// Apply filter (matches the documented hook name, same naming pattern as
+		// native_custom_fields_post_meta_fields / native_custom_fields_term_meta_fields)
+		$filtered = apply_filters('native_custom_fields_user_meta_fields', $get_user_meta_fields);
 
 		// Normalize: Convert model objects to arrays (backward compatibility)
 		if (is_array($filtered)) {

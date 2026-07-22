@@ -303,6 +303,9 @@ class OptionService implements OptionServiceInterface
 	/**
 	 * Get the flattened field configuration list (all sections merged) for an options page,
 	 * used to sanitize submitted option values according to each field's fieldType.
+	 * Mirrors buildConfigModel(): starts from the DB-stored builder config and applies the
+	 * 'native_custom_fields_options_page_fields' filter, since consumer plugins may inject/replace
+	 * sections entirely via that filter instead of the options page builder UI.
 	 *
 	 * @param string $menu_slug
 	 *
@@ -312,13 +315,17 @@ class OptionService implements OptionServiceInterface
 	public function getFieldsForMenuSlug(string $menu_slug): array
 	{
 		$fields_config = $this->getOptionsPagesFieldsConfigurations();
+		$sections      = $fields_config[$menu_slug]['sections'] ?? [];
 
-		if (empty($fields_config[$menu_slug]['sections'])) {
+		// Apply filter to allow modification/injection of sections (same filter buildConfigModel() applies)
+		$sections = apply_filters('native_custom_fields_options_page_fields', $sections, $menu_slug);
+
+		if (empty($sections)) {
 			return [];
 		}
 
 		$fields = [];
-		foreach ($fields_config[$menu_slug]['sections'] as $section) {
+		foreach ($sections as $section) {
 			if (! empty($section['fields']) && is_array($section['fields'])) {
 				$fields = array_merge($fields, $section['fields']);
 			}

@@ -54,7 +54,7 @@ This plugin relies on standard WordPress lifecycle hooks (`register_activation_h
 - `native_custom_fields_register_term_meta_args` (`includes/Services/TermMetaService.php`): Override registration args (commonly `single` and `show_in_rest`) before `register_term_meta`.
 
 #### User Meta
-- `native_custom_fields_user_meta_fields_config` (`includes/Services/UserMetaService.php`): Modify user meta field configuration before rendering/saving (currently centered on `all_users`).
+- `native_custom_fields_user_meta_fields` (`includes/Services/UserMetaService.php`): Modify user meta field configuration before rendering/saving (currently centered on `all_users`).
 
 ### 6.4 Quick Example
 
