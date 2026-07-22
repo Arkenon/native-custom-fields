@@ -225,7 +225,9 @@ class OptionsController
     {
 
         $menu_slug = sanitize_text_field($request->get_param('menu_slug'));
-        $values = Helper::sanitizeArray($request->get_param('values'));
+        $raw_values = $request->get_param('values');
+        $fields = $this->optionService->getFieldsForMenuSlug($menu_slug);
+        $values = is_array($raw_values) ? Helper::sanitizeFieldsByConfig($raw_values, $fields) : [];
         $reset = rest_sanitize_boolean($request->get_param('reset'));
 
         $result = $this->optionService->saveOptions($menu_slug, $values, $reset);

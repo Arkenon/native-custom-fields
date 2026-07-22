@@ -301,6 +301,33 @@ class OptionService implements OptionServiceInterface
 	}
 
 	/**
+	 * Get the flattened field configuration list (all sections merged) for an options page,
+	 * used to sanitize submitted option values according to each field's fieldType.
+	 *
+	 * @param string $menu_slug
+	 *
+	 * @return array
+	 * @since 1.2.9
+	 */
+	public function getFieldsForMenuSlug(string $menu_slug): array
+	{
+		$fields_config = $this->getOptionsPagesFieldsConfigurations();
+
+		if (empty($fields_config[$menu_slug]['sections'])) {
+			return [];
+		}
+
+		$fields = [];
+		foreach ($fields_config[$menu_slug]['sections'] as $section) {
+			if (! empty($section['fields']) && is_array($section['fields'])) {
+				$fields = array_merge($fields, $section['fields']);
+			}
+		}
+
+		return $fields;
+	}
+
+	/**
 	 * Create option page fields from the builder
 	 *
 	 * @param string $menu_slug
