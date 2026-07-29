@@ -567,6 +567,27 @@ export function getDefaultValue(defaultValue, fieldType) {
 }
 
 /**
+ * Cast a value to a boolean for toggle/checkbox fields.
+ *
+ * The builder stores the "Default Value" as plain text and meta values come back from PHP
+ * as strings, so "false" and "0" must not be treated as truthy the way `!!value` would.
+ *
+ * @param {any} value Value to cast
+ * @returns {boolean} Boolean representation of the value
+ * @since 1.3.3
+ */
+export function toBoolean(value) {
+    if (typeof value === 'boolean') return value;
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'number') return value !== 0;
+    if (typeof value !== 'string') return !!value;
+
+    const normalized = value.trim().toLowerCase();
+
+    return !['', '0', 'false', 'off', 'no'].includes(normalized);
+}
+
+/**
  * Log error when no field configuration is found
  * @returns {void}
  * @since 1.0.0

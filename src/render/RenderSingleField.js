@@ -54,7 +54,7 @@ import {
  */
 import {ComboboxField, FileUploadField, MediaLibraryField, RepeaterField} from '@nativecustomfields/components';
 import GroupField from "@nativecustomfields/components/Group/GroupField.js";
-import {getDefaultValue, parseJsonArray} from "@nativecustomfields/common/helper.js";
+import {getDefaultValue, parseJsonArray, toBoolean} from "@nativecustomfields/common/helper.js";
 import {
     isDynamicOptionsString,
     parseStaticOptionsString,
@@ -300,10 +300,21 @@ const RenderSingleField = (props) => {
             }
             case 'select': {
                 const {prefix, suffix, ...selectControlProps} = restElementProps;
-                const selectOptions = [{
-                    label: __('Select...', 'native-custom-fields'),
-                    value: null
-                }].concat(resolvedOptions);
+                const isMultiple = !!restElementProps.multiple;
+                // The placeholder only makes sense for single selects, and it needs an
+                // explicit empty value: an <option> without a value attribute falls back
+                // to its own label, which would store "Select..." as a real value.
+                const selectOptions = isMultiple
+                    ? resolvedOptions
+                    : [{
+                        label: __('Select...', 'native-custom-fields'),
+                        value: ''
+                    }].concat(resolvedOptions);
+                const selectValue = isMultiple
+                    ? (Array.isArray(currentValue)
+                        ? currentValue
+                        : (currentValue === null || currentValue === undefined || currentValue === '' ? [] : [currentValue]))
+                    : (currentValue === null || currentValue === undefined ? '' : currentValue);
                 return (<SelectControl
                     {...selectControlProps}
                     options={selectOptions}
@@ -311,7 +322,7 @@ const RenderSingleField = (props) => {
                     __next40pxDefaultSize
                     className={className}
                     name={name}
-                    value={currentValue}
+                    value={selectValue}
                     prefix={buildPrefixElement(prefix, InputControlPrefixWrapper)}
                     suffix={buildSuffixElement(suffix, InputControlSuffixWrapper)}
                     onChange={handleChange}
@@ -323,7 +334,7 @@ const RenderSingleField = (props) => {
                     __nextHasNoMarginBottom
                     className={className}
                     name={name}
-                    checked={!!currentValue}
+                    checked={toBoolean(currentValue)}
                     onChange={handleChange}
                 />);
             case 'radio':
@@ -361,7 +372,7 @@ const RenderSingleField = (props) => {
                     __nextHasNoMarginBottom
                     className={className}
                     name={name}
-                    checked={!!currentValue}
+                    checked={toBoolean(currentValue)}
                     onChange={handleChange}
                 />);
             case 'color_picker':
