@@ -34,10 +34,9 @@ jobs:
           create-h1: false
           rewrite-links: true
 
-          # Safety state: previews only, no WordPress writes of any kind.
-          # Change these one at a time, each with explicit approval:
-          #   1. dry-run: false  -> begins creating real Pages (as drafts)
-          #   2. status: publish -> makes those Pages publicly visible
+          # Writes are live, but only as drafts - nothing is publicly visible.
+          # Remaining step, requires its own approval:
+          #   status: publish -> makes these Pages publicly visible
           status: draft
           delete-mode: trash
-          dry-run: true
+          dry-run: false
