@@ -1,0 +1,39 @@
+name: Sync docs to WordPress
+
+# Manual trigger only for now. An automatic push trigger on `main` is added
+# ONLY after the manual dry-run and draft-write lifecycle has been proven.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout v4.4.0
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      # Automattic/docspress v0.4.1
+      - uses: Automattic/docspress@78ce6afcd30fe551f1a30007611344bdc9594a1d
+        with:
+          # Site origin only - DocsPress appends /wp-json/wp/v2/... itself.
+          wordpress-url: https://nativecustomfields.com
+          wordpress-site: nativecustomfields.com
+          wordpress-access-token: ${{ secrets.WP_ACCESS_TOKEN }}
+
+          docs-dir: docs
+          manifest-file: docs/docspress.manifest.json
+          root-slug: docs
+          root-title: Docs
+          create-h1: false
+          rewrite-links: true
+
+          # Safety state: previews only, no WordPress writes of any kind.
+          # Change these one at a time, each with explicit approval:
+          #   1. dry-run: false  -> begins creating real Pages (as drafts)
+          #   2. status: publish -> makes those Pages publicly visible
+          status: draft
+          delete-mode: trash
+          dry-run: true
