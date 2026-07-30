@@ -462,7 +462,7 @@ class Helper
      */
     public static function fieldsAlreadyHaveInput(): array
     {
-        return ['text', 'textarea', 'number', 'input', 'range', 'combobox'];
+        return ['text', 'textarea', 'number', 'input', 'range'];
     }
 
     /**

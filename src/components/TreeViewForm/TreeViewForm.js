@@ -10,7 +10,7 @@ import ActionButtons from '../ActionButtons/ActionButtons';
 import {transformTreeToFieldSchema} from './utils/transformTreeToFieldSchema';
 import {generateUniqueId} from './utils/generateUniqueId';
 import {fieldConfigurations} from '@nativecustomfields/configurations/field-configurations';
-import {deepClone} from '@nativecustomfields/common/helper.js';
+import {deepClone, getMissingRequiredFields} from '@nativecustomfields/common/helper.js';
 import './TreeViewForm.scss';
 
 const TreeViewForm = (
@@ -715,67 +715,19 @@ const TreeViewForm = (
 			};
 		}
 
-		// Get required field names from fieldConfigurations
-		const getRequiredFields = () => {
-			const requiredFields = [];
-
-			// Helper function to recursively extract required fields from nested structures
-			const extractRequiredFields = (fields) => {
-				if (!fields) return;
-
-				if (Array.isArray(fields)) {
-					fields.forEach(field => {
-						if (field.required === true && field.name) {
-							requiredFields.push({
-								name: field.name,
-								label: field.fieldLabel || field.name
-							});
-						}
-						// Check nested fields (for group fields)
-						if (field.fields) {
-							extractRequiredFields(field.fields);
-						}
-					});
-				}
-			};
-
-			extractRequiredFields(fieldConfigurations);
-			return requiredFields;
-		};
-
-		const requiredFieldsList = getRequiredFields();
-		// Convert to Map for faster lookup
-		const requiredFieldsMap = new Map(requiredFieldsList.map(f => [f.name, f.label]));
-
 		// Check all nodes for required fields and duplicate names
 		const checkNode = (node) => {
 			const nodeLabel = node.fieldLabel || node.name || node.fieldType || __('Unnamed field', 'native-custom-fields');
 
-			// Check only the fields that exist in this node AND are marked as required
-			Object.keys(node).forEach(nodeFieldName => {
-				// Skip internal/UI fields
-				if (nodeFieldName === 'id' || nodeFieldName === 'parentId' ||
-				    nodeFieldName === 'children' || nodeFieldName === 'fieldType') {
-					return;
-				}
+			// Strip UI metadata so it is not mistaken for field values (children holds child node ids)
+			const {id, parentId, children, isExpanded, ...nodeValues} = node;
 
-				// Check if this field is required in fieldConfigurations
-				if (requiredFieldsMap.has(nodeFieldName)) {
-					const fieldValue = node[nodeFieldName];
-					const isEmpty = fieldValue === undefined ||
-					                fieldValue === null ||
-					                fieldValue === '' ||
-					                (typeof fieldValue === 'string' && fieldValue.trim() === '') ||
-					                (Array.isArray(fieldValue) && fieldValue.length === 0);
-
-					if (isEmpty) {
-						const fieldLabel = requiredFieldsMap.get(nodeFieldName);
-						missingFields.push({
-							fieldLabel: nodeLabel,
-							issue: `${fieldLabel} ${__('is required', 'native-custom-fields')}`
-						});
-					}
-				}
+			// Walks groups and repeater items too, so nested rules (e.g. dependency conditions) are validated
+			getMissingRequiredFields(nodeValues, fieldConfigurations).forEach(missingField => {
+				missingFields.push({
+					fieldLabel: nodeLabel,
+					issue: `${missingField.labelPath} ${__('is required', 'native-custom-fields')}`
+				});
 			});
 
 			// Check for duplicate field names (only for fields, not sections/meta_boxes)

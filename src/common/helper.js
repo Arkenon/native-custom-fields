@@ -106,55 +106,19 @@ export const withDashboardIcons = ( items = [] ) =>
     items.map( ( item ) => ( { ...item, icon: DASHBOARD_ICON_MAP[ item.icon ] ?? null } ) );
 
 /**
- * Validate required fields for meta (simple validation for post/term meta)
+ * Validate required fields for meta (post/term/user meta forms)
+ *
+ * Delegates to getMissingRequiredFields so repeater and group fields are walked
+ * recursively — a top-level-only check would miss a required field nested inside
+ * a repeater item or group (see getMissingRequiredFields for details).
+ *
  * @param {Array} fields - Field definitions
  * @param {Object} currentValues - Current field values
  * @returns {boolean} Whether all required fields are valid
  * @since 1.0.0
  */
 export function validateFields(fields, currentValues) {
-    return fields.filter(f => f.required).every(f => {
-        const val = currentValues[f.name];
-
-        // Check if value exists
-        if (!val) {
-            return false;
-        }
-
-        // Check for arrays
-        if (Array.isArray(val)) {
-            return val.length > 0;
-        }
-
-        // Check for objects (box, border_box, border, etc.)
-        if (typeof val === 'object' && val !== null) {
-            const keys = Object.keys(val);
-            if (keys.length === 0) {
-                return false;
-            }
-
-            // Check if at least one value in the object is non-empty
-            return keys.some(key => {
-                const objVal = val[key];
-                if (objVal === null || objVal === undefined || objVal === '') {
-                    return false;
-                }
-                if (typeof objVal === 'string') {
-                    return objVal.trim() !== '';
-                }
-                if (Array.isArray(objVal)) {
-                    return objVal.length > 0;
-                }
-                if (typeof objVal === 'object') {
-                    return Object.keys(objVal).length > 0;
-                }
-                return true; // for numbers, booleans, etc.
-            });
-        }
-
-        // Check for strings and other primitives
-        return val.toString().trim() !== '';
-    });
+    return getMissingRequiredFields(currentValues, fields).length === 0;
 }
 
 /**
@@ -174,7 +138,7 @@ export function validateRequiredFields(sections, allValues) {
         const sectionValues = allValues[sectionName] || {};
 
         // Get missing fields for this section
-        const missingFields = getMissingFields(sectionValues, sectionFields);
+        const missingFields = getMissingRequiredFields(sectionValues, sectionFields);
 
         // Add section info to missing fields for better error messages
         const missingFieldsWithSection = missingFields.map(field => ({
@@ -194,7 +158,7 @@ export function validateRequiredFields(sections, allValues) {
             if (!fieldsBySection[sectionTitle]) {
                 fieldsBySection[sectionTitle] = [];
             }
-            fieldsBySection[sectionTitle].push(field.fieldLabel);
+            fieldsBySection[sectionTitle].push(field.labelPath || field.fieldLabel);
         });
 
         // Create detailed error message with HTML line breaks
@@ -213,187 +177,99 @@ export function validateRequiredFields(sections, allValues) {
 }
 
 /**
- * Get missing fields recursively
- * @param {Object} values - The form values
- * @param {Array} fields - The fields to check
- * @returns {Array} Missing fields
+ * Check whether a value counts as empty for required field validation
+ * @param {any} value - The value to check
+ * @returns {boolean} Whether the value is empty
+ * @since 1.0.0
  */
-function getMissingFields(values, fields = []) {
-    let missingFields = [];
-
-    if (!fields || fields.length === 0) {
-        return missingFields;
+function isEmptyFieldValue(value) {
+    if (value === undefined || value === null) {
+        return true;
     }
 
-    // Process each field in the current level
-    for (const field of fields) {
-        const fieldName = field.name;
-
-        // Get the field value from the form values
-        const fieldValue = values[fieldName];
-
-        // Check if this field is required and empty
-        // Handle both boolean true and string "1" for required field
-        if (field.required === true || field.required === "1") {
-            let isEmpty = false;
-
-            if (fieldValue === undefined || fieldValue === null) {
-                isEmpty = true;
-            }
-            // Check for arrays
-            else if (Array.isArray(fieldValue)) {
-                isEmpty = fieldValue.length === 0;
-            }
-            // Check for objects (box, border_box, border, etc.)
-            else if (typeof fieldValue === 'object' && fieldValue !== null) {
-                const keys = Object.keys(fieldValue);
-                if (keys.length === 0) {
-                    isEmpty = true;
-                } else {
-                    // Check if at least one value in the object is non-empty
-                    const hasValidValue = keys.some(key => {
-                        const objVal = fieldValue[key];
-                        if (objVal === null || objVal === undefined || objVal === '') {
-                            return false;
-                        }
-                        if (typeof objVal === 'string') {
-                            return objVal.trim() !== '';
-                        }
-                        if (Array.isArray(objVal)) {
-                            return objVal.length > 0;
-                        }
-                        if (typeof objVal === 'object') {
-                            return Object.keys(objVal).length > 0;
-                        }
-                        return true; // for numbers, booleans, etc.
-                    });
-                    isEmpty = !hasValidValue;
-                }
-            }
-            // Check for strings and other primitives
-            else if (typeof fieldValue === 'string') {
-                isEmpty = fieldValue.trim() === '';
-            }
-
-            if (isEmpty) {
-                missingFields.push(field);
-            }
-        }
-
-        // Handle repeater fields (array of objects)
-        if (field.fieldType === 'repeater' && Array.isArray(fieldValue) && fieldValue.length > 0) {
-
-            // Check each item in the repeater
-            fieldValue.forEach((item, index) => {
-
-                // Process nested fields inside this repeater item
-                const itemMissingFields = processNestedItem(item, field.fields);
-
-                if (itemMissingFields.length > 0) {
-                    missingFields = [...missingFields, ...itemMissingFields];
-                }
-            });
-        }
-
-        // Handle group fields (object with nested fields)
-        else if (field.fieldType === 'group' && fieldValue) {
-            // Process nested fields inside this group
-            const groupMissingFields = processNestedItem(fieldValue, field.fields);
-
-            if (groupMissingFields.length > 0) {
-                missingFields = [...missingFields, ...groupMissingFields];
-            }
-        }
+    if (Array.isArray(value)) {
+        return value.length === 0;
     }
 
-    return missingFields;
+    // Objects (box, border_box, border, etc.) need at least one non-empty entry
+    if (typeof value === 'object') {
+        const keys = Object.keys(value);
+        if (keys.length === 0) {
+            return true;
+        }
+
+        return !keys.some(key => {
+            const objVal = value[key];
+            if (objVal === null || objVal === undefined || objVal === '') {
+                return false;
+            }
+            if (typeof objVal === 'string') {
+                return objVal.trim() !== '';
+            }
+            if (Array.isArray(objVal)) {
+                return objVal.length > 0;
+            }
+            if (typeof objVal === 'object') {
+                return Object.keys(objVal).length > 0;
+            }
+            return true; // for numbers, booleans, etc.
+        });
+    }
+
+    if (typeof value === 'string') {
+        return value.trim() === '';
+    }
+
+    return false;
 }
 
 /**
- * Process a nested item (used for both repeater items and groups)
- * @param {Object} item - The nested item object
- * @param {Array} fields - The fields definition
- * @returns {Array} Missing fields
+ * Get missing required fields recursively, walking into groups and repeater items
+ *
+ * Fields hidden by their own dependencies are skipped, mirroring how RenderFields and
+ * GroupField decide what to render: a field the user cannot see must not block saving.
+ *
+ * @param {Object} values - The values for the current level (section, group or repeater item)
+ * @param {Array} fields - The field definitions for the current level
+ * @param {Array} labelPath - Parent labels used to build a readable error message
+ * @returns {Array} Missing fields, each with a labelPath describing where it lives
+ * @since 1.0.0
  */
-function processNestedItem(item, fields) {
+export function getMissingRequiredFields(values, fields = [], labelPath = []) {
     let missingFields = [];
 
-    if (!fields || fields.length === 0) {
+    if (!Array.isArray(fields) || fields.length === 0) {
         return missingFields;
     }
 
-    // Process each field in the nested structure
+    const levelValues = (values && typeof values === 'object') ? values : {};
+
     for (const field of fields) {
-        const fieldName = field.name;
-
-        let fieldValue;
-
-        if (item[fieldName] !== null && item[fieldName] !== undefined) {
-            fieldValue = item[fieldName];
+        if (field.dependencies && !checkCondition(field.dependencies, levelValues)) {
+            continue;
         }
 
-        // Check if required and empty
+        const fieldValue = levelValues[field.name];
+        const fieldLabel = field.fieldLabel || field.name;
+        const currentPath = [...labelPath, fieldLabel];
+
         // Handle both boolean true and string "1" for required field
-        if (field.required === true || field.required === "1") {
-            let isEmpty = false;
-
-            if (fieldValue === undefined || fieldValue === null) {
-                isEmpty = true;
-            }
-            // Check for arrays
-            else if (Array.isArray(fieldValue)) {
-                isEmpty = fieldValue.length === 0;
-            }
-            // Check for objects (box, border_box, border, etc.)
-            else if (typeof fieldValue === 'object' && fieldValue !== null) {
-                const keys = Object.keys(fieldValue);
-                if (keys.length === 0) {
-                    isEmpty = true;
-                } else {
-                    // Check if at least one value in the object is non-empty
-                    const hasValidValue = keys.some(key => {
-                        const objVal = fieldValue[key];
-                        if (objVal === null || objVal === undefined || objVal === '') {
-                            return false;
-                        }
-                        if (typeof objVal === 'string') {
-                            return objVal.trim() !== '';
-                        }
-                        if (Array.isArray(objVal)) {
-                            return objVal.length > 0;
-                        }
-                        if (typeof objVal === 'object') {
-                            return Object.keys(objVal).length > 0;
-                        }
-                        return true; // for numbers, booleans, etc.
-                    });
-                    isEmpty = !hasValidValue;
-                }
-            }
-            // Check for strings and other primitives
-            else if (typeof fieldValue === 'string') {
-                isEmpty = fieldValue.trim() === '';
-            }
-
-            if (isEmpty) {
-                missingFields.push(field);
-            }
+        if ((field.required === true || field.required === "1") && isEmptyFieldValue(fieldValue)) {
+            missingFields.push({...field, labelPath: currentPath.join(' > ')});
         }
 
-        // Handle nested repeaters
-        if (field.fieldType === 'repeater' && Array.isArray(fieldValue) && fieldValue.length > 0) {
-
-            fieldValue.forEach((subItem, index) => {
-                const subItemMissingFields = processNestedItem(subItem, field.fields);
-                missingFields = [...missingFields, ...subItemMissingFields];
+        if (field.fieldType === 'repeater' && Array.isArray(fieldValue)) {
+            fieldValue.forEach((item, index) => {
+                missingFields = [
+                    ...missingFields,
+                    ...getMissingRequiredFields(item, field.fields, [...labelPath, `${fieldLabel} #${index + 1}`])
+                ];
             });
-        }
-
-        // Handle nested groups
-        else if (field.fieldType === 'group' && fieldValue) {
-
-            const nestedGroupMissingFields = processNestedItem(fieldValue, field.fields);
-            missingFields = [...missingFields, ...nestedGroupMissingFields];
+        } else if (field.fieldType === 'group') {
+            missingFields = [
+                ...missingFields,
+                ...getMissingRequiredFields(fieldValue, field.fields, currentPath)
+            ];
         }
     }
 

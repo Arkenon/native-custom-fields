@@ -19,8 +19,8 @@ jobs:
       - uses: Automattic/docspress@78ce6afcd30fe551f1a30007611344bdc9594a1d
         with:
           # Site origin only - DocsPress appends /wp-json/wp/v2/... itself.
-          wordpress-url: https://nativecustomfields.com
-          wordpress-site: nativecustomfields.com
+          wordpress-url: https://docs.nativecustomfields.com
+          wordpress-site: docs.nativecustomfields.com
           wordpress-access-token: ${{ secrets.WP_ACCESS_TOKEN }}
 
           docs-dir: docs
@@ -29,7 +29,7 @@ jobs:
           #   - Page ID 180 (slug: docs, baslik: "Docs") - yonetilmeyen sayfa
           #   - ncf-documentation CPT'sinin rewrite slug'i da `docs`
           # DocsPress bunlarin uzerine yazmayi reddetti; dogru davranis.
-          root-slug: documentation
+          root-slug: docs
           root-title: Documentation
           create-h1: false
           rewrite-links: true
