@@ -25,10 +25,6 @@ jobs:
 
           docs-dir: docs
           manifest-file: docs/docspress.manifest.json
-          # NOT: `docs` kullanilamaz. O yol zaten dolu:
-          #   - Page ID 180 (slug: docs, baslik: "Docs") - yonetilmeyen sayfa
-          #   - ncf-documentation CPT'sinin rewrite slug'i da `docs`
-          # DocsPress bunlarin uzerine yazmayi reddetti; dogru davranis.
           root-slug: docs
           root-title: Documentation
           create-h1: false
