@@ -653,6 +653,36 @@ export function createEmptyItem(fields) {
 }
 
 /**
+ * Resolve the initial value of a repeater field.
+ *
+ * A repeater cannot be given a default through the field builder UI, but a default can be
+ * declared in PHP as an array of row objects whose keys match the sub-field names. When such
+ * a default exists it wins; otherwise the repeater opens with `min` empty rows, which is the
+ * historical behaviour. The result is always clamped to the field's `min`/`max` bounds.
+ *
+ * @param {Object} field The repeater field configuration.
+ * @returns {Array} The rows the repeater should start with.
+ * @since 1.3.5
+ */
+export function initializeRepeaterValue(field) {
+    const min = field.min || 0;
+    const max = (typeof field.max === 'number' && field.max > 0) ? field.max : null;
+
+    let items = Array.isArray(field.default) ? deepClone(field.default) : [];
+
+    // Top up to `min` with empty rows when the default does not provide enough
+    while (items.length < min) {
+        items.push(createEmptyItem(field.fields));
+    }
+
+    if (max !== null && items.length > max) {
+        items = items.slice(0, max);
+    }
+
+    return items;
+}
+
+/**
  * Parse JSON parameter from string to array
  * Used by BorderControl, BorderBoxControl, FontSizePicker, etc.
  *

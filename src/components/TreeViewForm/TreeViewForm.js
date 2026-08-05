@@ -10,7 +10,7 @@ import ActionButtons from '../ActionButtons/ActionButtons';
 import {transformTreeToFieldSchema} from './utils/transformTreeToFieldSchema';
 import {generateUniqueId} from './utils/generateUniqueId';
 import {fieldConfigurations} from '@nativecustomfields/configurations/field-configurations';
-import {deepClone, getMissingRequiredFields} from '@nativecustomfields/common/helper.js';
+import {deepClone, getMissingRequiredFields, initializeRepeaterValue} from '@nativecustomfields/common/helper.js';
 import './TreeViewForm.scss';
 
 const TreeViewForm = (
@@ -996,15 +996,8 @@ function processFieldsForDefaults(fieldsArray) {
 
 		// Process based on the field type
 		if (field.fieldType === 'repeater') {
-			const repeaterItems = [];
-			// If there's a 'min' property, create that many default items
-			const minItems = field.min || 0;
-
-			for (let i = 0; i < minItems; i++) {
-				// Call the function again for the fields inside the repeater (recursion)
-				repeaterItems.push(processFieldsForDefaults(field.fields));
-			}
-			data[field.name] = repeaterItems;
+			// Use the 'default' rows if one is declared, otherwise 'min' empty rows
+			data[field.name] = initializeRepeaterValue(field);
 
 		} else if (field.fieldType === 'group') {
 			// Call the function again for the fields inside the group (recursion)

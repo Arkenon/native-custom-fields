@@ -32,6 +32,31 @@ A repeater allows users to add multiple rows of grouped fields. Each row can con
 | `min` | No | `int` | `0` |  | Minimum number of items allowed. |
 | `max` | No | `int` | `50` |  | Maximum number of items allowed. |
 | `initialOpen` | No | `bool` | `false` | `true`, `false` | Whether repeater item panels are open initially. Only used when layout is `panel`. |
+| `default` | No | `array` |  |  | Rows the repeater starts with when no value has been saved yet. See below. |
+
+##### Default rows
+
+A repeater default cannot be set through the field builder UI — it can only be declared in a PHP field
+configuration. Pass an array of row objects whose keys match the `name` of the child fields:
+
+```php
+'fields' => [
+    ['fieldType' => 'text', 'name' => 'label', 'fieldLabel' => 'Label'],
+    ['fieldType' => 'textarea', 'name' => 'prompt', 'fieldLabel' => 'Prompt'],
+],
+'default' => [
+    ['label' => 'First', 'prompt' => 'First prompt text'],
+    ['label' => 'Second', 'prompt' => 'Second prompt text'],
+],
+```
+
+Notes:
+
+- The default only applies when no value has been stored yet, i.e. on first load and after a reset.
+  Once a value is saved it always wins — a repeater the user emptied on purpose stays empty.
+- The default rows are clamped to `min`/`max`: fewer rows than `min` are topped up with empty rows,
+  and rows beyond `max` are dropped.
+- Keys that do not match a child field `name` are ignored.
 
 #### 3) PHP Array Schema
 Here is an example of how to use the repeater control in a post meta configuration:

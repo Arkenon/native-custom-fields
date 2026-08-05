@@ -4,7 +4,7 @@ import { Button } from '@wordpress/components';
 import { copy, dragHandle, plus, trash } from '@wordpress/icons';
 import RenderFields from "../../render/RenderFields";
 import { CustomPanel } from "@nativecustomfields/components/index.js";
-import { createEmptyItem, deepClone } from "@nativecustomfields/common/helper.js";
+import { createEmptyItem, deepClone, initializeRepeaterValue } from "@nativecustomfields/common/helper.js";
 
 // Find the first field path marked with setAsRepeaterItemTag (skips nested repeaters to avoid ambiguity)
 const findRepeaterItemTagPath = (fields = [], parentPath = []) => {
@@ -50,6 +50,7 @@ const getRepeaterItemTagValue = (item, path) => {
  * @param {string} [props.addButtonText='Add Item'] Text for the add button
  * @param {number} [props.min=1] Minimum number of items
  * @param {number} [props.max=10] Maximum number of items
+ * @param {Array} [props.default] Default rows, used only when no value has been supplied at all
  * @param {string} [props.className=''] Additional CSS class names
  * @returns {React.ReactElement} Repeater field component
  */
@@ -64,7 +65,8 @@ const RepeaterField = (
 		max = 50,
 		className = '',
 		initialOpen = true,
-		layout = 'panel'
+		layout = 'panel',
+		default: defaultRows
 	}) => {
 
 	// State to manage group items
@@ -153,6 +155,11 @@ const RepeaterField = (
 			? values
 			: (values && Array.isArray(values[name]) ? values[name] : []);
 
+		// Whether a value was actually supplied for this repeater. A stored empty array is a real
+		// value - the user emptied the repeater on purpose - and must never be refilled from the
+		// default. Only a genuinely absent value falls back to `default`.
+		const hasSuppliedValue = Array.isArray(values)
+			|| (!!values && typeof values === 'object' && Object.prototype.hasOwnProperty.call(values, name));
 
 		// On first render, always initialize
 		if (isFirstRender.current) {
@@ -163,6 +170,10 @@ const RepeaterField = (
 				const clonedIncoming = deepClone(incoming);
 				prevValuesRef.current = clonedIncoming;
 				setGroupItems(clonedIncoming);
+			} else if (!hasSuppliedValue && Array.isArray(defaultRows) && defaultRows.length > 0) {
+				const defaultItems = initializeRepeaterValue({default: defaultRows, fields, min, max});
+				prevValuesRef.current = defaultItems;
+				setGroupItems(defaultItems);
 			} else if (min > 0) {
 				const emptyItems = Array.from({ length: min }, () => createEmptyItem(fields));
 				prevValuesRef.current = emptyItems;
