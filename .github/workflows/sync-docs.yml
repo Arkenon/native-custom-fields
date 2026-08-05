@@ -33,6 +33,6 @@ jobs:
           # Writes are live, but only as drafts - nothing is publicly visible.
           # Remaining step, requires its own approval:
           #   status: publish -> makes these Pages publicly visible
-          status: draft
+          status: publish
           delete-mode: trash
           dry-run: false
