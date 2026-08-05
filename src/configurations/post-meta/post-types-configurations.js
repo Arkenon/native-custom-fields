@@ -536,8 +536,8 @@ export const postTypesConfigurations = [
                         fieldType: 'textarea',
                         name: 'template_blocks',
                         fieldLabel: __('Template Blocks', 'native-custom-fields'),
-                        fieldHelpText: __('JSON array of block objects.', 'native-custom-fields'),
-                        placeholder: '[{"name":"core/paragraph","attributes":{"content":"Default content"}}]'
+                        fieldHelpText: __('JSON array of blocks. Each block is an array: [ "block/name", { attributes } ].', 'native-custom-fields'),
+                        placeholder: '[["core/heading",{"level":2,"placeholder":"Title"}],["core/paragraph",{"placeholder":"Description"}],["core/image",{}]]'
                     },
                     {
                         fieldType: 'toggle',
