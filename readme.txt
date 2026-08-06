@@ -1,7 +1,6 @@
 === Native Custom Fields - Custom Content Types and Meta Fields ===
 Contributors: arkenon
-Tags: custom fields, custom post type, meta box, gutenberg, block editor
-Requires at least: 7.0
+Tags: custom fields, fields, meta, repeater, ncf
 Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 1.3.6
