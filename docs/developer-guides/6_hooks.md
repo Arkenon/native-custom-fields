@@ -44,13 +44,13 @@ This plugin relies on standard WordPress lifecycle hooks (`register_activation_h
 #### Post Types and Post Meta
 - `native_custom_fields_post_types` (`includes/Services/PostMetaService.php`): Modify post type configurations before registration.
 - `native_custom_fields_post_meta_fields` (`includes/Services/PostMetaService.php`): Modify post meta field configuration map by post type.
-- `native_custom_fields_register_post_meta_type` (`includes/Services/PostMetaService.php`): Set/override the post meta `type` before `register_post_meta`.
-- `native_custom_fields_register_post_meta_args` (`includes/Services/PostMetaService.php`): Override registration args (commonly `single` and `show_in_rest`) before `register_post_meta`.
+- `native_custom_fields_register_post_meta_type` (`includes/Services/PostMetaService.php`): Set/override the post meta `type` before `register_post_meta`. The filtered value is the type derived from the field type (`repeater`, `file_upload`, `media_library`, multiple `select` and `token_field` are `array`, `group` is `object`, `toggle`/`checkbox` are `boolean`, `number`/`range` are `number`, everything else is `string`).
+- `native_custom_fields_register_post_meta_args` (`includes/Services/PostMetaService.php`): Override registration args (commonly `single` and `show_in_rest`) before `register_post_meta`. If you switch `type` to `array` or `object` here, also provide `show_in_rest['schema']` yourself — `register_meta()` rejects an `array` meta without `schema.items`.
 
 #### Taxonomies and Term Meta
 - `native_custom_fields_taxonomies` (`includes/Services/TermMetaService.php`): Modify taxonomy configurations before registration.
 - `native_custom_fields_term_meta_fields` (`includes/Services/TermMetaService.php`): Modify term meta field configuration map by taxonomy.
-- `native_custom_fields_register_term_meta_type` (`includes/Services/TermMetaService.php`): Set/override the term meta `type` before `register_term_meta`.
+- `native_custom_fields_register_term_meta_type` (`includes/Services/TermMetaService.php`): Set/override the term meta `type` before `register_term_meta`. The filtered value is the type derived from the field type, as with the post meta filter above.
 - `native_custom_fields_register_term_meta_args` (`includes/Services/TermMetaService.php`): Override registration args (commonly `single` and `show_in_rest`) before `register_term_meta`.
 
 #### User Meta
