@@ -1,7 +1,8 @@
-=== Native Custom Fields - Custom Content Types and Meta Fields ===
+=== Native Custom Fields ===
 Contributors: arkenon
 Tags: custom fields, fields, meta, repeater, ncf
-Tested up to: 7.0
+Requires at least: 6.9
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.3.6
 License: GPLv2 or later
