@@ -133,7 +133,7 @@ class PostMetaController
 				'methods'             => 'DELETE',
 				'callback'            => [$this, 'deletePostTypeConfigBySlug'],
 				'permission_callback' => function () {
-					return current_user_can('edit_posts');
+					return current_user_can('manage_options');
 				},
 				'args'                => [
 					'post_type_slug' => [

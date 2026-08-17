@@ -75,7 +75,7 @@ class OptionsController
             'methods' => 'GET',
             'callback' => [$this, 'getOptionsPageConfigByMenuSlug'],
             'permission_callback' => function () {
-                return current_user_can('edit_posts');
+                return current_user_can('manage_options');
             },
             'args' => [
                 'menu_slug' => [

@@ -35,6 +35,10 @@ class AjaxService
         // Verify nonce
         Helper::ajaxGuard();
 
+        if (!current_user_can('upload_files')) {
+            wp_send_json_error(['message' => __('You are not allowed to upload files.', 'native-custom-fields')], 403);
+        }
+
         // Upload files using Helper class
         $uploaded_files = Helper::uploadFiles();
 
