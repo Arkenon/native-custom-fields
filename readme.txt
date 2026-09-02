@@ -1,9 +1,9 @@
 === Native Custom Fields - Custom Content Types and Meta Fields ===
 Contributors: arkenon
 Tags: custom fields, fields, meta, repeater, ncf
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.3.7
+Stable tag: 1.3.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,9 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 
 == Changelog ==
+
+= 1.3.8 =
+* Added: Missing "Tested up to: 7.1" tag in readme.txt
 
 = 1.3.7 =
 * Bumped WordPress tested-up-to version 7.1
