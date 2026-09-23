@@ -11,6 +11,7 @@
  * WordPress dependencies
  */
 import {__} from "@wordpress/i18n";
+import {useState} from '@wordpress/element';
 import {Icon} from '@wordpress/components';
 import * as icons from '@wordpress/icons';
 import {
@@ -140,7 +141,15 @@ const RenderSingleField = (props) => {
     // Resolve options (static string, dynamic string, or array)
     const optionsInput = (typeof options !== 'undefined') ? options : restElementProps.options;
     const dynamic = isDynamicOptionsString(optionsInput);
-    const {options: dynamicOptions} = useDynamicOptions(dynamic ? optionsInput : null);
+    // Term typed into a combobox; forwarded to the REST API so that collections
+    // larger than a single page stay fully searchable instead of being capped
+    // at whatever `per_page` returned.
+    const [dynamicSearch, setDynamicSearch] = useState('');
+    const {options: dynamicOptions, isLoading: dynamicOptionsLoading} = useDynamicOptions(
+        dynamic ? optionsInput : null,
+        dynamicSearch,
+        currentValue
+    );
     const staticOptions = !dynamic
         ? (typeof optionsInput === 'string'
             ? parseStaticOptionsString(optionsInput)
@@ -509,7 +518,9 @@ const RenderSingleField = (props) => {
                     {...restElementProps}
                     options={[...resolvedOptions]}
                     className={className}
-                    currentValue={selectedOption ? selectedOption.value : ''}
+                    isLoading={dynamic ? dynamicOptionsLoading : undefined}
+                    onSearch={dynamic ? setDynamicSearch : undefined}
+                    currentValue={selectedOption ? selectedOption.value : (dynamic ? currentValue : '')}
                     handleChange={(value) => {
                         if (value === null || value === undefined) {
                             handleChange('');

@@ -11,6 +11,12 @@
 
 	&-base-control-wrapper {
 		padding: 15px 0;
+
+		// Help texts are plain strings; honour the newlines they contain so that
+		// multi-line help (e.g. the options token reference) stays readable.
+		.components-base-control__help {
+			white-space: pre-wrap;
+		}
 	}
 
 	&-has-validation-error{

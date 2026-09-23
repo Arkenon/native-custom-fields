@@ -26,11 +26,18 @@ Use this config when `fieldType` is `select`.
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `options` | No | `string` |  |  | An array of objects containing the value and label of the options. Format: `"Option 1 : option_1, Option 2 : option_2"`. Supports dynamic keywords: `{{users}}`, `{{posts}}`, `{{pages}}`, `{{taxonomies}}`, `{{categories}}`, `{{tags}}`, `{{menus}}`, `{{roles}}`, `{{post_types}}` with optional REST API parameters (e.g. `{{posts?author=admin&per_page=10}}`). |
+| `options` | No | `string` |  |  | A fixed list, or a dynamic token resolved from WordPress data. Static format: `"Option 1 : option_1, Option 2 : option_2"`. Dynamic tokens: `{{posts}}`, `{{pages}}`, `{{users}}`, `{{categories}}`, `{{tags}}`, `{{menus}}`, `{{taxonomies}}`, `{{post_types}}`, with optional REST API parameters (e.g. `{{posts?type=book&per_page=100}}`). See [Dynamic Options](dynamic-options). |
 | `variant` | No | `string` | `default` | `default`, `minimal` | The style variant of the control. |
 | `multiple` | No | `bool` | `false` | `true`, `false` | If true, multiple values can be selected. The stored value will be a JSON array. |
 | `prefix` | No | `string` |  |  | Renders an element before the input. Accepts text (e.g. `"$"`, `"https://"`) or WordPress icon names (e.g. `"search"`, `"external"`, `"lock"`). |
 | `suffix` | No | `string` |  |  | Renders an element after the input. Accepts text (e.g. `"USD"`, `".com"`) or WordPress icon names (e.g. `"search"`, `"external"`, `"lock"`). |
+
+#### Dynamic Options
+
+`options` also accepts a `{{token}}` that is resolved from WordPress data, for example
+`{{posts?type=book}}` for a custom post type. A select renders a single page of REST results
+(10 by default, 100 at most), so use it for short lists and prefer `combobox` when the list is
+larger than one page. See [Dynamic Options](dynamic-options).
 
 #### 3) PHP Array Schema
 Here is an example of how to use the select control in a post meta configuration:

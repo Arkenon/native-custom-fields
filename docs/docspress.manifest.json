@@ -194,6 +194,13 @@
       "markdown_source": "components/dateTimePickerControl.md"
     },
     {
+      "id": "components--dynamic-options",
+      "title": "Dynamic Options",
+      "slug": "dynamic-options",
+      "parent": "components",
+      "markdown_source": "components/dynamicOptions.md"
+    },
+    {
       "id": "components--external-link-control",
       "title": "External Link Control",
       "slug": "external-link-control",

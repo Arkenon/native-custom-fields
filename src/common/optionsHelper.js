@@ -5,8 +5,21 @@ import {useSelect} from '@wordpress/data';
 import {store as coreStore} from '@wordpress/core-data';
 
 /**
+ * Hard limit enforced by the WordPress REST API on the `per_page` argument.
+ * Anything above it makes the request fail with `rest_invalid_param`, which
+ * surfaces as "no options at all" instead of "too many options".
+ */
+const REST_MAX_PER_PAGE = 100;
+
+/**
+ * Sources whose records are fetched through a collection endpoint that accepts
+ * the REST `search` argument, so the options can be narrowed server side.
+ */
+const SEARCHABLE_SOURCES = ['users', 'posts', 'pages', 'categories', 'tags', 'menus'];
+
+/**
  * Quick check: is the given input a dynamic options string?
- * Example: "{{users?role=admin}} {{posts?per_page=10}}"
+ * Example: "{{users?roles=administrator}} {{posts?per_page=10}}"
  */
 export function isDynamicOptionsString(input) {
 	return typeof input === 'string' && /{{[^}]+}}/.test(input);
@@ -33,6 +46,22 @@ export function parseStaticOptionsString(input) {
 }
 
 /**
+ * Clamp `per_page` into the range the REST API actually accepts.
+ * `all` and `-1` are accepted as author-friendly spellings of "as many as possible".
+ */
+function normalizeParams(params) {
+	const normalized = {...params};
+	if (typeof normalized.per_page !== 'undefined') {
+		const raw = String(normalized.per_page).trim().toLowerCase();
+		const parsed = (raw === 'all' || raw === '-1') ? REST_MAX_PER_PAGE : parseInt(raw, 10);
+		normalized.per_page = (!Number.isFinite(parsed) || parsed < 1)
+			? REST_MAX_PER_PAGE
+			: Math.min(parsed, REST_MAX_PER_PAGE);
+	}
+	return normalized;
+}
+
+/**
  * Extract dynamic tokens from a string like: "{{token?query}}".
  * Returns an array of objects: { source: string, params: Record<string,string> }.
  */
@@ -51,9 +80,38 @@ export function parseDynamicTokens(input) {
 					params[k] = v;
 				}
 			}
-			return {source, params};
+			return {source, params: normalizeParams(params)};
 		})
 		.filter((t) => t.source);
+}
+
+/**
+ * Describe which core-data entity backs a token, so a token can be resolved both
+ * as a collection (the option list) and as a single record (the selected value).
+ *
+ * @param {string} source Token name
+ * @param {Object} params Token parameters
+ * @returns {{kind: string, name: string, query: Object}|null}
+ */
+function getEntityDescriptor(source, params) {
+	const {type, ...rest} = params || {};
+	switch (source) {
+		case 'users':
+			return {kind: 'root', name: 'user', query: {...params}};
+		case 'posts':
+			return {kind: 'postType', name: type || 'post', query: rest};
+		case 'pages':
+			return {kind: 'postType', name: type || 'page', query: rest};
+		case 'menus':
+			return {kind: 'postType', name: 'wp_navigation', query: {...params}};
+		case 'categories':
+			return {kind: 'taxonomy', name: 'category', query: {...params}};
+		case 'tags':
+			return {kind: 'taxonomy', name: 'post_tag', query: {...params}};
+		default:
+			// `taxonomies` and `post_types` use dedicated selectors, not entity records.
+			return null;
+	}
 }
 
 function mapEntitiesToOptions(source, entities) {
@@ -91,13 +149,8 @@ function mapEntitiesToOptions(source, entities) {
 			}));
 		case 'menus':
 			return entities.map((m) => ({
-				label: m.title.rendered,
+				label: (m.title && (m.title.raw || m.title.rendered)) || `#${m.id}`,
 				value: m.id,
-			}));
-		case 'roles':
-			return entities.map((r) => ({
-				label: r.name || r.slug,
-				value: r.slug,
 			}));
 		case 'post_types':
 			return entities.map((pt) => ({
@@ -111,67 +164,85 @@ function mapEntitiesToOptions(source, entities) {
 
 /**
  * React hook that fetches dynamic options via the WordPress core-data store.
- * @param {string|null} optionsString Dynamic options string or null
+ *
+ * When `searchTerm` is given, the term is forwarded to the REST API as `search`
+ * so that the whole collection stays reachable even though a single request can
+ * never return more than `REST_MAX_PER_PAGE` records. The record matching
+ * `selectedValue` is fetched separately and kept in the list, otherwise the
+ * stored value would lose its label as soon as it falls outside the search hits.
+ *
+ * @param {string|null}   optionsString Dynamic options string or null
+ * @param {string}        searchTerm    Term typed by the user, forwarded to the REST API
+ * @param {string|number} selectedValue Currently stored value, kept resolvable
  * @returns {{ options: Array<{label:string,value:any}>, isLoading: boolean }}
  */
-export function useDynamicOptions(optionsString) {
-	const tokens = parseDynamicTokens(optionsString || '');
+export function useDynamicOptions(optionsString, searchTerm = '', selectedValue = '') {
+	const search = String(searchTerm ?? '').trim();
+	const selected = (selectedValue === null || typeof selectedValue === 'undefined')
+		? ''
+		: String(selectedValue);
 
 	const result = useSelect(
 		(select) => {
+			const tokens = parseDynamicTokens(optionsString || '');
 			if (!tokens.length) return {combined: [], loading: false};
 
-			let combined = [];
+			const combined = [];
 			let loading = false;
+			const seen = new Set();
+
+			const push = (source, records) => {
+				mapEntitiesToOptions(source, records).forEach((option) => {
+					const key = `${source}:${option.value}`;
+					if (seen.has(key)) return;
+					seen.add(key);
+					combined.push(option);
+				});
+			};
 
 			tokens.forEach(({source, params}) => {
-				if (source === 'users') {
-					const query = {...params};
-					const users = select(coreStore).getEntityRecords('root', 'user', query);
-					if (!users) loading = true;
-					combined = combined.concat(mapEntitiesToOptions('users', users || []));
-				} else if (source === 'posts') {
-					const {type = 'post', ...rest} = params || {};
-					const query = {...rest};
-					const posts = select(coreStore).getEntityRecords('postType', type, query);
-					if (!posts) loading = true;
-					combined = combined.concat(mapEntitiesToOptions('posts', posts || []));
-				} else if (source === 'pages') {
-					const {type = 'page', ...rest} = params || {};
-					const query = {...rest};
-					const posts = select(coreStore).getEntityRecords('postType', type, query);
-					if (!posts) loading = true;
-					combined = combined.concat(mapEntitiesToOptions('posts', posts || []));
-				} else if (source === 'taxonomies') {
+				if (source === 'taxonomies') {
 					const taxonomies = select(coreStore).getTaxonomies(params || {});
 					if (!taxonomies) loading = true;
-					combined = combined.concat(mapEntitiesToOptions('taxonomies', taxonomies || []));
-				} else if (source === 'categories') {
-					const query = {...params};
-					const categories = select(coreStore).getEntityRecords('taxonomy', 'category', query);
-					if (!categories) loading = true;
-					combined = combined.concat(mapEntitiesToOptions('categories', categories || []));
-				} else if (source === 'tags') {
-					const query = {...params};
-					const tags = select(coreStore).getEntityRecords('taxonomy', 'post_tag', query);
-					if (!tags) loading = true;
-					combined = combined.concat(mapEntitiesToOptions('tags', tags || []));
-				} else if (source === 'menus') {
-					const query = {...params};
-					const menus = select(coreStore).getEntityRecords('postType', 'wp_navigation', query);
-					if (!menus) loading = true;
-					combined = combined.concat(mapEntitiesToOptions('menus', menus || []));
-				} else if (source === 'post_types') {
+					push('taxonomies', taxonomies || []);
+					return;
+				}
+
+				if (source === 'post_types') {
 					const postTypes = select(coreStore).getPostTypes(params || {});
 					if (!postTypes) loading = true;
-					combined = combined.concat(mapEntitiesToOptions('post_types', postTypes || []));
+					push('post_types', postTypes || []);
+					return;
 				}
+
+				const descriptor = getEntityDescriptor(source, params);
+				if (!descriptor) return;
+
+				const {kind, name, query} = descriptor;
+
+				// Keep the stored value selectable even when it is not part of the
+				// current page of results, so its label never degrades to a bare ID.
+				if (selected !== '') {
+					const record = select(coreStore).getEntityRecord(kind, name, selected);
+					if (record) {
+						push(source, [record]);
+					}
+				}
+
+				const listQuery = {...query};
+				if (search && SEARCHABLE_SOURCES.includes(source) && !listQuery.search) {
+					listQuery.search = search;
+				}
+
+				const records = select(coreStore).getEntityRecords(kind, name, listQuery);
+				if (!records) loading = true;
+				push(source, records || []);
 			});
 
 			return {combined, loading};
 		},
-		// Re-run when optionsString changes
-		[optionsString]
+		// Re-run when the token string, the search term or the stored value changes
+		[optionsString, search, selected]
 	);
 
 	return {options: result.combined || [], isLoading: !!result.loading};

@@ -26,10 +26,17 @@ Use this config when `fieldType` is `toggle_group`.
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `options` | No | `string` |  |  | An array of objects containing the value and label of the options. Format: `"Option 1 : option_1, Option 2 : option_2"`. Supports dynamic keywords: `{{users}}`, `{{posts}}`, `{{pages}}`, `{{taxonomies}}`, `{{categories}}`, `{{tags}}`, `{{menus}}`, `{{roles}}`, `{{post_types}}` with optional REST API parameters (e.g. `{{posts?author=admin&per_page=10}}`). |
+| `options` | No | `string` |  |  | A fixed list, or a dynamic token resolved from WordPress data. Static format: `"Option 1 : option_1, Option 2 : option_2"`. Dynamic tokens: `{{posts}}`, `{{pages}}`, `{{users}}`, `{{categories}}`, `{{tags}}`, `{{menus}}`, `{{taxonomies}}`, `{{post_types}}`, with optional REST API parameters (e.g. `{{posts?type=book&per_page=100}}`). See [Dynamic Options](dynamic-options). |
 | `isAdaptiveWidth` | No | `bool` | `false` | `true`, `false` | Determines if segments should be rendered with equal widths. |
 | `isDeselectable` | No | `bool` | `false` | `true`, `false` | Whether an option can be deselected by clicking it again. |
 | `isBlock` | No | `bool` | `false` | `true`, `false` | Renders ToggleGroupControl as a block element, spanning the entire width of the available space. Recommended when options are text-based. |
+
+#### Dynamic Options
+
+`options` also accepts a `{{token}}` that is resolved from WordPress data, for example
+`{{posts?type=book}}` for a custom post type. A toggle group renders a single page of REST
+results (10 by default, 100 at most) and is meant for a handful of choices, so prefer
+`combobox` for anything longer. See [Dynamic Options](dynamic-options).
 
 #### 3) PHP Array Schema
 Here is an example of how to use the toggle group control in a post meta configuration:

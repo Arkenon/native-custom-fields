@@ -26,9 +26,22 @@ Use this config when `fieldType` is `combobox`.
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `options` | No | `string` |  |  | An array of objects containing the value and label of the options. Format: `"Option 1 : option_1, Option 2 : option_2"`. Supports dynamic keywords: `{{users}}`, `{{posts}}`, `{{pages}}`, `{{taxonomies}}`, `{{categories}}`, `{{tags}}`, `{{menus}}`, `{{roles}}`, `{{post_types}}` with optional REST API parameters (e.g. `{{posts?author=admin&per_page=10}}`). |
+| `options` | No | `string` |  |  | A fixed list, or a dynamic token resolved from WordPress data. Static format: `"Option 1 : option_1, Option 2 : option_2"`. Dynamic tokens: `{{posts}}`, `{{pages}}`, `{{users}}`, `{{categories}}`, `{{tags}}`, `{{menus}}`, `{{taxonomies}}`, `{{post_types}}`, with optional REST API parameters (e.g. `{{posts?type=book&per_page=100}}`). See [Dynamic Options](dynamic-options). |
 | `expandOnFocus` | No | `bool` | `true` | `true`, `false` | Automatically expand the dropdown when the control is focused. |
 | `isLoading` | No | `bool` | `false` | `true`, `false` | Show a spinner (and hide the suggestions dropdown) while data about the matching suggestions is loading. |
+
+#### Dynamic Options and Server-Side Search
+
+`options` also accepts a `{{token}}` that is resolved from WordPress data, for example
+`{{posts?type=member}}` for a custom post type.
+
+When the options come from a token, the combobox searches **server side**: what the user types is
+sent to the REST API as the `search` argument, so a collection of any size stays reachable even
+though a single REST request never returns more than 100 records. In that mode `per_page` only
+controls how many entries are listed before anything is typed, and `isLoading` is managed
+automatically while results are being fetched. The record matching the stored value is fetched
+separately, so a saved selection keeps its label even when it is not among the current search
+hits. See [Dynamic Options](dynamic-options).
 
 #### 3) PHP Array Schema
 Here is an example of how to use the combobox control in a post meta configuration:

@@ -28,13 +28,19 @@ Use this config when `fieldType` is `token_field`.
 |---|---|---|---|---|---|
 | `maxLength` | No | `int` |  |  | Disables adding new tokens once the number of tokens reaches or exceeds this value. |
 | `maxSuggestions` | No | `int` | `100` |  | The maximum number of suggestions to display at a time. |
-| `suggestions` | No | `string` |  |  | An array of suggested token strings. Separate values with commas (e.g. `"Africa, Europe, Asia"`). |
+| `suggestions` | No | `string` |  |  | An array of suggested token strings. Separate values with commas (e.g. `"Africa, Europe, Asia"`). This is a plain list and does not support the `{{token}}` syntax used by the `options` parameter of other controls. |
 | `allowOnlySuggestions` | No | `bool` | `false` | `true`, `false` | If true, only tokens matching a suggestion can be added. Only relevant if suggestions is set. |
 | `__experimentalAutoSelectFirstMatch` | No | `bool` | `false` | `true`, `false` | If true, automatically selects the first matching suggestion when Enter (or space if tokenizeOnSpace) is pressed. |
 | `__experimentalExpandOnFocus` | No | `bool` | `false` | `true`, `false` | If true, the suggestions list is always expanded when the input field has focus. |
 | `isBorderless` | No | `bool` | `false` | `true`, `false` | When true, renders tokens without a background. |
 | `tokenizeOnBlur` | No | `bool` | `false` | `true`, `false` | If true, adds any incomplete token value as a new token when the field loses focus. |
 | `tokenizeOnSpace` | No | `bool` | `false` | `true`, `false` | If true, adds a token when the field is focused and space is pressed. |
+
+#### Suggestions Are Not Dynamic
+
+Unlike the `options` parameter of `select`, `radio`, `combobox` and `toggle_group`, `suggestions`
+is a literal comma-separated list. Tokens such as `{{posts}}` are not resolved here; to pick
+existing WordPress records, use a `combobox` field instead. See [Dynamic Options](dynamic-options).
 
 #### 3) PHP Array Schema
 Here is an example of how to use the token field control in a post meta configuration:

@@ -47,6 +47,13 @@ Below is a list of all available field components. You can find detailed configu
 - Token Field Control
 - Unit Control
 
+## Dynamic Options
+
+The `options` parameter of the Select, Radio, Combobox and Toggle Group controls can be filled
+from WordPress data instead of a fixed list, using tokens such as `{{posts?type=book}}` or
+`{{users}}`. See [Dynamic Options](dynamic-options) for the available tokens, their parameters,
+and how to search collections that are too large to fit in a single REST response.
+
 ## Available Icons
 WordPress components uses these icons:
 

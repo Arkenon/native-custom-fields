@@ -4,7 +4,7 @@ Tags: custom fields, fields, meta, repeater, ncf
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.3.9
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,18 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 
 == Changelog ==
+
+= 1.4.0 =
+* Added: The `combobox` field now searches server side when its options come from a dynamic token. What is typed in the field is sent to the REST API as the `search` argument, so collections larger than a single REST response stay fully reachable. Previously the typed text only filtered the records that had already been fetched.
+* Added: The record matching a stored value is now fetched on its own, so a saved selection keeps its label even when it is not part of the current option list or search results.
+* Fixed: A `per_page` above 100, or `-1`, made the whole request fail with `rest_invalid_param` and the field rendered no options at all. Such values are now capped at the REST maximum of 100, and `per_page=all` is accepted as a spelling of the same thing.
+* Fixed: `{{menus}}` raised a TypeError on any navigation menu without a title.
+* Fixed: Combining several dynamic tokens could list the same record more than once.
+* Removed: The `{{roles}}` token from the options help text and the documentation. It was never implemented and always resolved to an empty list.
+* Updated: The help text of the options field, which now documents the `{{posts?type=slug}}` pattern for querying a custom post type. That pattern was supported but undocumented, so there was no way to populate a field from a custom post type without reading the source. The text is also grouped into sections and rendered with its line breaks intact.
+* Updated: Corrected two wrong parameter examples in the options help text: the users endpoint takes `roles` (plural, role slugs) rather than `role`, and `author` takes a user ID rather than a login name.
+* Added: A "Dynamic Options" documentation page covering the available tokens, their parameters, the REST item limits, and server-side search. Select, radio, combobox, toggle group and token field documentation now links to it.
+* Updated: Token field documentation now states that `suggestions` is a literal list and does not support the `{{token}}` syntax.
 
 = 1.3.9 =
 * Added: Sub-fields for `repeater` and `group` fields can now be defined through the field abilities (`save-post-meta-fields`, `save-term-meta-fields`, `save-user-meta-fields`, `save-options-page-fields`) using the new `fields` property on a field definition. Up to two levels of nesting are supported. Previously only the container field could be created and its contents had to be added in the field builder.
