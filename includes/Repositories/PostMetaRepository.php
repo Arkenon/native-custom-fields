@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Post Meta Repository
  * Responsible for handling post metadata
+ *
  * @package NativeCustomFields
  * @subpackage Services
  * @since 1.0.0
@@ -12,6 +12,9 @@ namespace NativeCustomFields\Repositories;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Post Meta Repository.
+ */
 class PostMetaRepository extends BaseRepository
 {
 
@@ -19,7 +22,7 @@ class PostMetaRepository extends BaseRepository
 	 * Get field values for a post
 	 *
 	 * @param string $field_name
-	 * @param int $post_id
+	 * @param int    $post_id
 	 *
 	 * @return mixed An array of values if $single is false.
 	 *               The value of the meta field if $single is true.
@@ -37,7 +40,7 @@ class PostMetaRepository extends BaseRepository
 	 * Unlike getPostMeta(), this tells a stored falsy value (false, 0, '') apart from a missing one.
 	 *
 	 * @param string $field_name
-	 * @param int $post_id
+	 * @param int    $post_id
 	 *
 	 * @return bool
 	 * @since 1.3.3
@@ -50,9 +53,9 @@ class PostMetaRepository extends BaseRepository
 	/**
 	 * Save post meta
 	 *
-	 * @param int $post_id Post ID
-	 * @param string $meta_key Meta key
-	 * @param mixed $value Meta value
+	 * @param int    $post_id Post ID.
+	 * @param string $meta_key Meta key.
+	 * @param mixed  $value Meta value.
 	 *
 	 * @return bool|int
 	 * @since 1.0.0

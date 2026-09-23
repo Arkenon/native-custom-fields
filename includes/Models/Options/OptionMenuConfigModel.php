@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Option Menu configurations model class
  * Responsible for handling option menu data
+ *
  * @package NativeCustomFields
  * @subpackage Models\Options
  * @since 1.0.0
@@ -14,6 +14,9 @@ use NativeCustomFields\Models\Common\FieldsConfigModel;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Option Menu configurations model class.
+ */
 class OptionMenuConfigModel
 {
 	public string $menu_slug = '';

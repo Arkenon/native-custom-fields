@@ -2,6 +2,7 @@
 /**
  * Main plugin class
  * Runs on plugins_loaded action
+ *
  * @package NativeCustomFields
  * @since 1.0.0
  */
@@ -23,10 +24,14 @@ use NativeCustomFields\Services\UserMetaService;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Main plugin class.
+ */
 final class App {
 
     /**
      * List of services to be initialized
+     *
      * @var array
      * @since 1.0.0
      */
@@ -36,21 +41,23 @@ final class App {
         PostMetaService::class,
 		TermMetaService::class,
         UserMetaService::class,
-        ImportExportService::class
+        ImportExportService::class,
     ];
 
     /**
      * Include Presentation layer base class - ControllerInit.php
      * Contains all controllers
+     *
      * @var array
      * @since 1.0.0
      */
     private array $controllers = [
-        ControllerInit::class
+        ControllerInit::class,
     ];
 
     /**
      * Flag to prevent multiple initializations
+     *
      * @var bool
      * @since 1.2.6
      */
@@ -68,6 +75,7 @@ final class App {
 	/**
 	 * Boot the plugin
      * Would be called when plugin using with composer or externally
+     *
 	 * @return void
 	 * @since 1.2.6
 	 */
@@ -83,7 +91,6 @@ final class App {
         $path = isset( $config['path'] )
             ? sanitize_text_field( $config['path'] )
             : ( defined( 'NATIVE_CUSTOM_FIELDS_PATH' ) ? NATIVE_CUSTOM_FIELDS_PATH : '' );
-       
 
         if ( ! defined( 'NATIVE_CUSTOM_FIELDS_URL' ) ) {
             define( 'NATIVE_CUSTOM_FIELDS_URL', $url );
@@ -111,6 +118,7 @@ final class App {
 
     /**
 	 * Run all services and controllers
+     *
 	 * @return void
 	 * @since 1.0.0
 	 */
@@ -137,9 +145,10 @@ final class App {
 
     /**
      * Initialize all services
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @throws Exception
+     *
+     * @throws DependencyException If a dependency cannot be resolved.
+     * @throws NotFoundException If the requested service is not registered in the container.
+     * @throws Exception If an unexpected error occurs.
      * @since 1.0.0
      */
     public function initPluginServices(): void
@@ -152,9 +161,10 @@ final class App {
 
     /**
      * Initialize all controllers
-     * @throws Exception
-     * @throws DependencyException
-     * @throws NotFoundException
+     *
+     * @throws Exception If an unexpected error occurs.
+     * @throws DependencyException If a dependency cannot be resolved.
+     * @throws NotFoundException If the requested service is not registered in the container.
      * @since 1.0.0
      */
     public function initPluginControllers(): void

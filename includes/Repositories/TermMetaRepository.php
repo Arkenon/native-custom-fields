@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Term meta repository for handling term meta fields
  *
@@ -15,6 +14,9 @@ use WP_Term;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Term meta repository for handling term meta fields.
+ */
 class TermMetaRepository extends BaseRepository
 {
 
@@ -22,8 +24,8 @@ class TermMetaRepository extends BaseRepository
 	 * Get field values for a term
 	 *
 	 * @param string $field_name
-	 * @param int $term_id
-	 * @param bool $single
+	 * @param int    $term_id
+	 * @param bool   $single
 	 *
 	 * @return mixed The value of the meta field if found.
 	 *               False if the meta key does not exist.
@@ -38,7 +40,7 @@ class TermMetaRepository extends BaseRepository
 	 * Unlike getTermMeta(), this tells a stored falsy value (false, 0, '') apart from a missing one.
 	 *
 	 * @param string $field_name
-	 * @param int $term_id
+	 * @param int    $term_id
 	 *
 	 * @return bool
 	 * @since 1.3.3
@@ -51,9 +53,9 @@ class TermMetaRepository extends BaseRepository
 	/**
 	 * Save term meta
 	 *
-	 * @param int $term_id Term ID
-	 * @param string $meta_key Meta key
-	 * @param mixed $value Meta value
+	 * @param int    $term_id Term ID.
+	 * @param string $meta_key Meta key.
+	 * @param mixed  $value Meta value.
 	 *
 	 * @return bool|int Meta ID if the key didn't exist, true on successful update, false on failure.
 	 * @since 1.0.0
@@ -66,9 +68,9 @@ class TermMetaRepository extends BaseRepository
 	/**
 	 * Delete term meta
 	 *
-	 * @param int $term_id Term ID
-	 * @param string $meta_key Meta key
-	 * @param mixed $value Optional. Meta value. If provided, rows will only be removed that match the value.
+	 * @param int    $term_id Term ID.
+	 * @param string $meta_key Meta key.
+	 * @param mixed  $value Optional. Meta value. If provided, rows will only be removed that match the value.
 	 *
 	 * @return bool True on success, false on failure.
 	 * @since 1.0.0
@@ -81,8 +83,8 @@ class TermMetaRepository extends BaseRepository
 	/**
 	 * Get all terms for a taxonomy
 	 *
-	 * @param string $taxonomy Taxonomy name
-	 * @param array $args Optional. Arguments to get terms
+	 * @param string $taxonomy Taxonomy name.
+	 * @param array  $args Optional. Arguments to get terms.
 	 *
 	 * @return int[]|string|string[]|WP_Error|WP_Term[] List of WP_Term objects on success, 0 if no terms found, or WP_Error on error.
 	 * @since 1.0.0
@@ -95,8 +97,8 @@ class TermMetaRepository extends BaseRepository
 	/**
 	 * Get a specific term by ID
 	 *
-	 * @param int $term_id Term ID
-	 * @param string $taxonomy Taxonomy name
+	 * @param int    $term_id Term ID.
+	 * @param string $taxonomy Taxonomy name.
 	 *
 	 * @return array|null|WP_Error|WP_Term WP_Term object if found, WP_Error if not found.
 	 * @since 1.0.0

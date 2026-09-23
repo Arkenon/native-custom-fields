@@ -1,5 +1,4 @@
 <?php
-
 /**
  * UserMetaController class
  * Responsible for handling user meta fields and related REST API endpoints.
@@ -20,6 +19,9 @@ use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 
+/**
+ * UserMetaController class.
+ */
 class UserMetaController
 {
 
@@ -79,10 +81,10 @@ class UserMetaController
 	/**
 	 * Handle save user meta fields configuration request
 	 *
-	 * @param WP_REST_Request $request Request object
+	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response|WP_Error Response object
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function saveUserMetaFieldsConfig(WP_REST_Request $request)

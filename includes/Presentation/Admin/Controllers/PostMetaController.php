@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PostMetaController class
  * Responsible for handling post meta actions
@@ -22,6 +21,9 @@ use WP_REST_Response;
 
 defined('ABSPATH') || exit;
 
+/**
+ * PostMetaController class.
+ */
 class PostMetaController
 {
 
@@ -71,7 +73,7 @@ class PostMetaController
 			'callback'            => [$this, 'getPostTypes'],
 			'permission_callback' => function () {
 				return current_user_can('edit_posts');
-			}
+			},
 		]);
 
 		//Rest API route for get post meta config by post type
@@ -150,7 +152,7 @@ class PostMetaController
 	 *
 	 * @param WP_REST_Request $request
 	 * @return WP_REST_Response|WP_Error
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function getPostMetaConfigByPostType(WP_REST_Request $request)
 	{
@@ -166,7 +168,7 @@ class PostMetaController
 	 * Both set by PHP array and admin create post types form
 	 *
 	 * @return WP_REST_Response WP_REST_Response or WP_Error
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function getPostTypes(): WP_REST_Response
@@ -181,10 +183,10 @@ class PostMetaController
 	 * Delete post type configuration by post type slug
 	 * To delete post type configurations at admin create post types form
 	 *
-	 * @param WP_REST_Request $request REST API request
+	 * @param WP_REST_Request $request REST API request.
 	 *
 	 * @return WP_Error|WP_REST_Response WP_REST_Response or WP_Error
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function deletePostTypeConfigBySlug(WP_REST_Request $request)
@@ -199,10 +201,10 @@ class PostMetaController
 	/**
 	 * Handle save post type configuration request
 	 *
-	 * @param WP_REST_Request $request Request object
+	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response|WP_Error Response object
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function savePostTypeConfig(WP_REST_Request $request)
@@ -219,10 +221,10 @@ class PostMetaController
 	/**
 	 * Handle save post meta fields configuration request
 	 *
-	 * @param WP_REST_Request $request Request object
+	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response|WP_Error Response object
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function savePostMetaFieldsConfig(WP_REST_Request $request)

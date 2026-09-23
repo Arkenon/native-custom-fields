@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Term Meta Fields Abilities Service
  * Registers WP Abilities API abilities for creating, updating, and deleting term meta field configurations.
@@ -17,6 +16,9 @@ use NativeCustomFields\Services\TermMetaService;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Term Meta Fields Abilities Service.
+ */
 class TermMetaFieldsAbilitiesService
 {
     use AbilityFieldAdapterTrait;
@@ -91,7 +93,7 @@ class TermMetaFieldsAbilitiesService
     /**
      * Save Term Meta Fields Ability
      *
-     * @param array $input Input data
+     * @param array $input Input data.
      * @return array Response data
      * @since 1.0.1
      */

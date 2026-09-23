@@ -1,12 +1,12 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) exit;
-
 /**
  * Uninstall file for the plugin
  * Runs on uninstallation of the plugin
+ *
  * @package NativeCustomFields
  */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 // If uninstall not called from WordPress, then exit.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
@@ -14,7 +14,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // If plugin basename is not set, then return.
-if ( __FILE__ != WP_UNINSTALL_PLUGIN ) {
+if ( __FILE__ !== WP_UNINSTALL_PLUGIN ) {
 	return;
 }
 

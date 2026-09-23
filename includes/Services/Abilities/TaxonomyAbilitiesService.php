@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Taxonomy Abilities Service
  * Registers WP Abilities API abilities for creating, updating, and deleting custom taxonomies.
@@ -17,6 +16,9 @@ use NativeCustomFields\Services\TermMetaService;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Taxonomy Abilities Service.
+ */
 class TaxonomyAbilitiesService
 {
     private TermMetaService $termMetaService;
@@ -40,15 +42,15 @@ class TaxonomyAbilitiesService
             'type'       => 'object',
             'required'   => ['taxonomy', 'label', 'object_type'],
             'properties' => [
-                'taxonomy'         => ['type' => 'string', 'description' => __('Taxonomy slug (lowercase, max 32 chars)', 'native-custom-fields')],
-                'label'            => ['type' => 'string', 'description' => __('Plural label', 'native-custom-fields')],
-                'singular_name'    => ['type' => 'string', 'description' => __('Singular label (defaults to label if not set)', 'native-custom-fields')],
-                'object_type'      => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => __('Post types to attach this taxonomy to, e.g. ["post","page"]', 'native-custom-fields')],
-                'description'      => ['type' => 'string'],
-                'public'           => ['type' => 'boolean', 'default' => true],
-                'hierarchical'     => ['type' => 'boolean', 'default' => true],
+                'taxonomy'          => ['type' => 'string', 'description' => __('Taxonomy slug (lowercase, max 32 chars)', 'native-custom-fields')],
+                'label'             => ['type' => 'string', 'description' => __('Plural label', 'native-custom-fields')],
+                'singular_name'     => ['type' => 'string', 'description' => __('Singular label (defaults to label if not set)', 'native-custom-fields')],
+                'object_type'       => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => __('Post types to attach this taxonomy to, e.g. ["post","page"]', 'native-custom-fields')],
+                'description'       => ['type' => 'string'],
+                'public'            => ['type' => 'boolean', 'default' => true],
+                'hierarchical'      => ['type' => 'boolean', 'default' => true],
                 'show_admin_column' => ['type' => 'boolean', 'default' => false, 'description' => __('Whether to display a column for the taxonomy on its post type listing screens', 'native-custom-fields')],
-                'show_in_rest'     => ['type' => 'boolean', 'default' => true],
+                'show_in_rest'      => ['type' => 'boolean', 'default' => true],
             ],
         ];
 
@@ -102,7 +104,7 @@ class TaxonomyAbilitiesService
     /**
      * Save Taxonomy Ability
      *
-     * @param array $input Input data
+     * @param array $input Input data.
      * @return array Response data
      * @since 1.0.1
      */
@@ -184,15 +186,15 @@ class TaxonomyAbilitiesService
 
             $values = [
                 'native_custom_fields_create_taxonomy_general' => [
-                    'taxonomy'               => $taxonomy,
-                    'label'                  => $label,
-                    'singular_name'          => sanitize_text_field($input['singular_name'] ?? $label),
-                    'description'            => sanitize_text_field($input['description'] ?? ''),
-                    'object_type'            => array_map('sanitize_key', (array) $object_type),
-                    'query_var'              => true,
-                    'query_var_custom_slug'  => $taxonomy,
-                    'default_term'           => false,
-                    'default_term_settings'  => [
+                    'taxonomy'              => $taxonomy,
+                    'label'                 => $label,
+                    'singular_name'         => sanitize_text_field($input['singular_name'] ?? $label),
+                    'description'           => sanitize_text_field($input['description'] ?? ''),
+                    'object_type'           => array_map('sanitize_key', (array) $object_type),
+                    'query_var'             => true,
+                    'query_var_custom_slug' => $taxonomy,
+                    'default_term'          => false,
+                    'default_term_settings' => [
                         'default_term_name'        => '',
                         'default_term_slug'        => '',
                         'default_term_description' => '',
@@ -200,25 +202,25 @@ class TaxonomyAbilitiesService
                 ],
                 'native_custom_fields_create_taxonomy_labels'       => $labels_data,
                 'native_custom_fields_create_taxonomy_visibility'   => [
-                    'public'              => $input['public'] ?? true,
-                    'hierarchical'        => $input['hierarchical'] ?? true,
-                    'publicly_queryable'  => true,
-                    'show_ui'             => true,
-                    'show_in_menu'        => true,
-                    'show_tagcloud'       => true,
-                    'show_in_quick_edit'  => true,
-                    'show_in_nav_menus'   => true,
-                    'show_admin_column'   => $input['show_admin_column'] ?? false,
+                    'public'             => $input['public'] ?? true,
+                    'hierarchical'       => $input['hierarchical'] ?? true,
+                    'publicly_queryable' => true,
+                    'show_ui'            => true,
+                    'show_in_menu'       => true,
+                    'show_tagcloud'      => true,
+                    'show_in_quick_edit' => true,
+                    'show_in_nav_menus'  => true,
+                    'show_admin_column'  => $input['show_admin_column'] ?? false,
                 ],
                 'native_custom_fields_create_taxonomy_capabilities' => [
                     'capabilities' => [],
                     'sort'         => false,
                 ],
                 'native_custom_fields_create_taxonomy_rest_api' => [
-                    'show_in_rest'            => $input['show_in_rest'] ?? true,
-                    'rest_base'               => '',
-                    'rest_controller_class'   => 'WP_REST_Terms_Controller',
-                    'rest_namespace'          => 'wp/v2',
+                    'show_in_rest'          => $input['show_in_rest'] ?? true,
+                    'rest_base'             => '',
+                    'rest_controller_class' => 'WP_REST_Terms_Controller',
+                    'rest_namespace'        => 'wp/v2',
                 ],
                 'native_custom_fields_create_taxonomy_permalinks' => [
                     'rewrite'          => true,

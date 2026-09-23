@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Option menu config response model
  *
@@ -14,6 +13,9 @@ use NativeCustomFields\Models\Common\ResponseModel;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Option menu config response model.
+ */
 class OptionMenuConfigResponseModel extends ResponseModel
 {
 	public OptionMenuConfigModel $config_model;

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Custom Taxonomy Service for handling custom taxonomies and their meta fields
  *
@@ -22,6 +21,9 @@ use WP_Term;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Custom Taxonomy Service for handling custom taxonomies and their meta fields.
+ */
 class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterface
 {
 
@@ -63,7 +65,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 
 				//Remove null values from args
 				$arguments = array_filter($config['args'], function ($value) {
-					return $value !== null && $value !== '';
+					return null !== $value && '' !== $value;
 				});
 
 				// Allowed EP_MASK values
@@ -91,7 +93,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	 * Get taxonomy list
 	 *
 	 * @return TaxonomyListResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function getTaxonomies(): TaxonomyListResponseModel
@@ -130,6 +132,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 
 	/**
 	 * Get custom taxonomy configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -141,6 +144,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	/**
 	 * Get custom taxonomy configurations with filters applied
 	 * Filter applies php-based modifications to the taxonomy configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -155,10 +159,10 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	 * Save custom taxonomy configurations comes from admin taxonomy builder form
 	 *
 	 * @param string $menu_slug
-	 * @param array $values
+	 * @param array  $values
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function saveCustomTaxonomyConfig(string $menu_slug, array $values): ResponseModel
@@ -203,7 +207,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 		];
 
 		foreach ($capability_prefixes as $cap => $prefix) {
-			if (in_array($cap, $get_capabilities)) {
+			if (in_array($cap, $get_capabilities, true)) {
 				$selected_capabilities[$cap] = $prefix . $general['taxonomy'];
 			}
 		}
@@ -229,7 +233,6 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 				'ep_mask'      => $ep_mask,
 			];
 		}
-
 
 		//Prepare default term settings
 		$default_term = [];
@@ -264,7 +267,6 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 		$taxonomy_args['rest_namespace']        = $rest_api['rest_namespace'];
 		$taxonomy_args['rewrite']               = $rewrite;
 
-
 		//Set taxonomy model
 		$taxonomy['taxonomy']    = $general['taxonomy'];
 		$taxonomy['object_type'] = $general['object_type'];
@@ -295,7 +297,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	 * @param string $taxonomy_slug
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function deleteTaxonomyConfigBySlug(string $taxonomy_slug): ResponseModel
@@ -316,10 +318,10 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	 * Add fields into a taxonomy from builder form
 	 *
 	 * @param string $menu_slug
-	 * @param array $values
+	 * @param array  $values
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function saveTermMetaFieldsConfig(string $menu_slug, array $values): ResponseModel
@@ -363,14 +365,14 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 				'section_name'  => $section['name'] ?? '',
 				'section_title' => $section['fieldLabel'] ?? '',
 				'section_icon'  => $section['field_custom_info_section']['section_icon'] ?? '',
-				'fields'        => $field_list
+				'fields'        => $field_list,
 			];
 		}
 
 		// Prepare config as array (for database storage)
 		$config_array = [
 			'taxonomy' => $taxonomy_key,
-			'sections' => $prepared_sections
+			'sections' => $prepared_sections,
 		];
 
 		//Get term meta fields configurations
@@ -393,6 +395,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 
 	/**
 	 * Get term meta fields configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -405,6 +408,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	/**
 	 * Get term meta fields configurations with filters applied
 	 * Filter applies php-based modifications to the term meta fields configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -419,16 +423,16 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	/**
 	 * Register all post meta fields
 	 *
-	 * @param string $taxonomy
+	 * @param string       $taxonomy
 	 * @param array|string $object_type
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function registerAllTermMeta(string $taxonomy, $object_type): void
 	{
 
-		if (! taxonomy_exists($taxonomy) || $taxonomy === '') {
+		if (! taxonomy_exists($taxonomy) || '' === $taxonomy) {
 			return;
 		}
 
@@ -461,11 +465,11 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	/**
 	 * Add and edit form fields into a custom taxonomy
 	 *
-	 * @param string $taxonomy
+	 * @param string       $taxonomy
 	 * @param array|string $object_type
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function addFormFieldsToTaxonomy(string $taxonomy, $object_type): void
 	{
@@ -476,11 +480,11 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	/**
 	 * Add, edit and save hooks for a custom taxonomy
 	 *
-	 * @param string $taxonomy
+	 * @param string       $taxonomy
 	 * @param array|string $object_type
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function editOrSaveHooksForTaxonomy(string $taxonomy, $object_type): void
 	{
@@ -493,11 +497,10 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	 * Register fields for a custom taxonomy
 	 *
 	 * @param string $taxonomy
-	 * @param array $fields
+	 * @param array  $fields
 	 *
 	 * @return void
 	 * @since 1.0.0
-	 *
 	 */
 	private function registerFieldsForTaxonomy(string $taxonomy, array $fields): void
 	{
@@ -510,7 +513,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 				continue;
 			}
 
-			if ($field_type === 'section' || $field_type === 'meta_box') {
+			if ('section' === $field_type || 'meta_box' === $field_type) {
 				return;
 			}
 
@@ -541,10 +544,10 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	/**
 	 * Add term meta fields into the "Add New Term" form
 	 *
-	 * @param string $taxonomy Taxonomy name
+	 * @param string $taxonomy Taxonomy name.
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function addTermMetaFormFields(string $taxonomy): void
 	{
@@ -617,8 +620,8 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	/**
 	 * Get field values for a taxonomy
 	 *
-	 * @param array $fields Fields configuration
-	 * @param int $id Term ID
+	 * @param array $fields Fields configuration.
+	 * @param int   $id Term ID.
 	 *
 	 * @return array Field values
 	 */
@@ -635,7 +638,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 
 			// Fall back to the default only when the meta key is missing: a stored false/0/''
 			// is a real value and must not be overwritten by the default.
-			if ($id === 0 || ! $this->termMetaRepository->termMetaExists($field['name'], $id)) {
+			if (0 === $id || ! $this->termMetaRepository->termMetaExists($field['name'], $id)) {
 				$values[$field['name']] = $get_default_value;
 			} else {
 				$get_value              = $this->termMetaRepository->getTermMeta($field['name'], $id);
@@ -649,11 +652,11 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	/**
 	 * Add term meta fields into edit term form
 	 *
-	 * @param WP_Term $term Term object
-	 * @param string $taxonomy Taxonomy name
+	 * @param WP_Term $term Term object.
+	 * @param string  $taxonomy Taxonomy name.
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function addTermMetaEditFormFields(WP_Term $term, string $taxonomy): void
 	{
@@ -733,10 +736,10 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	/**
 	 * Save term meta
 	 *
-	 * @param int $term_id Term ID
+	 * @param int $term_id Term ID.
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function saveTermMeta(int $term_id): void
 	{
@@ -833,11 +836,11 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 
 				// Recursive handling for group and repeater fields
 				// Sub-fields are in $field['fields'], not in $field_custom_info['fields']
-				if (($field['fieldType'] === 'group' || $field['fieldType'] === 'repeater') && ! empty($field['fields'])) {
+				if (('group' === $field['fieldType'] || 'repeater' === $field['fieldType']) && ! empty($field['fields'])) {
 					$field_custom_info['fields'] = $this->prepareFieldList($field['fields']);
 
 					// For repeater fields with table layout, hide labels and tags of inner fields
-					if ($field['fieldType'] === 'repeater' && isset($field_custom_info['layout']) && $field_custom_info['layout'] === 'table') {
+					if ('repeater' === $field['fieldType'] && isset($field_custom_info['layout']) && 'table' === $field_custom_info['layout']) {
 						$field_custom_info['hideRepeaterItemTag'] = true;
 						foreach ($field_custom_info['fields'] as &$item) {
 							$item['hideLabel'] = true;
@@ -848,7 +851,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 			}
 
 			// Condition to set default value for date and date time picker fields
-			if (($field['fieldType'] === 'date_picker' || $field['fieldType'] === 'date_time_picker')) {
+			if (('date_picker' === $field['fieldType'] || 'date_time_picker' === $field['fieldType'])) {
 				$field['default'] = $field_custom_info['currentDate'] ?? null;
 			}
 

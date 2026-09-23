@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Post meta fields config response model
  *
@@ -14,6 +13,9 @@ use NativeCustomFields\Models\Common\ResponseModel;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Post meta fields config response model.
+ */
 class PostMetaFieldsConfigResponseModel extends ResponseModel
 {
 	public PostMetaFieldsConfigModel $config_model;

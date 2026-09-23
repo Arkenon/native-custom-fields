@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Option Menu default model class
  * Contains default parameters for add_menu_page() function
+ *
  * @package NativeCustomFields
  * @subpackage Models\Options
  * @since 1.0.0
@@ -12,6 +12,9 @@ namespace NativeCustomFields\Models\Options;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Option Menu default model class.
+ */
 class OptionMenuModel
 {
 	public string $page_title;
@@ -31,8 +34,8 @@ class OptionMenuModel
 	/**
 	 * Create an OptionMenuModel instance from an array
 	 *
-	 * @param array $data Array data to map to model properties
-	 * @param string $menu_slug Menu slug for this menu item
+	 * @param array  $data Array data to map to model properties.
+	 * @param string $menu_slug Menu slug for this menu item.
 	 *
 	 * @return self
 	 * @since 1.0.0

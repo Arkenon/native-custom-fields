@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Taxonomy list item model class
  * Responsible for handling list item data for taxonomies
+ *
  * @package NativeCustomFields
  * @subpackage Models\PostMeta
  * @since 1.0.0
@@ -12,6 +12,9 @@ namespace NativeCustomFields\Models\TermMeta;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Taxonomy list item model class.
+ */
 class TaxonomyListItemModel
 {
 	public int $no = 1;

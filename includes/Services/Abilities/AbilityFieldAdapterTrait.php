@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ability Field Adapter Trait
  * Shared helper for adapting simplified ability field input into the structure expected by prepareFieldList.
@@ -59,20 +58,20 @@ trait AbilityFieldAdapterTrait
             'type'       => 'object',
             'required'   => ['fieldType', 'name', 'fieldLabel'],
             'properties' => [
-                'fieldType'  => [
+                'fieldType'         => [
                     'type'        => 'string',
                     'description' => $is_root
                         ? __('Field type. Common values: text, textarea, input, select, radio, checkbox, toggle, number, range, combobox, token_field, toggle_group, date_picker, date_time_picker, time_picker, file_upload, media_library, color_picker, color_palette, font_size, unit, repeater, group, section', 'native-custom-fields')
                         : __('Field type. Accepts the same values as the parent field.', 'native-custom-fields'),
                 ],
-                'name'       => ['type' => 'string', 'description' => __('Unique meta key slug', 'native-custom-fields')],
-                'fieldLabel' => ['type' => 'string'],
-                'default'    => [
+                'name'              => ['type' => 'string', 'description' => __('Unique meta key slug', 'native-custom-fields')],
+                'fieldLabel'        => ['type' => 'string'],
+                'default'           => [
                     'type'        => ['string', 'array'],
                     'description' => __('Default value. Repeater and group fields take an array: a repeater default is a list of row objects keyed by sub-field name.', 'native-custom-fields'),
                 ],
-                'required'   => ['type' => 'boolean', 'default' => false],
-                'disabled'   => ['type' => 'boolean', 'default' => false],
+                'required'          => ['type' => 'boolean', 'default' => false],
+                'disabled'          => ['type' => 'boolean', 'default' => false],
                 'field_custom_info' => [
                     'type'        => 'object',
                     'description' => $is_root

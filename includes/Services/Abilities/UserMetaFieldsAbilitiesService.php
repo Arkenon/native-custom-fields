@@ -1,5 +1,4 @@
 <?php
-
 /**
  * User Meta Fields Abilities Service
  * Registers WP Abilities API abilities for creating, updating, and deleting user meta field configurations.
@@ -17,6 +16,9 @@ use NativeCustomFields\Services\UserMetaService;
 
 defined('ABSPATH') || exit;
 
+/**
+ * User Meta Fields Abilities Service.
+ */
 class UserMetaFieldsAbilitiesService
 {
     use AbilityFieldAdapterTrait;
@@ -93,7 +95,7 @@ class UserMetaFieldsAbilitiesService
     /**
      * Save User Meta Fields Ability
      *
-     * @param array $input Input data
+     * @param array $input Input data.
      * @return array Response data
      * @since 1.0.1
      */

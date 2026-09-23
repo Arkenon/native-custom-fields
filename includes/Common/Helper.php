@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Helper class for common functions
  *
@@ -14,6 +13,9 @@ use NativeCustomFields\Models\Common\FieldsConfigModel;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Helper class for common functions.
+ */
 class Helper
 {
 
@@ -57,8 +59,8 @@ class Helper
     /**
      * Get the raw (unslashed, unsanitized) value of a GET/POST/REQUEST input
      *
-     * @param string $name Input name
-     * @param string $method GET or POST or REQUEST
+     * @param string $name Input name.
+     * @param string $method GET or POST or REQUEST.
      *
      * @return mixed|null
      * @since 1.2.9
@@ -68,7 +70,7 @@ class Helper
         $method = strtolower($method);
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- This is a helper method for sanitization, not directly processing form data.
-        $input = $method === 'post' ? $_POST : ($method === 'get' ? $_GET : $_REQUEST);
+        $input = 'post' === $method ? $_POST : ('get' === $method ? $_GET : $_REQUEST);
 
         if (! isset($input[$name])) {
             return null;
@@ -80,9 +82,9 @@ class Helper
     /**
      * Sanitize input
      *
-     * @param string $name Input name
-     * @param string $method GET or POST or REQUEST
-     * @param string $type Type of input (title, id, textarea, url, email, username, text, bool)
+     * @param string $name Input name.
+     * @param string $method GET or POST or REQUEST.
+     * @param string $type Type of input (title, id, textarea, url, email, username, text, bool).
      *
      * @return bool|int|string|null
      * @since 1.0.0
@@ -91,7 +93,7 @@ class Helper
     {
         $value = self::getRawValue($name, $method);
 
-        if ($value === null) {
+        if (null === $value) {
             return null;
         }
 
@@ -127,7 +129,7 @@ class Helper
      * Use sanitizeFieldValue()/sanitizeFieldsByConfig() instead when field type configuration
      * (e.g. textarea) is available and line breaks must be preserved.
      *
-     * @param array $array
+     * @param array $array Array to sanitize.
      *
      * @return array
      * @since 1.0.0
@@ -153,10 +155,10 @@ class Helper
      * Arrays without a matching $fields configuration (e.g. plain multi-select values) are sanitized
      * per-item using $field_type.
      *
-     * @param mixed $value Raw (already unslashed) value
-     * @param string $field_type Field type, e.g. 'text', 'textarea', 'number', 'toggle', 'group', 'repeater'
-     * @param array $fields Sub-field configuration (for 'group'/'repeater' fields), each with 'name', 'fieldType', and optionally 'fields'
-     * @param string $field_name Field name/meta key, used only to give integrators context in the 'ncf_sanitize_field_value' filter
+     * @param mixed  $value Raw (already unslashed) value.
+     * @param string $field_type Field type, e.g. 'text', 'textarea', 'number', 'toggle', 'group', 'repeater'.
+     * @param array  $fields Sub-field configuration (for 'group'/'repeater' fields), each with 'name', 'fieldType', and optionally 'fields'.
+     * @param string $field_name Field name/meta key, used only to give integrators context in the 'ncf_sanitize_field_value' filter.
      *
      * @return mixed
      * @since 1.2.9
@@ -167,13 +169,13 @@ class Helper
             return self::sanitizeScalarValue($value, $field_type, $field_name);
         }
 
-        if ($field_type === 'repeater') {
+        if ('repeater' === $field_type) {
             return array_map(function ($item) use ($fields, $field_name) {
                 return is_array($item) ? self::sanitizeFieldsByConfig($item, $fields) : self::sanitizeScalarValue($item, 'text', $field_name);
             }, $value);
         }
 
-        if ($field_type === 'group' || ! empty($fields)) {
+        if ('group' === $field_type || ! empty($fields)) {
             return self::sanitizeFieldsByConfig($value, $fields);
         }
 
@@ -188,8 +190,8 @@ class Helper
      * (and recursing into 'fields' for nested group/repeater sub-fields).
      * Keys without a matching field fall back to plain text sanitization.
      *
-     * @param array $values Values keyed by field name
-     * @param array $fields Field configuration list, each with 'name', 'fieldType', and optionally 'fields'
+     * @param array $values Values keyed by field name.
+     * @param array $fields Field configuration list, each with 'name', 'fieldType', and optionally 'fields'.
      *
      * @return array
      * @since 1.2.9
@@ -220,9 +222,9 @@ class Helper
     /**
      * Sanitize a scalar field value according to its field type
      *
-     * @param mixed $value
-     * @param string $field_type
-     * @param string $field_name Field name/meta key, if known (for filter context only)
+     * @param mixed  $value Raw (already unslashed) value.
+     * @param string $field_type Field type, e.g. 'text', 'textarea', 'number', 'toggle'.
+     * @param string $field_name Field name/meta key, if known (for filter context only).
      *
      * @return mixed
      * @since 1.2.9
@@ -302,7 +304,7 @@ class Helper
             'EP_ROOT',
             'EP_SEARCH',
             'EP_TAGS',
-            'EP_TAGS'
+            'EP_TAGS',
         ];
     }
 
@@ -312,8 +314,8 @@ class Helper
      * Uses general nonce 'native_custom_fields' for all AJAX actions.
      * The nonce is created in ClientController and AdminController.
      *
-     * @param string $action Nonce action name (default: 'native_custom_fields')
-     * @param string $query_arg Query argument name in $_REQUEST (default: 'nonce')
+     * @param string $action Nonce action name (default: 'native_custom_fields').
+     * @param string $query_arg Query argument name in $_REQUEST (default: 'nonce').
      *
      * @return void Dies with JSON error if nonce is invalid
      * @since 1.0.0
@@ -355,11 +357,11 @@ class Helper
                 if (!empty($files['name'][$key])) {
 
                     $file = [
-                        'name' => sanitize_file_name($files['name'][$key]),
-                        'type' => sanitize_mime_type($files['type'][$key]),
+                        'name'     => sanitize_file_name($files['name'][$key]),
+                        'type'     => sanitize_mime_type($files['type'][$key]),
                         'tmp_name' => sanitize_text_field($files['tmp_name'][$key]),
-                        'error' => sanitize_text_field($files['error'][$key]),
-                        'size' => (int)$files['size'][$key],
+                        'error'    => sanitize_text_field($files['error'][$key]),
+                        'size'     => (int)$files['size'][$key],
                     ];
 
                     $upload = wp_handle_upload($file, $upload_overrides);
@@ -369,11 +371,11 @@ class Helper
                     $wp_upload_dir = wp_upload_dir();
                     $post_title = preg_replace('/\.[^.]+$/', '', basename($filename));
                     $attachment = [
-                        'guid' => $wp_upload_dir['url'] . '/' . basename($filename),
+                        'guid'           => $wp_upload_dir['url'] . '/' . basename($filename),
                         'post_mime_type' => $filetype['type'],
-                        'post_title' => $post_title,
-                        'post_content' => '',
-                        'post_status' => 'inherit',
+                        'post_title'     => $post_title,
+                        'post_content'   => '',
+                        'post_status'    => 'inherit',
                     ];
                     $attach_id = wp_insert_attachment($attachment, $filename);
 
@@ -384,7 +386,7 @@ class Helper
                     $file_url = wp_get_attachment_url($attach_id);
                     $file_to_upload[] = [
                         'file_to_upload' => esc_url($file_url),
-                        'file_name' => $post_title,
+                        'file_name'      => $post_title,
                     ];
                 }
             }
@@ -399,7 +401,7 @@ class Helper
      * Get JSON data from uploaded file
      * Convert uploaded JSON file to array
      *
-     * @param array $file Uploaded file array
+     * @param array $file Uploaded file array.
      *
      * @return array
      * @since 1.0.0
@@ -422,7 +424,7 @@ class Helper
      * Allowed types: string, boolean, integer, number, array, object
      * Used for register_post_meta, register_term_meta etc.
      *
-     * @param string $type
+     * @param string $type Raw meta type, as configured on the field.
      *
      * @return string
      * @since 1.0.0
@@ -441,7 +443,7 @@ class Helper
      * select can be either depending on its "multiple" setting. Everything else is stored as a
      * scalar.
      *
-     * @param array $field Field configuration, with at least 'fieldType'
+     * @param array $field Field configuration, with at least 'fieldType'.
      *
      * @return string One of: string, boolean, number, array, object
      * @since 1.3.6
@@ -450,11 +452,11 @@ class Helper
     {
         $field_type = $field['fieldType'] ?? 'text';
 
-        if ($field_type === 'group') {
+        if ('group' === $field_type) {
             return 'object';
         }
 
-        if ($field_type === 'repeater' || $field_type === 'token_field') {
+        if ('repeater' === $field_type || 'token_field' === $field_type) {
             return 'array';
         }
 
@@ -462,7 +464,7 @@ class Helper
             return 'array';
         }
 
-        if ($field_type === 'select' && ! empty($field['multiple'])) {
+        if ('select' === $field_type && ! empty($field['multiple'])) {
             return 'array';
         }
 
@@ -480,20 +482,20 @@ class Helper
     /**
      * Build the 'show_in_rest' argument for a meta registration.
      *
-     * register_meta() only accepts `true` for scalar types: an "array" or "object" meta must
+     * Note: register_meta() only accepts `true` for scalar types: an "array" or "object" meta must
      * describe its structure through show_in_rest.schema, otherwise WordPress throws
      * "you must specify the schema for each array item in show_in_rest.schema.items"
      * (_doing_it_wrong, since WP 5.3) and skips the meta in REST.
      *
-     * @param string $meta_type Normalized meta type (string, boolean, integer, number, array, object)
-     * @param array $field Field configuration, used to describe sub-fields of group/repeater fields
+     * @param string $meta_type Normalized meta type (string, boolean, integer, number, array, object).
+     * @param array  $field Field configuration, used to describe sub-fields of group/repeater fields.
      *
      * @return array|bool `true` for scalar types, ['schema' => ...] for array/object types
      * @since 1.3.6
      */
     public static function getMetaShowInRest(string $meta_type, array $field = [])
     {
-        if ($meta_type !== 'array' && $meta_type !== 'object') {
+        if ('array' !== $meta_type && 'object' !== $meta_type) {
             return true;
         }
 
@@ -503,8 +505,8 @@ class Helper
     /**
      * Build the REST schema describing the value of a field.
      *
-     * @param string $meta_type Normalized meta type
-     * @param array $field Field configuration
+     * @param string $meta_type Normalized meta type.
+     * @param array  $field Field configuration.
      *
      * @return array
      * @since 1.3.6
@@ -514,17 +516,17 @@ class Helper
         $field_type = $field['fieldType'] ?? '';
         $sub_fields = $field['fields'] ?? [];
 
-        if ($meta_type === 'object') {
+        if ('object' === $meta_type) {
             return [
-                'type'       => 'object',
-                'properties' => self::getMetaSchemaProperties($sub_fields),
+                'type'                 => 'object',
+                'properties'           => self::getMetaSchemaProperties($sub_fields),
                 // Sub-fields the configuration does not know about (e.g. values stored before a
                 // field was removed from the builder) must not fail REST validation.
                 'additionalProperties' => true,
             ];
         }
 
-        if ($field_type === 'repeater') {
+        if ('repeater' === $field_type) {
             return [
                 'type'  => 'array',
                 'items' => [
@@ -561,7 +563,7 @@ class Helper
     /**
      * Build the 'properties' part of an object schema from a sub-field configuration list.
      *
-     * @param array $fields Sub-field configuration list, each with 'name' and 'fieldType'
+     * @param array $fields Sub-field configuration list, each with 'name' and 'fieldType'.
      *
      * @return array
      * @since 1.3.6
@@ -573,13 +575,13 @@ class Helper
         foreach ($fields as $field) {
             $name = $field['name'] ?? '';
 
-            if (! is_string($name) || $name === '') {
+            if (! is_string($name) || '' === $name) {
                 continue;
             }
 
             $type = self::getMetaTypeFromField($field);
 
-            $properties[$name] = ($type === 'array' || $type === 'object')
+            $properties[$name] = ('array' === $type || 'object' === $type)
                 ? self::getMetaSchema($type, $field)
                 : ['type' => $type];
         }
@@ -590,7 +592,7 @@ class Helper
     /**
      * Get sections and fields from configuration
      *
-     * @param FieldsConfigModel $config Fields configuration
+     * @param FieldsConfigModel $config Fields configuration.
      *
      * @return array
      */
@@ -606,7 +608,8 @@ class Helper
     /**
      * Get sections from configuration
      * It can also be used for meta boxes.
-     * @param array $config Fields configuration
+     *
+     * @param array $config Fields configuration.
      *
      * @return array
      */
@@ -621,7 +624,8 @@ class Helper
 
     /**
      * Check if the menu slug is a builder page
-     * @param string $menu_slug
+     *
+     * @param string $menu_slug Menu slug to check.
      * @return bool
      * @since 1.0.0
      */
@@ -632,6 +636,7 @@ class Helper
 
     /**
      * Fields that are already have input tag
+     *
      * @return array
      * @since 1.0.0
      */
@@ -647,8 +652,8 @@ class Helper
      * the string "false"/"true". Passed to the UI as-is, "false" would be truthy and the toggle would
      * render as on. Stored boolean meta values come back as '' / '1' and need the same treatment.
      *
-     * @param mixed $value Raw value
-     * @param string $field_type Field type, e.g. 'text', 'toggle', 'checkbox'
+     * @param mixed  $value Raw value.
+     * @param string $field_type Field type, e.g. 'text', 'toggle', 'checkbox'.
      *
      * @return mixed Cast value, unchanged for field types that need no casting
      * @since 1.3.3
@@ -673,14 +678,14 @@ class Helper
      * Mirrors updateHiddenInputValue() in src/common/helper.js so that a value rendered by PHP and
      * a value written by React end up in the same shape.
      *
-     * @param mixed $value Field value
+     * @param mixed $value Field value.
      *
      * @return string
      * @since 1.3.3
      */
     public static function formatHiddenInputValue($value): string
     {
-        if ($value === null) {
+        if (null === $value) {
             return '';
         }
 
@@ -698,7 +703,7 @@ class Helper
     /**
      * Check if a string is valid JSON
      *
-     * @param string $string String to check
+     * @param string $string String to check.
      *
      * @return boolean
      */
@@ -719,9 +724,9 @@ class Helper
     {
         return [
             'input' => [
-                'id' => [],
-                'type' => [],
-                'name' => [],
+                'id'    => [],
+                'type'  => [],
+                'name'  => [],
                 'value' => [],
             ],
         ];
@@ -730,7 +735,7 @@ class Helper
     /**
      * Convert snake_case to camelCase
      *
-     * @param array $data Data to convert
+     * @param array $data Data to convert.
      *
      * @return array
      */
@@ -751,7 +756,7 @@ class Helper
     /**
      * Renders a builder page wrapper div
      *
-     * @param string $wrapperClass The CSS class for the wrapper div
+     * @param string $wrapperClass The CSS class for the wrapper div.
      *
      * @return void
      * @since 1.0.0

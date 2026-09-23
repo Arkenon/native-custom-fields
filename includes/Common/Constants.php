@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Additional Plugin Constants
  * (Base constant defined in the main plugin php file)
+ *
  * @package NativeCustomFields
  * @subpackage Common
  * @since 1.0.0
@@ -12,6 +12,9 @@ namespace NativeCustomFields\Common;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Additional Plugin Constants.
+ */
 class Constants
 {
 	public const NAME = 'native_custom_fields';
@@ -34,6 +37,6 @@ class Constants
 		'native_custom_fields_taxonomy_builder',
 		'native_custom_fields_term_meta_fields_builder',
 		'native_custom_fields_user_meta_fields_builder',
-		'native_custom_fields_comment_meta_fields_builder'
+		'native_custom_fields_comment_meta_fields_builder',
 	];
 }

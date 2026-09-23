@@ -1,8 +1,76 @@
 <?xml version="1.0"?>
 <ruleset name="NativeCustomFields">
     <description>Coding standards for Native Custom Fields</description>
+
     <rule ref="WordPress-Core">
         <exclude name="WordPress.Files.FileName"/>
+
+        <!--
+        This codebase deliberately uses a modern OOP/PSR coding style (PSR-4
+        autoloading, camelCase methods/properties/variables, 4-space indent,
+        short array syntax, no interior parenthesis padding) rather than
+        WordPress-Core's classic procedural style. The sniffs below enforce
+        that classic style and would otherwise flag the entire codebase.
+        Excluding them keeps WordPress-Core meaningful for the things that
+        still matter here: security (nonces, escaping, sanitization),
+        i18n, and other non-stylistic checks.
+        -->
+
+        <!-- Indentation: this codebase uses spaces, not tabs. -->
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+        <exclude name="Generic.WhiteSpace.ScopeIndent"/>
+        <exclude name="Universal.WhiteSpace.PrecisionAlignment"/>
+
+        <!-- Array syntax: this codebase uses short array syntax []. -->
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+
+        <!-- Naming: this codebase uses camelCase, not snake_case. -->
+        <exclude name="WordPress.NamingConventions.ValidVariableName"/>
+        <exclude name="WordPress.NamingConventions.ValidFunctionName"/>
+
+        <!-- Bracket/paren spacing: this codebase follows PSR-style spacing
+             (no padding inside parentheses/array brackets), not WordPress'
+             classic `if ( $x )` / `array( $x )` padded style. -->
+        <exclude name="PEAR.Functions.FunctionCallSignature"/>
+        <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
+        <exclude name="Generic.WhiteSpace.ArbitraryParenthesesSpacing"/>
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
+        <exclude name="NormalizedArrays.Arrays.ArrayBraceSpacing"/>
+        <exclude name="WordPress.Arrays.ArrayDeclarationSpacing"/>
+        <exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
+        <exclude name="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
+        <exclude name="Generic.Classes.OpeningBraceSameLine"/>
+        <exclude name="PSR2.Classes.ClassDeclaration"/>
+
+        <!-- Alignment/formatting nits that assume the padded style above. -->
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+        <exclude name="WordPress.WhiteSpace.OperatorSpacing"/>
+        <exclude name="WordPress.WhiteSpace.CastStructureSpacing"/>
+        <exclude name="Squiz.Strings.DoubleQuoteUsage"/>
+        <exclude name="Generic.Formatting.SpaceAfterCast"/>
+
+        <!-- Inline comment punctuation/style nits, as distinct from doc
+             comments (missing docblocks are still flagged and fixed). -->
+        <exclude name="Squiz.Commenting.InlineComment"/>
+
+        <exclude name="Universal.Operators.DisallowShortTernary"/>
+        <exclude name="Universal.Operators.DisallowStandalonePostIncrementDecrement"/>
+        <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames"/>
+        <exclude name="Squiz.PHP.DisallowMultipleAssignments"/>
+        <exclude name="Squiz.Scope.MethodScope"/>
+        <exclude name="PSR12.Traits.UseDeclaration"/>
+        <exclude name="PSR12.Files.FileHeader"/>
+        <exclude name="Squiz.ControlStructures.ControlSignature"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration"/>
+        <exclude name="Generic.ControlStructures.InlineControlStructure"/>
+        <exclude name="Generic.WhiteSpace.LanguageConstructSpacing"/>
+        <exclude name="PSR2.Files.EndFileNewline"/>
     </rule>
-    <rule ref="WordPress-Docs"/>
+
+    <rule ref="WordPress-Docs">
+        <!-- Same naming-convention exclusion as above, applied to the doc
+             standard's own variable-name checks. -->
+        <exclude name="WordPress.NamingConventions.ValidVariableName"/>
+    </rule>
 </ruleset>

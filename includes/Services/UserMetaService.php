@@ -1,5 +1,4 @@
 <?php
-
 /**
  * User Meta Service for handling user meta fields
  *
@@ -20,6 +19,9 @@ use WP_User;
 
 defined('ABSPATH') || exit;
 
+/**
+ * User Meta Service for handling user meta fields.
+ */
 class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterface
 {
 
@@ -40,10 +42,10 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	 * Add fields into user pages from builder form
 	 *
 	 * @param string $menu_slug
-	 * @param array $values
+	 * @param array  $values
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function saveUserMetaFieldsConfig(string $menu_slug, array $values): ResponseModel
@@ -74,7 +76,7 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 				'section_name'  => $section['name'] ?? '',
 				'section_title' => $section['fieldLabel'] ?? '',
 				'section_icon'  => $section['field_custom_info_section']['section_icon'] ?? '',
-				'fields'        => $field_list
+				'fields'        => $field_list,
 			];
 		}
 
@@ -82,7 +84,7 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 		// User role is fixed as 'all_users' for now
 		$config_array = [
 			'user_role' => 'all_users',
-			'sections'  => $prepared_sections
+			'sections'  => $prepared_sections,
 		];
 
 		$get_config = $this->getUserMetaFieldsConfigurations();
@@ -104,6 +106,7 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 
 	/**
 	 * Get term meta fields configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -116,6 +119,7 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	/**
 	 * Get user meta fields configurations with filters applied
 	 * Filter applies php based modifications to the user meta fields configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -144,8 +148,8 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	/**
 	 * Get field values for a user
 	 *
-	 * @param array $fields Fields configuration
-	 * @param int $id User ID
+	 * @param array $fields Fields configuration.
+	 * @param int   $id User ID.
 	 *
 	 * @return array Field values
 	 */
@@ -162,7 +166,7 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 
 			// Fall back to the default only when the meta key is missing: a stored false/0/''
 			// is a real value and must not be overwritten by the default.
-			if ($id === 0 || ! $this->userMetaRepository->userMetaExists($field['name'], $id)) {
+			if (0 === $id || ! $this->userMetaRepository->userMetaExists($field['name'], $id)) {
 				$values[$field['name']] = $get_default_value;
 			} else {
 				$get_value              = $this->userMetaRepository->getUserMeta($field['name'], $id);
@@ -176,10 +180,10 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	/**
 	 * Add user meta fields to edit form
 	 *
-	 * @param WP_User $user User object
+	 * @param WP_User $user User object.
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function renderFields(WP_User $user): void
 	{
@@ -267,10 +271,10 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 	/**
 	 * Save user meta
 	 *
-	 * @param int $user_id User ID
+	 * @param int $user_id User ID.
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function saveUserMeta(int $user_id): void
 	{
@@ -286,7 +290,6 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 		if (! current_user_can('edit_user', $user_id)) {
 			return;
 		}
-
 
 		$user_meta_fields_config = $this->getUserMetaFieldsConfigurationsFiltered();
 		$config = $user_meta_fields_config['all_users'];
@@ -362,11 +365,11 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 
 				// Recursive handling for group and repeater fields
 				// Sub-fields are in $field['fields'], not in $field_custom_info['fields']
-				if (($field['fieldType'] === 'group' || $field['fieldType'] === 'repeater') && ! empty($field['fields'])) {
+				if (('group' === $field['fieldType'] || 'repeater' === $field['fieldType']) && ! empty($field['fields'])) {
 					$field_custom_info['fields'] = $this->prepareFieldList($field['fields']);
 
 					// For repeater fields with table layout, hide labels and tags of inner fields
-					if ($field['fieldType'] === 'repeater' && isset($field_custom_info['layout']) && $field_custom_info['layout'] === 'table') {
+					if ('repeater' === $field['fieldType'] && isset($field_custom_info['layout']) && 'table' === $field_custom_info['layout']) {
 						$field_custom_info['hideRepeaterItemTag'] = true;
 						foreach ($field_custom_info['fields'] as &$item) {
 							$item['hideLabel'] = true;
@@ -377,7 +380,7 @@ class UserMetaService implements BaseMetaServiceInterface, UserMetaServiceInterf
 			}
 
 			// Condition to set default value for date and date time picker fields
-			if (($field['fieldType'] === 'date_picker' || $field['fieldType'] === 'date_time_picker')) {
+			if (('date_picker' === $field['fieldType'] || 'date_time_picker' === $field['fieldType'])) {
 				$field['default'] = $field_custom_info['currentDate'] ?? null;
 			}
 

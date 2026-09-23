@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Post type list item model class
  * Responsible for handling list item data for post types
+ *
  * @package NativeCustomFields
  * @subpackage Models\PostMeta
  * @since 1.0.0
@@ -12,6 +12,9 @@ namespace NativeCustomFields\Models\PostMeta;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Post type list item model class.
+ */
 class PostTypeListItemModel
 {
 

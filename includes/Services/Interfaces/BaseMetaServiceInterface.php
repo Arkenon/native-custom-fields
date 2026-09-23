@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Base Meta Service Interface
  *

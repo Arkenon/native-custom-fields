@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Taxonomy list model class
  * Responsible for handling taxonomies data for Create Taxonomy page
+ *
  * @package NativeCustomFields
  * @subpackage Models\TermMeta
  * @since 1.0.0
@@ -14,6 +14,9 @@ use NativeCustomFields\Models\Common\ResponseModel;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Taxonomy list model class.
+ */
 class TaxonomyListResponseModel extends ResponseModel
 {
 	public array $taxonomy_list = [];

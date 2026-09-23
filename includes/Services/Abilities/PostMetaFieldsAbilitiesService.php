@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Post Meta Fields Abilities Service
  * Registers WP Abilities API abilities for creating, updating, and deleting post meta field configurations.
@@ -17,6 +16,9 @@ use NativeCustomFields\Services\PostMetaService;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Post Meta Fields Abilities Service.
+ */
 class PostMetaFieldsAbilitiesService
 {
     use AbilityFieldAdapterTrait;
@@ -91,7 +93,7 @@ class PostMetaFieldsAbilitiesService
     /**
      * Save Post Meta Fields Ability
      *
-     * @param array $input Input data
+     * @param array $input Input data.
      * @return array Response data
      * @since 1.0.1
      */
@@ -122,7 +124,7 @@ class PostMetaFieldsAbilitiesService
                         'meta_box_context'  => sanitize_text_field($section['meta_box_context'] ?? 'advanced'),
                         'meta_box_priority' => sanitize_text_field($section['meta_box_priority'] ?? 'default'),
                     ],
-                    'fields' => $this->prepareAbilityFields($section['fields'] ?? []),
+                    'fields'                     => $this->prepareAbilityFields($section['fields'] ?? []),
                 ];
             }
 

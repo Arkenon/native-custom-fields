@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ajax Service class for handling AJAX requests
  *
@@ -14,6 +13,9 @@ use NativeCustomFields\Common\Helper;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Ajax Service class for handling AJAX requests.
+ */
 class AjaxService
 {
     /**
@@ -38,7 +40,7 @@ class AjaxService
         // Upload files using Helper class
         $uploaded_files = Helper::uploadFiles();
 
-        if ($uploaded_files === false) {
+        if (false === $uploaded_files) {
             wp_send_json_error(['message' => __('Error uploading files', 'native-custom-fields')]);
         }
 

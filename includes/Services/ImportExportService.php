@@ -22,6 +22,9 @@ use NativeCustomFields\Services\UserMetaService;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * ImportExport service class.
+ */
 class ImportExportService {
 
 	/**
@@ -133,7 +136,7 @@ class ImportExportService {
 	 */
 	public function exportData( array $choices ): array {
 
-		if ( ! isset( $choices ) && $choices === [] ) {
+		if ( ! isset( $choices ) && [] === $choices ) {
 			return [ 'success' => false, 'data' => [] ];
 		}
 
@@ -142,22 +145,22 @@ class ImportExportService {
 		$taxonomies_config = $taxonomy_fields_config = null;
 		$user_meta_fields_config = null;
 
-		if ( in_array( 'options', $choices ) ) {
+		if ( in_array( 'options', $choices, true ) ) {
 			$options_pages_config       = $this->optionRepository->getOptions( 'native_custom_fields_options_pages_config' );
 			$options_page_fields_config = $this->optionRepository->getOptions( 'native_custom_fields_options_pages_fields_config' );
 		}
 
-		if ( in_array( 'post_meta', $choices ) ) {
+		if ( in_array( 'post_meta', $choices, true ) ) {
 			$post_types_config       = $this->optionRepository->getOptions( 'native_custom_fields_post_types_config' );
 			$post_meta_fields_config = $this->optionRepository->getOptions( 'native_custom_fields_post_meta_fields_config' );
 		}
 
-		if ( in_array( 'term_meta', $choices ) ) {
+		if ( in_array( 'term_meta', $choices, true ) ) {
 			$taxonomies_config      = $this->optionRepository->getOptions( 'native_custom_fields_taxonomies_config' );
 			$taxonomy_fields_config = $this->optionRepository->getOptions( 'native_custom_fields_term_meta_fields_config' );
 		}
 
-		if ( in_array( 'user_meta', $choices ) ) {
+		if ( in_array( 'user_meta', $choices, true ) ) {
 			$user_meta_fields_config = $this->optionRepository->getOptions( 'native_custom_fields_user_meta_fields_config' );
 		}
 
@@ -185,7 +188,7 @@ class ImportExportService {
 	/**
 	 * Create PHP code string from exported data
 	 *
-	 * @param array $exportedData The "data" array returned by exportData()
+	 * @param array $exportedData The "data" array returned by exportData().
 	 * @return string PHP code
 	 * @since 1.0.5
 	 */
@@ -208,7 +211,7 @@ class ImportExportService {
 		};
 
 		$getKey = function ( $key, $cfg, string $fallbackProp ) use ( $get ): string {
-			$slug = ( is_string( $key ) && $key !== '' ) ? $key : (string) $get( $cfg, $fallbackProp, '' );
+			$slug = ( is_string( $key ) && '' !== $key ) ? $key : (string) $get( $cfg, $fallbackProp, '' );
 			return sanitize_key( $slug );
 		};
 
@@ -397,7 +400,7 @@ class ImportExportService {
 	/**
 	 * @param array $options_page_fields_config
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.5
 	 */
 	private function importOptionsPageFields( array $options_page_fields_config ): void {
@@ -412,7 +415,7 @@ class ImportExportService {
 	/**
 	 * @param array $post_types_config
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.5
 	 */
 	private function importPostTypes( array $post_types_config ): void {
@@ -426,7 +429,7 @@ class ImportExportService {
 	/**
 	 * @param array $post_meta_fields_config
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.5
 	 */
 	private function importPostMetaFields( array $post_meta_fields_config ): void {
@@ -441,7 +444,7 @@ class ImportExportService {
 	/**
 	 * @param array $taxonomies_config
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.5
 	 */
 	private function importTaxonomies( array $taxonomies_config ): void {
@@ -455,7 +458,7 @@ class ImportExportService {
 	/**
 	 * @param array $term_meta_fields_config
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.5
 	 */
 	private function importTermMetaFields( array $term_meta_fields_config ): void {
@@ -470,7 +473,7 @@ class ImportExportService {
 	/**
 	 * @param array $user_meta_fields_config
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.5
 	 */
 	private function importUserMetaFields( array $user_meta_fields_config ): void {

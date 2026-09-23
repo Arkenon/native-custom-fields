@@ -1,7 +1,7 @@
 <?php
-
 /**
  * View for the admin import/export page
+ *
  * @since 1.0.5
  * @package NativeCustomFields
  */
@@ -44,7 +44,7 @@ use NativeCustomFields\Common\Helper;
 							'options'   => __( 'Option Pages & Fields', 'native-custom-fields' ),
 							'post_meta' => __( 'Post Types & Post Meta Fields', 'native-custom-fields' ),
 							'term_meta' => __( 'Taxonomies & Term Meta Fields', 'native-custom-fields' ),
-							'user_meta' => __( 'User Meta Fields', 'native-custom-fields' )
+							'user_meta' => __( 'User Meta Fields', 'native-custom-fields' ),
 						];
 						foreach ( $choices as $key => $value ) : // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 						?>

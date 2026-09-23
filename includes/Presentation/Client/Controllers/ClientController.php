@@ -2,11 +2,11 @@
 /**
  * Client controller class
  * Creates main menu and submenus for admin area
+ *
  * @package NativeCustomFields
  * @subpackage Presentation\Client\Controllers
  * @since 1.0.0
  */
-
 
 namespace NativeCustomFields\Presentation\Client\Controllers;
 
@@ -15,11 +15,23 @@ use NativeCustomFields\Services\FieldService;
 
 defined('ABSPATH') || exit;
 
-
+/**
+ * Client controller class.
+ */
 final class ClientController
 {
+    /**
+     * Field service.
+     *
+     * @var FieldService
+     */
     private FieldService $fieldService;
 
+    /**
+     * Constructor.
+     *
+     * @param FieldService $fieldService Field service.
+     */
     public function __construct( FieldService $fieldService )
     {
         // Inject dependencies
@@ -33,6 +45,7 @@ final class ClientController
 
     /**
      * Enqueue scripts for the client area
+     *
      * @return void
      * @since 1.0.0
      */
@@ -49,22 +62,22 @@ final class ClientController
         );
 
         wp_localize_script('native-custom-fields', 'nativeCustomFieldsData', [
-            'nonce'          => wp_create_nonce('native_custom_fields'),
-            'assets_url'     => NATIVE_CUSTOM_FIELDS_URL . '/includes/Presentation/Client/Assets/',
-            'rest_url'       => esc_url_raw(rest_url()),
-            'ajax_url'       => esc_url_raw(admin_url('admin-ajax.php')),
-            'field_types'    => $this->fieldService->getFieldTypes(),
+            'nonce'           => wp_create_nonce('native_custom_fields'),
+            'assets_url'      => NATIVE_CUSTOM_FIELDS_URL . '/includes/Presentation/Client/Assets/',
+            'rest_url'        => esc_url_raw(rest_url()),
+            'ajax_url'        => esc_url_raw(admin_url('admin-ajax.php')),
+            'field_types'     => $this->fieldService->getFieldTypes(),
             'container_types' => $this->fieldService->getContainerTypes(),
-            'dashboard_items' => $this->fieldService->getDashboardItems()
+            'dashboard_items' => $this->fieldService->getDashboardItems(),
         ]);
     }
 
     /**
      * Enqueue styles for the client area
+     *
      * @return void
      * @since 1.0.0
      */
-
     public function enqueueStyles(): void
     {
         // Enqueue styles for client side

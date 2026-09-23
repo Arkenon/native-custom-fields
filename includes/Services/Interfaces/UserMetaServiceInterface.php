@@ -2,6 +2,7 @@
 /**
  * User Meta Service Interface
  * Contains method signatures for user meta-related operations.
+ *
  * @package NativeCustomFields
  * @subpackage Services/Interfaces
  * @since 1.0.0

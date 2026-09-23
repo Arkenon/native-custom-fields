@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Options class for handling admin pages and fields
  *
@@ -50,8 +49,9 @@ class OptionService implements OptionServiceInterface
 
 	/**
 	 * Get the option pages list
+     *
 	 * @return OptionsMenuListResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function getOptionsPages(): OptionsMenuListResponseModel
@@ -119,8 +119,7 @@ class OptionService implements OptionServiceInterface
 	 * @param string $menu_slug
 	 *
 	 * @return OptionMenuConfigResponseModel
-	 * @throws Exception
-	 *
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function getOptionsPageConfigByMenuSlug(string $menu_slug): OptionMenuConfigResponseModel
 	{
@@ -158,11 +157,11 @@ class OptionService implements OptionServiceInterface
 	 * Save options page configurations
 	 *
 	 * @param string $menu_slug
-	 * @param array $values
-	 * @param bool $reset If reset form data action is performed
+	 * @param array  $values
+	 * @param bool   $reset If reset form data action is performed.
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function saveOptions(string $menu_slug, array $values, bool $reset = false): ResponseModel
@@ -209,10 +208,10 @@ class OptionService implements OptionServiceInterface
 	 * This method can only be used for the options page builder
 	 *
 	 * @param string $menu_slug
-	 * @param array $values
+	 * @param array  $values
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function saveOptionsPageConfig(string $menu_slug, array $values): ResponseModel
@@ -271,7 +270,7 @@ class OptionService implements OptionServiceInterface
 	 * @param string $menu_slug
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function deleteOptionsPageConfigurationsByMenuSlug(string $menu_slug): ResponseModel
@@ -291,6 +290,7 @@ class OptionService implements OptionServiceInterface
 
 	/**
 	 * Get options page fields configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -329,10 +329,10 @@ class OptionService implements OptionServiceInterface
 	 * Create option page fields from the builder
 	 *
 	 * @param string $menu_slug
-	 * @param array $values
+	 * @param array  $values
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function saveOptionPageFieldsConfig(string $menu_slug, array $values): ResponseModel
@@ -365,14 +365,14 @@ class OptionService implements OptionServiceInterface
 				'section_name'  => $page_section['name'] ?? '',
 				'section_title' => $page_section['fieldLabel'] ?? '',
 				'section_icon'  => $page_section['field_custom_info_section']['section_icon'] ?? '',
-				'fields'        => $field_list
+				'fields'        => $field_list,
 			];
 		}
 
 		//Prepare fields config as array (for database storage)
 		$fields_config_array = [
 			'menu_slug' => $config_menu_slug,
-			'sections'  => $menu_sections
+			'sections'  => $menu_sections,
 		];
 
 		//Get options pages configurations
@@ -399,7 +399,7 @@ class OptionService implements OptionServiceInterface
 	 * @param string $menu_slug
 	 *
 	 * @return OptionMenuConfigModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	private function buildConfigModel(string $menu_slug): OptionMenuConfigModel
@@ -441,7 +441,6 @@ class OptionService implements OptionServiceInterface
 	{
 		$field_list = [];
 
-
 		foreach ($fields as $field) {
 
 			// Get field data from option groups
@@ -457,11 +456,11 @@ class OptionService implements OptionServiceInterface
 
 				// Recursive handling for group and repeater fields
 				// Sub-fields are in $field['fields'], not in $field_custom_info['fields']
-				if (($field['fieldType'] === 'group' || $field['fieldType'] === 'repeater') && ! empty($field['fields'])) {
+				if (('group' === $field['fieldType'] || 'repeater' === $field['fieldType']) && ! empty($field['fields'])) {
 					$field_custom_info['fields'] = $this->prepareFieldList($field['fields']);
 
 					// For repeater fields with table layout, hide labels and tags of inner fields
-					if ($field['fieldType'] === 'repeater' && isset($field_custom_info['layout']) && $field_custom_info['layout'] === 'table') {
+					if ('repeater' === $field['fieldType'] && isset($field_custom_info['layout']) && 'table' === $field_custom_info['layout']) {
 						$field_custom_info['hideRepeaterItemTag'] = true;
 						foreach ($field_custom_info['fields'] as &$item) {
 							$item['hideLabel'] = true;
@@ -472,7 +471,7 @@ class OptionService implements OptionServiceInterface
 			}
 
 			// Condition to set default value for date and date time picker fields
-			if (($field['fieldType'] === 'date_picker' || $field['fieldType'] === 'date_time_picker')) {
+			if (('date_picker' === $field['fieldType'] || 'date_time_picker' === $field['fieldType'])) {
 				$field['default'] = $field_custom_info['currentDate'] ?? null;
 			}
 

@@ -1,7 +1,7 @@
 <?php
-
 /**
  * Deactivation service class for the plugin
+ *
  * @package NativeCustomFields
  * @subpackage Services
  * @since 1.0.0
@@ -11,6 +11,9 @@ namespace NativeCustomFields\Services;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Deactivation service class for the plugin.
+ */
 class ActivationService
 {
 	public function activate(): void

@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Option Menu list item model class
  * Responsible for handling list item data for options menus
+ *
  * @package NativeCustomFields
  * @subpackage Models\Options
  * @since 1.0.0
@@ -12,6 +12,9 @@ namespace NativeCustomFields\Models\Options;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Option Menu list item model class.
+ */
 class OptionsMenuListItemModel
 {
 

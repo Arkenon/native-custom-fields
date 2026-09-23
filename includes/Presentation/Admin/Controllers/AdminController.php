@@ -1,8 +1,8 @@
 <?php
-
 /**
  * Admin controller class
  * Creates main menu and submenus for admin area
+ *
  * @package NativeCustomFields
  * @subpackage Presentation\Admin\Controllers
  * @since 1.0.0
@@ -17,11 +17,24 @@ use NativeCustomFields\Services\FieldService;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Admin controller class.
+ */
 final class AdminController
 {
 
+	/**
+	 * Field service.
+	 *
+	 * @var FieldService
+	 */
 	private FieldService $fieldService;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param FieldService $fieldService Field service.
+	 */
 	public function __construct(FieldService $fieldService)
 	{
 
@@ -39,6 +52,7 @@ final class AdminController
 
 	/**
 	 * Enqueue scripts for the admin area
+     *
 	 * @return void
 	 * @since 1.0.0
 	 */
@@ -67,7 +81,7 @@ final class AdminController
 			'site_url'        => esc_url_raw(site_url()),
 			'field_types'     => $this->fieldService->getFieldTypes(),
 			'container_types' => $this->fieldService->getContainerTypes(),
-			'dashboard_items' => $this->fieldService->getDashboardItems()
+			'dashboard_items' => $this->fieldService->getDashboardItems(),
 		]);
 
 		wp_localize_script('native-custom-fields', 'nativeCustomFieldsData', $localize_data);
@@ -75,6 +89,7 @@ final class AdminController
 
 	/**
 	 * Enqueue styles for the admin area
+     *
 	 * @return void
 	 * @since 1.0.0
 	 */
@@ -91,6 +106,7 @@ final class AdminController
 
 	/**
 	 * Add a menu for the plugin
+     *
 	 * @return void
 	 * @since 1.0.0
 	 */
@@ -108,6 +124,7 @@ final class AdminController
 
 	/**
 	 * Render HTML output for dashboard
+     *
 	 * @return void
 	 * @since 1.0.0
 	 */
@@ -124,12 +141,12 @@ final class AdminController
 
 	/**
 	 * Add submenus for the plugin
+     *
 	 * @return void
 	 * @since 1.0.0
 	 */
 	public function addSubMenus()
 	{
-
 
 		//Post Meta Page Builder
 		add_submenu_page(

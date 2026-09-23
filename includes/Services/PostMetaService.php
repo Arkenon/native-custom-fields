@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Post Meta Service for handling custom post types and fields
  *
@@ -24,6 +23,9 @@ use WP_Post_Type;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Post Meta Service for handling custom post types and fields.
+ */
 class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterface
 {
 
@@ -71,13 +73,13 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 					// Configurations saved before the empty-slug fix stored has_archive as an empty
 					// string when the archive was enabled without a custom slug. Restore it to true
 					// so the value is not dropped by the array_filter below.
-					if (isset($config['args']['has_archive']) && $config['args']['has_archive'] === '') {
+					if (isset($config['args']['has_archive']) && '' === $config['args']['has_archive']) {
 						$config['args']['has_archive'] = true;
 					}
 
 					//Remove null values from args
 					$arguments = array_filter($config['args'], function ($value) {
-						return $value !== null && $value !== '';
+						return null !== $value && '' !== $value;
 					});
 
 					// Only normalize the endpoint mask when rewrites are enabled: $arguments['rewrite']
@@ -113,7 +115,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	 * Both set by PHP array and admin create post types form
 	 *
 	 * @return PostTypeListResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function getPostTypes(): PostTypeListResponseModel
@@ -151,6 +153,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 
 	/**
 	 * Get configurations of post types
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -162,6 +165,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	/**
 	 * Get configurations of post types with applied filters
 	 * Filter applies php-based modifications to the post type configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -177,10 +181,10 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	 * Register post type via admin post type builder form
 	 *
 	 * @param string $menu_slug
-	 * @param array $values
+	 * @param array  $values
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function savePostTypeConfig(string $menu_slug, array $values): ResponseModel
@@ -196,7 +200,6 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 
 			return $result;
 		}
-
 
 		//Get values from create options page form and sanitize fields (uses sanitize_text_field for all)
 		$general = Helper::sanitizeArray($values['native_custom_fields_create_post_type_general']);
@@ -223,7 +226,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 			// Only replace the boolean with a slug when a non-empty custom slug is provided.
 			// An empty custom slug must keep has_archive as true so WordPress falls back to the post type slug.
 			$archive_custom_slug = isset($general['has_archive_custom_slug']) ? sanitize_title($general['has_archive_custom_slug']) : '';
-			if ($archive_custom_slug !== '') {
+			if ('' !== $archive_custom_slug) {
 				$has_archive = $archive_custom_slug;
 			}
 		}
@@ -233,7 +236,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 		if ($query_var) {
 			// Same as has_archive: an empty custom slug falls back to the post type slug.
 			$query_var_custom_slug = isset($general['query_var_custom_slug']) ? sanitize_title($general['query_var_custom_slug']) : '';
-			$query_var             = $query_var_custom_slug !== '' ? $query_var_custom_slug : $general['post_type'];
+			$query_var             = '' !== $query_var_custom_slug ? $query_var_custom_slug : $general['post_type'];
 		}
 
 		// Prepare rewrite settings
@@ -354,7 +357,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	 * @param string $post_type_slug
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function deletePostTypeConfigBySlug(string $post_type_slug): ResponseModel
@@ -375,6 +378,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	#region Custom Fields and Meta Boxes
 	/**
 	 * Get post meta fields configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -386,6 +390,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	/**
 	 * Get post meta fields configurations with applied filters
 	 * Filter applies PHP-based modifications to the post meta fields configurations
+     *
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -400,7 +405,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	 * Add meta boxes for post types
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function addMetaBoxes(): void
@@ -444,11 +449,11 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	/**
 	 * Render meta box
 	 *
-	 * @param WP_Post $post Post object
-	 * @param array $meta_box Meta box arguments
+	 * @param WP_Post $post Post object.
+	 * @param array   $meta_box Meta box arguments.
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function renderMetaBox(WP_Post $post, array $meta_box): void
 	{
@@ -503,10 +508,10 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	 * Add fields into a post type from builder form
 	 *
 	 * @param string $menu_slug
-	 * @param array $values
+	 * @param array  $values
 	 *
 	 * @return ResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function savePostMetaFieldsConfig(string $menu_slug, array $values): ResponseModel
@@ -556,7 +561,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 		// Prepare config as array (for database storage)
 		$config_array = [
 			'post_type' => sanitize_key($post_type_slug),
-			'sections'  => $sections
+			'sections'  => $sections,
 		];
 
 		//Get post meta fields configurations
@@ -580,8 +585,8 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	/**
 	 * Get field values for a post
 	 *
-	 * @param array $fields Fields configuration
-	 * @param int $id Post ID
+	 * @param array $fields Fields configuration.
+	 * @param int   $id Post ID.
 	 *
 	 * @return array Field values
 	 */
@@ -598,7 +603,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 
 			// Fall back to the default only when the meta key is missing: a stored false/0/''
 			// is a real value and must not be overwritten by the default.
-			if ($id === 0 || ! $this->postMetaRepository->postMetaExists($field['name'], $id)) {
+			if (0 === $id || ! $this->postMetaRepository->postMetaExists($field['name'], $id)) {
 				$values[$field['name']] = $get_default_value;
 			} else {
 				$get_value              = $this->postMetaRepository->getPostMeta($field['name'], $id);
@@ -612,10 +617,10 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	/**
 	 * Save post meta
 	 *
-	 * @param int $post_id Post ID
+	 * @param int $post_id Post ID.
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function savePostMeta(int $post_id): void
 	{
@@ -690,11 +695,11 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	/**
 	 * Register all post meta fields
 	 *
-	 * @param string $post_type
+	 * @param string       $post_type
 	 * @param WP_Post_Type $pt_object
 	 *
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function registerAllPostMeta(string $post_type, WP_Post_Type $pt_object): void
 	{
@@ -721,16 +726,15 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	 * Register fields for a post type
 	 *
 	 * @param string $post_type
-	 * @param array $fields
+	 * @param array  $fields
 	 *
 	 * @return void
 	 * @since 1.0.0
-	 *
 	 */
 	private function registerFieldsForPostType(string $post_type, array $fields): void
 	{
 
-		if (empty($fields) && $post_type === '') {
+		if (empty($fields) && '' === $post_type) {
 			return;
 		}
 
@@ -739,7 +743,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 			$meta_key = $field['name'];
 			$field_type = $field['fieldType'];
 
-			if ($field_type === 'section' || $field_type === 'meta_box') {
+			if ('section' === $field_type || 'meta_box' === $field_type) {
 				return;
 			}
 
@@ -798,11 +802,11 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 
 				// Recursive handling for group and repeater fields
 				// Sub-fields are in $field['fields'], not in $field_custom_info['fields']
-				if (($field['fieldType'] === 'group' || $field['fieldType'] === 'repeater') && ! empty($field['fields'])) {
+				if (('group' === $field['fieldType'] || 'repeater' === $field['fieldType']) && ! empty($field['fields'])) {
 					$field_custom_info['fields'] = $this->prepareFieldList($field['fields']);
 
 					// For repeater fields with table layout, hide labels and tags of inner fields
-					if ($field['fieldType'] === 'repeater' && isset($field_custom_info['layout']) && $field_custom_info['layout'] === 'table') {
+					if ('repeater' === $field['fieldType'] && isset($field_custom_info['layout']) && 'table' === $field_custom_info['layout']) {
 						$field_custom_info['hideRepeaterItemTag'] = true;
 						foreach ($field_custom_info['fields'] as &$item) {
 							$item['hideLabel'] = true;
@@ -813,7 +817,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 			}
 
 			// Condition to set default value for date and date time picker fields
-			if (($field['fieldType'] === 'date_picker' || $field['fieldType'] === 'date_time_picker')) {
+			if (('date_picker' === $field['fieldType'] || 'date_time_picker' === $field['fieldType'])) {
 				$field['default'] = $field_custom_info['currentDate'] ?? null;
 			}
 
@@ -845,7 +849,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	 * @param string $post_type
 	 *
 	 * @return PostMetaFieldsConfigResponseModel
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 */
 	public function getPostMetaConfigByPostType(string $post_type): PostMetaFieldsConfigResponseModel
 	{

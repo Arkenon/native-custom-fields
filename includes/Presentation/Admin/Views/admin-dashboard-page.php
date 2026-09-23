@@ -1,7 +1,7 @@
 <?php
-
 /**
  * View for the admin dashboard page
+ *
  * @since 1.0.0
  * @package NativeCustomFields
  */

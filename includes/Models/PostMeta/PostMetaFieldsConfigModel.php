@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Custom fields model for meta boxes of post types
  *
@@ -15,6 +14,9 @@ use NativeCustomFields\Models\Common\FieldsConfigModel;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Custom fields model for meta boxes of post types.
+ */
 class PostMetaFieldsConfigModel extends FieldsConfigModel
 {
 	public string $post_type;

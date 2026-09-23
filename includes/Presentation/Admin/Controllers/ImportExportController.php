@@ -19,6 +19,9 @@ use WP_REST_Response;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Import Export controller class.
+ */
 final class ImportExportController
 {
 
@@ -132,12 +135,12 @@ final class ImportExportController
     public function registerRestRoutes(): void
     {
         register_rest_route('native-custom-fields/v1', 'import-export/create-php', [
-            'methods' => 'POST',
-            'callback' => [$this, 'createPhp'],
+            'methods'             => 'POST',
+            'callback'            => [$this, 'createPhp'],
             'permission_callback' => function () {
                 return current_user_can('manage_options');
             },
-            'args' => [
+            'args'                => [
                 'choices' => ['required' => true, 'type' => 'array'],
             ],
         ]);

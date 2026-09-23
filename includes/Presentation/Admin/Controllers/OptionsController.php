@@ -1,5 +1,4 @@
 <?php
-
 /**
  * OptionsController class
  * Handles the options pages and their configurations
@@ -21,11 +20,15 @@ use WP_REST_Response;
 
 defined('ABSPATH') || exit;
 
+/**
+ * OptionsController class.
+ */
 class OptionsController
 {
 
     /**
      * Route namespace for REST API
+     *
      * @since 1.0.0
      * @var string
      */
@@ -33,6 +36,7 @@ class OptionsController
 
     /**
      * Inject OptionService
+     *
      * @var OptionService
      * @since 1.0.0
      */
@@ -63,43 +67,43 @@ class OptionsController
         #region Options Pages
         //Rest API route for get options pages list
         register_rest_route($this->routeNamespace, 'options/get-options-pages', [
-            'methods' => 'GET',
-            'callback' => [$this, 'getOptionsPages'],
+            'methods'             => 'GET',
+            'callback'            => [$this, 'getOptionsPages'],
             'permission_callback' => function () {
                 return current_user_can('manage_options');
-            }
+            },
         ]);
 
         //Rest API route for get options page configurations by menu slug
         register_rest_route($this->routeNamespace, 'options/get-options-page-config-by-menu-slug', [
-            'methods' => 'GET',
-            'callback' => [$this, 'getOptionsPageConfigByMenuSlug'],
+            'methods'             => 'GET',
+            'callback'            => [$this, 'getOptionsPageConfigByMenuSlug'],
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
-            'args' => [
+            'args'                => [
                 'menu_slug' => [
                     'required' => true,
-                    'type' => 'string',
+                    'type'     => 'string',
                 ],
             ],
         ]);
 
         //Rest API route for save options pages configuration
         register_rest_route($this->routeNamespace, 'options/save-option-pages-config', [
-            'methods' => 'POST',
-            'callback' => [$this, 'saveOptionPagesConfig'],
+            'methods'             => 'POST',
+            'callback'            => [$this, 'saveOptionPagesConfig'],
             'permission_callback' => function () {
                 return current_user_can('manage_options');
             },
-            'args' => [
+            'args'                => [
                 'menu_slug' => [
                     'required' => true,
-                    'type' => 'string',
+                    'type'     => 'string',
                 ],
-                'values' => [
+                'values'    => [
                     'required' => true,
-                    'type' => 'object',
+                    'type'     => 'object',
                 ],
             ],
         ]);
@@ -107,15 +111,15 @@ class OptionsController
         //Rest API route for to delete options page by menu slug
         register_rest_route($this->routeNamespace, '/options/delete-options-page', [
             [
-                'methods' => 'DELETE',
-                'callback' => [$this, 'deleteOptionsPageConfigByMenuSlug'],
+                'methods'             => 'DELETE',
+                'callback'            => [$this, 'deleteOptionsPageConfigByMenuSlug'],
                 'permission_callback' => function () {
                     return current_user_can('manage_options');
                 },
-                'args' => [
+                'args'                => [
                     'menu_slug' => [
                         'required' => true,
-                        'type' => 'string',
+                        'type'     => 'string',
                     ],
                 ],
             ],
@@ -123,19 +127,19 @@ class OptionsController
 
         //Rest API route for save options for general use
         register_rest_route($this->routeNamespace, 'options/save-options', [
-            'methods' => 'POST',
-            'callback' => [$this, 'saveOptions'],
+            'methods'             => 'POST',
+            'callback'            => [$this, 'saveOptions'],
             'permission_callback' => function () {
                 return current_user_can('manage_options');
             },
-            'args' => [
+            'args'                => [
                 'menu_slug' => [
                     'required' => true,
-                    'type' => 'string',
+                    'type'     => 'string',
                 ],
-                'values' => [
+                'values'    => [
                     'required' => true,
-                    'type' => 'object',
+                    'type'     => 'object',
                 ],
             ],
         ]);
@@ -144,19 +148,19 @@ class OptionsController
         #region Options Page Fields
         //Rest API route for save option page fields configuration
         register_rest_route($this->routeNamespace, 'options/save-option-page-fields-config', [
-            'methods' => 'POST',
-            'callback' => [$this, 'saveOptionPageFieldsConfig'],
+            'methods'             => 'POST',
+            'callback'            => [$this, 'saveOptionPageFieldsConfig'],
             'permission_callback' => function () {
                 return current_user_can('manage_options');
             },
-            'args' => [
+            'args'                => [
                 'menu_slug' => [
                     'required' => true,
-                    'type' => 'string',
+                    'type'     => 'string',
                 ],
-                'values' => [
+                'values'    => [
                     'required' => true,
-                    'type' => 'object',
+                    'type'     => 'object',
                 ],
             ],
         ]);
@@ -166,10 +170,10 @@ class OptionsController
     /**
      * Get options pages configuration by menu slug
      *
-     * @param WP_REST_Request $request REST API request
+     * @param WP_REST_Request $request REST API request.
      *
      * @return WP_Error|WP_REST_Response WP_REST_Response or WP_Error
-     * @throws Exception
+     * @throws Exception If an unexpected error occurs.
      * @since 1.0.0
      */
     public function getOptionsPageConfigByMenuSlug(WP_REST_Request $request)
@@ -184,10 +188,10 @@ class OptionsController
     /**
      * Delete options page configuration by menu slug
      *
-     * @param WP_REST_Request $request REST API request
+     * @param WP_REST_Request $request REST API request.
      *
      * @return WP_Error|WP_REST_Response WP_REST_Response or WP_Error
-     * @throws Exception
+     * @throws Exception If an unexpected error occurs.
      * @since 1.0.0
      */
     public function deleteOptionsPageConfigByMenuSlug(WP_REST_Request $request)
@@ -201,8 +205,9 @@ class OptionsController
 
     /**
      * Get options pages list
+     *
      * @return WP_REST_Response WP_REST_Response or WP_Error
-     * @throws Exception
+     * @throws Exception If an unexpected error occurs.
      * @since 1.0.0
      */
     public function getOptionsPages(): WP_REST_Response
@@ -215,10 +220,10 @@ class OptionsController
     /**
      * Handle save options request
      *
-     * @param WP_REST_Request $request Request object
+     * @param WP_REST_Request $request Request object.
      *
      * @return WP_REST_Response|WP_Error Response object
-     * @throws Exception
+     * @throws Exception If an unexpected error occurs.
      * @since 1.0.0
      */
     public function saveOptions(WP_REST_Request $request)
@@ -259,10 +264,10 @@ class OptionsController
     /**
      * Handle save option pages configuration request
      *
-     * @param WP_REST_Request $request Request object
+     * @param WP_REST_Request $request Request object.
      *
      * @return WP_REST_Response|WP_Error Response object
-     * @throws Exception
+     * @throws Exception If an unexpected error occurs.
      * @since 1.0.0
      */
     public function saveOptionPagesConfig(WP_REST_Request $request)
@@ -279,10 +284,10 @@ class OptionsController
     /**
      * Handle save option page fields configuration request
      *
-     * @param WP_REST_Request $request Request object
+     * @param WP_REST_Request $request Request object.
      *
      * @return WP_REST_Response|WP_Error Response object
-     * @throws Exception
+     * @throws Exception If an unexpected error occurs.
      * @since 1.0.0
      */
     public function saveOptionPageFieldsConfig(WP_REST_Request $request)
@@ -301,8 +306,9 @@ class OptionsController
 
     /**
      * Add admin menus pages from options pages configurations
+     *
      * @return void
-     * @throws Exception
+     * @throws Exception If an unexpected error occurs.
      * @since 1.0.0
      */
     public function addMenuPages(): void
@@ -345,6 +351,7 @@ class OptionsController
     /**
      * Render method for options pages
      * It provides a wrapper div for React app
+     *
      * @return void
      * @since 1.0.0
      */

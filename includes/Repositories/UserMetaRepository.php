@@ -1,5 +1,4 @@
 <?php
-
 /**
  * User meta repository for handling user meta fields
  *
@@ -14,6 +13,9 @@ use WP_User;
 
 defined('ABSPATH') || exit;
 
+/**
+ * User meta repository for handling user meta fields.
+ */
 class UserMetaRepository extends BaseRepository
 {
 
@@ -21,8 +23,8 @@ class UserMetaRepository extends BaseRepository
 	 * Get field values for a user meta field
 	 *
 	 * @param string $key
-	 * @param int $user_id
-	 * @param bool $single
+	 * @param int    $user_id
+	 * @param bool   $single
 	 *
 	 * @return mixed The value of the meta field if found.
 	 *               False if the meta key does not exist.
@@ -37,7 +39,7 @@ class UserMetaRepository extends BaseRepository
 	 * Unlike getUserMeta(), this tells a stored falsy value (false, 0, '') apart from a missing one.
 	 *
 	 * @param string $key
-	 * @param int $user_id
+	 * @param int    $user_id
 	 *
 	 * @return bool
 	 * @since 1.3.3
@@ -50,9 +52,9 @@ class UserMetaRepository extends BaseRepository
 	/**
 	 * Save user meta
 	 *
-	 * @param int $user_id User ID
-	 * @param string $meta_key Meta key
-	 * @param mixed $value Meta value
+	 * @param int    $user_id User ID.
+	 * @param string $meta_key Meta key.
+	 * @param mixed  $value Meta value.
 	 *
 	 * @return bool|int Meta ID if the key didn't exist, true on successful update, false on failure.
 	 * @since 1.0.0

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Post Type Abilities Service
  * Registers WP Abilities API abilities for creating, updating, and deleting custom post types.
@@ -17,6 +16,9 @@ use NativeCustomFields\Services\PostMetaService;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Post Type Abilities Service.
+ */
 class PostTypeAbilitiesService
 {
     private PostMetaService $postMetaService;
@@ -122,7 +124,7 @@ class PostTypeAbilitiesService
     /**
      * Save Post Type Ability
      *
-     * @param array $input Input data
+     * @param array $input Input data.
      * @return array Response data
      * @since 1.0.1
      */
@@ -151,11 +153,11 @@ class PostTypeAbilitiesService
             $singular_lower = strtolower($singular);
 
             $labels_data = [
-                'name'          => $plural,
-                'singular_name' => $singular,
-                'add_new'       => __('Add New', 'native-custom-fields'),
-                'menu_name'     => $singular,
-                'name_admin_bar' => $singular,
+                'name'                     => $plural,
+                'singular_name'            => $singular,
+                'add_new'                  => __('Add New', 'native-custom-fields'),
+                'menu_name'                => $singular,
+                'name_admin_bar'           => $singular,
                 /* translators: %s: singular post type name */
                 'add_new_item'             => sprintf(__('Add New %s', 'native-custom-fields'), $singular),
                 /* translators: %s: singular post type name */
@@ -224,14 +226,14 @@ class PostTypeAbilitiesService
                 ],
                 'native_custom_fields_create_post_type_labels' => $labels_data,
                 'native_custom_fields_create_post_type_visibility' => [
-                    'public'             => $input['public'] ?? true,
-                    'hierarchical'       => $input['hierarchical'] ?? false,
+                    'public'              => $input['public'] ?? true,
+                    'hierarchical'        => $input['hierarchical'] ?? false,
                     'exclude_from_search' => false,
-                    'publicly_queryable' => true,
-                    'show_ui'            => true,
-                    'show_in_menu'       => true,
-                    'show_in_admin_bar'  => true,
-                    'show_in_nav_menus'  => true,
+                    'publicly_queryable'  => true,
+                    'show_ui'             => true,
+                    'show_in_menu'        => true,
+                    'show_in_admin_bar'   => true,
+                    'show_in_nav_menus'   => true,
                 ],
                 'native_custom_fields_create_post_type_capabilities' => [
                     'capability_type'  => 'post',

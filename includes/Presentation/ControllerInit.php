@@ -2,6 +2,7 @@
 /**
  * Base class for Presentation layer
  * Contains all controllers
+ *
  * @since 1.0.0
  * @package NativeCustomFields
  * @subpackage Presentation
@@ -22,9 +23,13 @@ use NativeCustomFields\Presentation\Admin\Controllers\TermMetaController;
 use NativeCustomFields\Presentation\Admin\Controllers\UserMetaController;
 
 
+/**
+ * Base class for Presentation layer.
+ */
 final class ControllerInit {
 	/**
 	 * List of controllers to be initialized
+     *
 	 * @var array
 	 * @since 1.0.0
 	 */
@@ -35,12 +40,13 @@ final class ControllerInit {
 		TermMetaController::class,
 		UserMetaController::class,
 		ImportExportController::class,
-		AbilityContoller::class
+		AbilityContoller::class,
 	];
 
 	/**
 	 * Initialize the program
-	 * @throws Exception
+     *
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function __construct() {
@@ -57,7 +63,8 @@ final class ControllerInit {
 
 	/**
 	 * Initialize controllers
-	 * @throws Exception
+     *
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function initControllers() {

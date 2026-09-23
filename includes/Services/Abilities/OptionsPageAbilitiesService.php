@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Options Page Abilities Service
  * Registers WP Abilities API abilities for creating, updating, and deleting options pages and their fields.
@@ -16,6 +15,9 @@ use NativeCustomFields\Services\OptionService;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Options Page Abilities Service.
+ */
 class OptionsPageAbilitiesService
 {
     use AbilityFieldAdapterTrait;
@@ -29,7 +31,7 @@ class OptionsPageAbilitiesService
 
     /**
      * Register Abilities
-     * 
+     *
      * @return void
      * @since 1.0.1
      */
@@ -139,7 +141,7 @@ class OptionsPageAbilitiesService
     /**
      * Save Options Page Ability
      *
-     * @param array $input Input data
+     * @param array $input Input data.
      * @return array Response data
      * @since 1.0.1
      */
@@ -188,7 +190,7 @@ class OptionsPageAbilitiesService
     /**
      * Save Options Page Fields Ability
      *
-     * @param array $input Input data
+     * @param array $input Input data.
      * @return array Response data
      * @since 1.0.1
      */

@@ -1,7 +1,7 @@
 <?php
-
 /**
  * Base repository class for the plugin
+ *
  * @package NativeCustomFields
  * @subpackage Repositories
  * @since 1.0.0
@@ -11,6 +11,9 @@ namespace NativeCustomFields\Repositories;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Base repository class for the plugin.
+ */
 class BaseRepository
 {
 	/**
@@ -29,7 +32,7 @@ class BaseRepository
 	/**
 	 * Save configurations
 	 *
-	 * @param array $config
+	 * @param array  $config
 	 * @param string $config_name
 	 *
 	 * @return bool

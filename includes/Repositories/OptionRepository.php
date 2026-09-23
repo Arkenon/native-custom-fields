@@ -1,7 +1,7 @@
 <?php
-
 /**
  * Option repository class for the plugin
+ *
  * @package NativeCustomFields
  * @subpackage Repositories
  * @since 1.0.0
@@ -11,13 +11,16 @@ namespace NativeCustomFields\Repositories;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Option repository class for the plugin.
+ */
 class OptionRepository extends BaseRepository
 {
 
 	/**
 	 * Get option values
 	 *
-	 * @param string $option_name Option name
+	 * @param string $option_name Option name.
 	 *
 	 * @return mixed Value of the option. A value of any type may be returned, including
 	 *               scalar (string, boolean, float, integer), null, array, object.
@@ -35,8 +38,8 @@ class OptionRepository extends BaseRepository
 	/**
 	 * Save option values
 	 *
-	 * @param array $values Values to save
-	 * @param string $option_name Option name
+	 * @param array  $values Values to save.
+	 * @param string $option_name Option name.
 	 *
 	 * @return bool True, if saved successfully, array with an error message otherwise
 	 * @since 1.0.0

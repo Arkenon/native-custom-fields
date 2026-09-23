@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Term meta fields model for taxonomies
  *
@@ -15,6 +14,9 @@ use NativeCustomFields\Models\Common\FieldsConfigModel;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Term meta fields model for taxonomies.
+ */
 class TermMetaFieldsConfigModel extends FieldsConfigModel
 {
 	public string $taxonomy;

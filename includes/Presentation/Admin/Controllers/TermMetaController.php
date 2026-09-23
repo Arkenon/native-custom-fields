@@ -1,5 +1,4 @@
 <?php
-
 /**
  * TermMetaController class
  * Responsible for handling custom taxonomies, term meta fields, and related REST API endpoints.
@@ -20,6 +19,9 @@ use WP_REST_Response;
 
 defined('ABSPATH') || exit;
 
+/**
+ * TermMetaController class.
+ */
 class TermMetaController
 {
 
@@ -69,7 +71,7 @@ class TermMetaController
 			'callback'            => [$this, 'getTaxonomies'],
 			'permission_callback' => function () {
 				return current_user_can('edit_posts');
-			}
+			},
 		]);
 
 		//Rest API route for save custom taxonomy configuration
@@ -133,7 +135,7 @@ class TermMetaController
 	 * Get taxonomy list registered in the site
 	 *
 	 * @return WP_REST_Response WP_REST_Response or WP_Error
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function getTaxonomies(): WP_REST_Response
@@ -147,10 +149,10 @@ class TermMetaController
 	/**
 	 * Delete taxonomy configuration by slug
 	 *
-	 * @param WP_REST_Request $request Request object
+	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response WP_REST_Response or WP_Error
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function deleteTaxonomyConfigBySlug(WP_REST_Request $request): WP_REST_Response
@@ -166,10 +168,10 @@ class TermMetaController
 	/**
 	 * Handle save custom taxonomy configuration request
 	 *
-	 * @param WP_REST_Request $request Request object
+	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response|WP_Error Response object
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function saveCustomTaxonomyConfig(WP_REST_Request $request)
@@ -186,10 +188,10 @@ class TermMetaController
 	/**
 	 * Handle save term meta fields configuration request
 	 *
-	 * @param WP_REST_Request $request Request object
+	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response|WP_Error Response object
-	 * @throws Exception
+	 * @throws Exception If an unexpected error occurs.
 	 * @since 1.0.0
 	 */
 	public function saveTermMetaFieldsConfig(WP_REST_Request $request)

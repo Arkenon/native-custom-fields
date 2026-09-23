@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /**
  * Plugin Name: Native Custom Fields
  * Plugin URI: https://nativecustomfields.com
@@ -14,8 +12,11 @@ declare(strict_types=1);
  * Domain Path: /languages
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ *
  * @package NativeCustomFields
  */
+
+declare(strict_types=1);
 
 defined('ABSPATH') || exit;
 
@@ -39,6 +40,11 @@ if (!defined('NATIVE_CUSTOM_FIELDS_INCLUDES_PATH')) {
 
 //Activation
 if (!function_exists('nativeCustomFieldsInitActivation')) {
+    /**
+     * Run the plugin's activation routine.
+     *
+     * @return void
+     */
     function nativeCustomFieldsInitActivation()
     {
         $activation_service = new ActivationService();
@@ -50,6 +56,11 @@ if (!function_exists('nativeCustomFieldsInitActivation')) {
 
 //Deactivation
 if (!function_exists('nativeCustomFieldsInitDeactivation')) {
+    /**
+     * Run the plugin's deactivation routine.
+     *
+     * @return void
+     */
     function nativeCustomFieldsInitDeactivation()
     {
         $deactivation_service = new DeactivationService();

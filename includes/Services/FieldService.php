@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Field Service
  * Provides available field types and container types.
@@ -14,6 +13,9 @@ namespace NativeCustomFields\Services;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Field Service.
+ */
 class FieldService
 {
 
@@ -84,45 +86,45 @@ class FieldService
 
     /**
      * Get dashboard items to display on the dashboard
+     *
      * @return array
      * @since 1.0.0
-     *
      */
     public function getDashboardItems(): array
     {
         $items = [
             [
-                'label' => __('Post Types & Post Meta Fields', 'native-custom-fields'),
+                'label'       => __('Post Types & Post Meta Fields', 'native-custom-fields'),
                 'description' => __('Create custom post types with custom fields', 'native-custom-fields'),
-                'icon' => 'postList',
-                'page' => 'native-custom-fields-post-type-builder'
+                'icon'        => 'postList',
+                'page'        => 'native-custom-fields-post-type-builder',
             ],
             [
-                'label' => __('Custom Taxonomies & Term Meta Fields', 'native-custom-fields'),
+                'label'       => __('Custom Taxonomies & Term Meta Fields', 'native-custom-fields'),
                 'description' => __('Create custom taxonomies with custom fields', 'native-custom-fields'),
-                'icon' => 'category',
-                'page' => 'native-custom-fields-taxonomy-builder'
+                'icon'        => 'category',
+                'page'        => 'native-custom-fields-taxonomy-builder',
             ],
             [
-                'label' => __('User Meta Fields', 'native-custom-fields'),
+                'label'       => __('User Meta Fields', 'native-custom-fields'),
                 'description' => __('Add custom fields to user profiles', 'native-custom-fields'),
-                'icon' => 'people',
-                'page' => 'native-custom-fields-user-meta-builder'
+                'icon'        => 'people',
+                'page'        => 'native-custom-fields-user-meta-builder',
             ],
 
             // Added 1.0.5
             [
-                'label' => __('Create Option Pages', 'native-custom-fields'),
+                'label'       => __('Create Option Pages', 'native-custom-fields'),
                 'description' => __('Create custom option pages for your site settings', 'native-custom-fields'),
-                'icon' => 'settings',
-                'page' => 'native-custom-fields-options-page-builder',
+                'icon'        => 'settings',
+                'page'        => 'native-custom-fields-options-page-builder',
             ],
 
             [
-                'label' => __('Import/Export Data', 'native-custom-fields'),
+                'label'       => __('Import/Export Data', 'native-custom-fields'),
                 'description' => __('Import or export data with JSON or PHP format.', 'native-custom-fields'),
-                'icon' => 'cloudDownload',
-                'page' => 'native-custom-fields-import-export',
+                'icon'        => 'cloudDownload',
+                'page'        => 'native-custom-fields-import-export',
             ],
         ];
         return apply_filters('native_custom_fields_dashboard_items', $items);

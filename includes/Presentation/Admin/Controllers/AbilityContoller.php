@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Options Page Builder controller class
  * Adds the Options Page Builder submenu under the main plugin menu.
@@ -22,6 +21,9 @@ use NativeCustomFields\Services\Abilities\OptionsPageAbilitiesService;
 
 defined('ABSPATH') || exit;
 
+/**
+ * Options Page Builder controller class.
+ */
 final class AbilityContoller
 {
 
