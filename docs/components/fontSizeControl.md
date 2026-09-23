@@ -26,7 +26,6 @@ Use this config when `fieldType` is `font_size`.
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `size` | No | `string` | `default` | `default`, `__unstable-large` | Sets control size. |
 | `units` | No | `string` | `["px","em","rem","vw","vh"]` | `px`, `em`, `rem`, `vw`, `vh` | Available units for custom font size selection. Accepts a JSON array of unit strings. |
 | `disableCustomFontSizes` | No | `bool` | `false` | `true`, `false` | If true, the user is forced to pick one of the pre-defined font sizes from fontSizes. |
 | `withReset` | No | `bool` | `true` | `true`, `false` | If true, a reset button will be displayed alongside the input field when a custom font size is active. |

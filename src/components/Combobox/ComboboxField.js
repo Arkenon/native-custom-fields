@@ -43,7 +43,6 @@ const ComboboxField = (
 	return (
 		<ComboboxControl
 			{...rest}
-			__next40pxDefaultSize
 			__nextHasNoMarginBottom
 			className={className}
 			isLoading={isLoading}

@@ -16,12 +16,11 @@ const fieldCustomInfoInput = {
             fieldType: 'select',
             name: 'size',
             fieldLabel: __('Size', 'native-custom-fields'),
-            fieldHelpText: __('Adjusts the size of the input. Allowed values: default, small, __unstable-large, compact', 'native-custom-fields'),
+            fieldHelpText: __('Adjusts the size of the input. Allowed values: default, small, compact', 'native-custom-fields'),
             default: 'default',
             options: [
                 {label: __('Default', 'native-custom-fields'), value: 'default'},
                 {label: __('Small', 'native-custom-fields'), value: 'small'},
-                {label: __('Large', 'native-custom-fields'), value: '__unstable-large'},
                 {label: __('Compact', 'native-custom-fields'), value: 'compact'}
             ]
         },

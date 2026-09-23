@@ -265,7 +265,6 @@ const RenderSingleField = (props) => {
                     type={inputType || 'text'}
                     help={validationHelp}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={validationClassName}
                     name={name}
                     value={currentValue}
@@ -276,7 +275,6 @@ const RenderSingleField = (props) => {
                 return (<NumberControl
                     {...restElementProps}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={className}
                     name={name}
                     value={currentValue}
@@ -289,7 +287,6 @@ const RenderSingleField = (props) => {
                 return (<InputControl
                     {...inputControlProps}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={className}
                     name={name}
                     value={currentValue}
@@ -319,7 +316,6 @@ const RenderSingleField = (props) => {
                     {...selectControlProps}
                     options={selectOptions}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={className}
                     name={name}
                     value={selectValue}
@@ -359,7 +355,6 @@ const RenderSingleField = (props) => {
                 return (<RangeControl
                     {...restElementProps}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={className}
                     name={name}
                     value={currentValue ? parseInt(currentValue) : 0}
@@ -415,7 +410,6 @@ const RenderSingleField = (props) => {
                 return (<UnitControl
                     {...restElementProps}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={className}
                     name={name}
                     value={currentValue}
@@ -439,11 +433,13 @@ const RenderSingleField = (props) => {
                     value={currentValue}
                     onChange={handleChange}
                 />);
-            case 'border_box':
+            case 'border_box': {
+                // `size` is deprecated and has no effect as of WP 7.1; drop any value
+                // still stored in an existing field config so it never reaches the control.
+                const {size, ...borderBoxProps} = restElementProps;
                 return (<BorderBoxControl
-                    {...restElementProps}
+                    {...borderBoxProps}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={className}
                     name={name}
                     value={currentValue || {
@@ -455,22 +451,23 @@ const RenderSingleField = (props) => {
                     colors={parseJsonArray(restElementProps.colors, 'border_box')}
                     onChange={handleChange}
                 />);
-            case 'border':
+            }
+            case 'border': {
+                const {size, ...borderProps} = restElementProps;
                 return (<BorderControl
-                    {...restElementProps}
+                    {...borderProps}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={className}
                     name={name}
                     value={currentValue || undefined}
                     colors={parseJsonArray(restElementProps.colors, 'border')}
                     onChange={handleChange}
                 />);
+            }
             case 'box':
                 return (<BoxControl
                     {...restElementProps}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={className}
                     name={name}
                     values={currentValue || {
@@ -495,7 +492,6 @@ const RenderSingleField = (props) => {
                     {...restElementProps}
                     options={[...resolvedOptions]}
                     __nextHasNoMarginBottom
-                    __next40pxDefaultSize
                     className={className}
                     value={currentValue}
                     onChange={handleChange}
@@ -531,15 +527,16 @@ const RenderSingleField = (props) => {
                 >
                     {restElementProps.children || restElementProps.text}
                 </ExternalLink>);
-            case 'font_size':
+            case 'font_size': {
+                const {size, ...fontSizeProps} = restElementProps;
                 return (<FontSizePicker
-                    {...restElementProps}
-                    __next40pxDefaultSize
+                    {...fontSizeProps}
                     className={className}
                     value={currentValue}
                     fontSizes={parseJsonArray(restElementProps.fontSizes, 'font_size')}
                     onChange={handleChange}
                 />);
+            }
             case 'file_upload':
                 return (<FileUploadField
                     elementProps={{...restElementProps}}
@@ -567,7 +564,6 @@ const RenderSingleField = (props) => {
                         : undefined;
                 return (<FormTokenField
                     {...tokenFieldProps}
-                    __next40pxDefaultSize
                     __nextHasNoMarginBottom
                     className={className}
                     value={currentValue || []}

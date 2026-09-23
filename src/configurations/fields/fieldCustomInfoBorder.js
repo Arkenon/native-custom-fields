@@ -7,17 +7,6 @@ const fieldCustomInfoBorder = {
     layout: 'grid',
     fields: [
         {
-            fieldType: 'select',
-            name: 'size',
-            fieldLabel: __('Size', 'native-custom-fields'),
-            fieldHelpText: __('Size of the control. Allowed values: default, __unstable-large', 'native-custom-fields'),
-            default: 'default',
-            options: [
-                {label: __('Default', 'native-custom-fields'), value: 'default'},
-                {label: __('Large', 'native-custom-fields'), value: '__unstable-large'}
-            ]
-        },
-        {
             fieldType: 'toggle',
             name: 'disableCustomColors',
             fieldLabel: __('Disable Custom Colors', 'native-custom-fields'),

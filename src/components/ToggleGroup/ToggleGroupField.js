@@ -13,6 +13,9 @@ const ToggleGroupField = (
 		options = [],
 		label,
 		isBlock = false,
+		// `size` is deprecated on ToggleGroupControl as of WP 7.1; swallow it
+		// so a value left in an existing field config never reaches the control.
+		size,
 		...rest
 	}
 ) => {
@@ -38,7 +41,6 @@ const ToggleGroupField = (
 			isBlock={isBlock}
 			onChange={changeHandler}
 			__nextHasNoMarginBottom
-			__next40pxDefaultSize
 		>
 			{normalizedOptions.map(({value: v, label: l}) => (
 				<ToggleGroupControlOption key={v} value={v} label={l}/>

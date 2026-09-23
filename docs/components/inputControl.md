@@ -27,7 +27,7 @@ Use this config when `fieldType` is `input`.
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
 | `id` | No | `string` |  |  | The id of the input element. |
-| `size` | No | `string` | `default` | `default`, `small`, `__unstable-large`, `compact` | Adjusts the size of the input. |
+| `size` | No | `string` | `default` | `default`, `small`, `compact` | Adjusts the size of the input. |
 | `placeholder` | No | `string` |  |  | Placeholder text for the input. |
 | `prefix` | No | `string` |  |  | Renders an element before the input. Accepts text (e.g. `"$"`, `"https://"`) or WordPress icon names (e.g. `"search"`, `"external"`, `"lock"`). |
 | `suffix` | No | `string` |  |  | Renders an element after the input. Accepts text (e.g. `"USD"`, `".com"`) or WordPress icon names (e.g. `"search"`, `"external"`, `"lock"`). |

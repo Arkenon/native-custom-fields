@@ -94,7 +94,6 @@ const FileUploadField = ({elementProps, className, handleChange, currentValue}) 
                     className={className}
                     disabled={isUploading}
                     onChange={uploadFiles}
-                    __next40pxDefaultSize
                     icon={<Icon icon={upload} />}
                     accept={elementProps.accept || '*'}
                 />

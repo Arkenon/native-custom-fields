@@ -124,7 +124,6 @@ const MediaLibraryField = ({elementProps = {}, className, handleChange, currentV
                     className={`native-custom-fields-media-library-open-button ${className || ''}`}
                     onClick={openMediaLibrary}
                     icon={<Icon icon={upload} />}
-                    __next40pxDefaultSize
                     variant="secondary"
                 >
                     {__('Select from Media Library', 'native-custom-fields')}
@@ -143,7 +142,6 @@ const MediaLibraryField = ({elementProps = {}, className, handleChange, currentV
                             onClick={openMediaLibrary}
                             icon={<Icon icon={upload} />}
                             variant="secondary"
-                            __next40pxDefaultSize
                         >
                             {__('Add More', 'native-custom-fields')}
                         </Button>

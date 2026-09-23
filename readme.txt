@@ -1,9 +1,10 @@
 === Native Custom Fields - Custom Content Types and Meta Fields ===
 Contributors: arkenon
 Tags: custom fields, fields, meta, repeater, ncf
+Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.3.8
+Stable tag: 1.3.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +136,14 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 
 == Changelog ==
+
+= 1.3.9 =
+* Updated: Aligned the editor controls with the WordPress 7.1 component changes, so no deprecation notices are logged on 7.1.
+* Removed: The "Size" option from the border, border box and font size field settings. The underlying `size` prop is deprecated and has no effect as of WordPress 7.1. A value stored by an earlier version is now ignored instead of being passed to the control.
+* Removed: The "Large" (`__unstable-large`) choice from the input field "Size" setting. The remaining choices are default, small and compact.
+* Removed: The `__next40pxDefaultSize` prop from every control. The 40px default height rollout is complete in WordPress 7.1 and the prop no longer has any effect.
+* Updated: Border, border box, font size and input control documentation to match the available settings.
+* Added: Missing "Requires at least" header in readme.txt and the plugin file. The plugin already assumed WordPress 7.0 as its minimum, but neither header declared it.
 
 = 1.3.8 =
 * Added: Missing "Tested up to: 7.1" tag in readme.txt

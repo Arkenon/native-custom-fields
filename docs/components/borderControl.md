@@ -26,7 +26,6 @@ Use this config when `fieldType` is `border`.
 
 | Parameter | Required | Type | Default | Choices | Description |
 |---|---|---|---|---|---|
-| `size` | No | `string` | `default` | `default`, `__unstable-large` | Sets control size. |
 | `disableCustomColors` | No | `bool` | `false` | `true`, `false` | Toggles the ability to choose custom colors. |
 | `disableUnits` | No | `bool` | `false` | `true`, `false` | Controls whether unit selection should be disabled. |
 | `enableAlpha` | No | `bool` | `false` | `true`, `false` | Controls whether the alpha channel will be offered when selecting custom colors. |

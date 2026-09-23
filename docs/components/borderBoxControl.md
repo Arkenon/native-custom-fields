@@ -28,7 +28,6 @@ Use this config when `fieldType` is `border_box`.
 |---|---|---|---|---|---|
 | `popoverPlacement` | No | `string` | `top` | `top`, `left`, `right`, `bottom`, `top-end`, `top-start`, `left-end`, `left-start`, `right-end`, `right-start`, `bottom-end`, `bottom-start`, `overlay` | The position of the color popovers relative to the control wrapper. |
 | `popoverOffset` | No | `int` |  |  | The space between the popover and the control wrapper. |
-| `size` | No | `string` | `default` | `default`, `__unstable-large` | Sets control size. |
 | `disableCustomColors` | No | `bool` | `false` | `true`, `false` | Toggles the ability to choose custom colors. |
 | `enableAlpha` | No | `bool` | `false` | `true`, `false` | Controls whether the alpha channel will be offered when selecting custom colors. |
 | `enableStyle` | No | `bool` | `true` | `true`, `false` | Controls whether to support border style selections. |
