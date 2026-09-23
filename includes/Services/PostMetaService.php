@@ -416,6 +416,12 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 			// Get meta boxes (sections) from configuration
 			$meta_boxes = Helper::getSectionsFromConfig($config);
 
+			// WooCommerce order types (e.g. shop_order) are edited on a dedicated
+			// admin screen rather than the post type's own edit screen when High-
+			// Performance Order Storage (HPOS) is active; registering the meta box
+			// under the post type slug would silently never render there.
+			$screen = $this->resolveMetaBoxScreenId($post_type);
+
 			foreach ($meta_boxes as $meta_box) {
 
 				// Extract meta box data from array
@@ -430,7 +436,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 					$meta_box_id,
 					$meta_box_title,
 					[$this, 'renderMetaBox'], //Always use this callback
-					$post_type,
+					$screen,
 					$meta_box_context,
 					$meta_box_priority,
 					[
@@ -442,16 +448,61 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	}
 
 	/**
+	 * Resolve the admin screen a meta box should be registered against.
+	 *
+	 * For most post types this is just the post type slug. WooCommerce order
+	 * types are the exception: wc_get_page_screen_id() returns the dedicated
+	 * "woocommerce_page_wc-orders" screen when High-Performance Order Storage
+	 * is enabled, or the post type slug unchanged when it isn't (or when the
+	 * type isn't a WooCommerce order type at all).
+	 *
+	 * @param string $post_type Post type slug.
+	 *
+	 * @return string Screen ID to register the meta box against.
+	 * @since 1.3.7
+	 */
+	private function resolveMetaBoxScreenId(string $post_type): string
+	{
+		if (! function_exists('wc_get_page_screen_id')) {
+			return $post_type;
+		}
+
+		$screen_id = wc_get_page_screen_id($post_type);
+
+		return '' !== $screen_id ? $screen_id : $post_type;
+	}
+
+	/**
+	 * Check whether a post type slug is a WooCommerce order type.
+	 *
+	 * @param string $post_type Post type slug.
+	 *
+	 * @return bool
+	 * @since 1.3.7
+	 */
+	private function isWooCommerceOrderType(string $post_type): bool
+	{
+		return function_exists('wc_get_order_types') && in_array($post_type, wc_get_order_types(), true);
+	}
+
+	/**
 	 * Render meta box
 	 *
-	 * @param WP_Post $post Post object
+	 * $post is a WP_Post for a standard post type's edit screen, or a
+	 * WooCommerce order object (an instance of \WC_Abstract_Order, which
+	 * does not extend WP_Post) when registered against a WooCommerce order
+	 * screen -- hence the loose parameter type.
+	 *
+	 * @param WP_Post|object $post Post or WooCommerce order object.
 	 * @param array $meta_box Meta box arguments
 	 *
 	 * @return void
 	 * @throws Exception
 	 */
-	public function renderMetaBox(WP_Post $post, array $meta_box): void
+	public function renderMetaBox($post, array $meta_box): void
 	{
+
+		$object_id = $post instanceof WP_Post ? $post->ID : (int) $post->get_id();
 
 		// Get fields from meta box args (already in array format)
 		$fields_sections = $meta_box['args']['fields'];
@@ -464,7 +515,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 
 		// Resolve the values once so the hidden inputs and the React wrapper always agree,
 		// including the fields that fall back to their configured default value.
-		$field_values = $this->getFieldValues($fields, $post->ID);
+		$field_values = $this->getFieldValues($fields, $object_id, $post instanceof WP_Post ? null : $post);
 
 		$hidden_fields_html = '';
 		foreach ($fields as $field) {
@@ -581,11 +632,13 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	 * Get field values for a post
 	 *
 	 * @param array $fields Fields configuration
-	 * @param int $id Post ID
+	 * @param int $id Post ID (or WooCommerce order ID, when $order is given)
+	 * @param object|null $order WooCommerce order object to read values from instead of post
+	 *                           meta, when $id identifies a WooCommerce order rather than a post.
 	 *
 	 * @return array Field values
 	 */
-	public function getFieldValues(array $fields, int $id = 0): array
+	public function getFieldValues(array $fields, int $id = 0, $order = null): array
 	{
 		$values = [];
 		foreach ($fields as $field) {
@@ -596,6 +649,20 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 			$field_type        = $field['fieldType'] ?? 'text';
 			$get_default_value = Helper::castFieldValue($field['default'] ?? '', $field_type);
 
+			if (null !== $order) {
+				// WooCommerce order meta lives in its own storage (a custom table
+				// under HPOS), not necessarily in the wp_postmeta table, so it's
+				// read through the order object rather than postMetaRepository.
+				if ($id === 0 || ! $order->meta_exists($field['name'])) {
+					$values[$field['name']] = $get_default_value;
+				} else {
+					$get_value              = $order->get_meta($field['name'], true);
+					$values[$field['name']] = Helper::castFieldValue($get_value, $field_type);
+				}
+
+				continue;
+			}
+
 			// Fall back to the default only when the meta key is missing: a stored false/0/''
 			// is a real value and must not be overwritten by the default.
 			if ($id === 0 || ! $this->postMetaRepository->postMetaExists($field['name'], $id)) {
@@ -604,6 +671,63 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 				$get_value              = $this->postMetaRepository->getPostMeta($field['name'], $id);
 				$values[$field['name']] = Helper::castFieldValue($get_value, $field_type);
 			}
+		}
+
+		return $values;
+	}
+
+	/**
+	 * Get the configured fields (from every meta box) for a post type.
+	 *
+	 * @param string $post_type Post type slug.
+	 *
+	 * @return array Flat list of field configurations.
+	 * @since 1.3.7
+	 */
+	private function getConfiguredFieldsForPostType(string $post_type): array
+	{
+		$post_meta_fields_config = $this->getPostMetaFieldsConfigurationsFiltered();
+
+		if (empty($post_meta_fields_config[$post_type])) {
+			return [];
+		}
+
+		$fields = [];
+		foreach (Helper::getSectionsFromConfig($post_meta_fields_config[$post_type]) as $meta_box) {
+			foreach ($meta_box['fields'] ?? [] as $field) {
+				if (isset($field['name'])) {
+					$fields[] = $field;
+				}
+			}
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Read and sanitize submitted values for a list of configured fields.
+	 *
+	 * @param array $fields Field configurations, as returned by getConfiguredFieldsForPostType().
+	 *
+	 * @return array Sanitized values, keyed by meta key.
+	 * @since 1.3.7
+	 */
+	private function extractSubmittedFieldValues(array $fields): array
+	{
+		$values = [];
+		foreach ($fields as $field) {
+			$meta_key = $field['name'];
+
+			// Always save the value, even if it's empty (important for checkboxes and radios)
+			$value = Helper::getRawValue($meta_key, 'post') ?? '';
+
+			// Try to decode JSON if the value is a JSON string (group/repeater fields are posted as JSON)
+			if (is_string($value) && Helper::isJson($value)) {
+				$value = json_decode($value, true);
+			}
+
+			// Sanitize according to the field's fieldType (preserves line breaks for textarea, etc.)
+			$values[$meta_key] = Helper::sanitizeFieldValue($value, $field['fieldType'] ?? 'text', $field['fields'] ?? [], $meta_key);
 		}
 
 		return $values;
@@ -638,53 +762,78 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 			return;
 		}
 
-		// Get fields for this post type
-		$get_post_type = get_post_type($post_id);
+		$post_type = get_post_type($post_id);
 
-		$post_meta_fields_config = $this->getPostMetaFieldsConfigurationsFiltered();
-
-		if (empty($post_meta_fields_config)) {
+		// WooCommerce order types are saved by saveOrderMeta(), hooked to
+		// woocommerce_process_shop_order_meta: under High-Performance Order
+		// Storage, save_post never fires for an order save at all, and even
+		// on stores where it does fire (legacy/sync), writing through
+		// update_post_meta() here would not reach the order's own storage.
+		if ($this->isWooCommerceOrderType($post_type)) {
 			return;
 		}
 
-		foreach ($post_meta_fields_config as $post_type => $config) {
+		$fields = $this->getConfiguredFieldsForPostType($post_type);
 
-			if ($post_type !== $get_post_type) {
-				continue;
-			}
-
-			// Get meta boxes (sections) from configuration
-			$meta_boxes = Helper::getSectionsFromConfig($config);
-
-			foreach ($meta_boxes as $meta_box) {
-
-				// Get fields directly from array
-				$meta_box_fields = $meta_box['fields'] ?? [];
-
-				foreach ($meta_box_fields as $field) {
-
-					$meta_key   = $field['name'];
-
-					if (! isset($meta_key)) {
-						continue;
-					}
-
-					// Always save the value, even if it's empty (important for checkboxes and radios)
-					$value = Helper::getRawValue($meta_key, 'post') ?? '';
-
-					// Try to decode JSON if the value is a JSON string (group/repeater fields are posted as JSON)
-					if (is_string($value) && Helper::isJson($value)) {
-						$value = json_decode($value, true);
-					}
-
-					// Sanitize according to the field's fieldType (preserves line breaks for textarea, etc.)
-					$value = Helper::sanitizeFieldValue($value, $field['fieldType'] ?? 'text', $field['fields'] ?? [], $meta_key);
-
-					// Save the value to the database
-					$this->postMetaRepository->savePostMeta($post_id, $meta_key, $value);
-				}
-			}
+		foreach ($this->extractSubmittedFieldValues($fields) as $meta_key => $value) {
+			$this->postMetaRepository->savePostMeta($post_id, $meta_key, $value);
 		}
+	}
+
+	/**
+	 * Save custom field values for a WooCommerce order.
+	 *
+	 * Hooked to WooCommerce's woocommerce_process_shop_order_meta action,
+	 * which fires for both legacy post-based orders and High-Performance
+	 * Order Storage (HPOS) orders alike -- unlike save_post, which HPOS order
+	 * saves never trigger. Values are written through the order object's own
+	 * meta API rather than update_post_meta(), since order meta under HPOS
+	 * lives in its own storage rather than necessarily in wp_postmeta.
+	 *
+	 * @param int $order_id Order ID.
+	 * @param object|null $order Order object, when already available.
+	 *
+	 * @return void
+	 * @since 1.3.7
+	 */
+	public function saveOrderMeta(int $order_id, $order = null): void
+	{
+		$nonce = Helper::sanitize('native_custom_fields_post_meta_nonce', 'post');
+
+		if (
+			! isset($nonce) || // phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
+			! wp_verify_nonce($nonce, 'native_custom_fields_post_meta_nonce')
+		) {
+			return;
+		}
+
+		if (! current_user_can('edit_post', $order_id)) {
+			return;
+		}
+
+		if (! is_object($order) || ! method_exists($order, 'update_meta_data')) {
+			if (! function_exists('wc_get_order')) {
+				return;
+			}
+
+			$order = wc_get_order($order_id);
+		}
+
+		if (! $order) {
+			return;
+		}
+
+		$fields = $this->getConfiguredFieldsForPostType($order->get_type());
+
+		if (empty($fields)) {
+			return;
+		}
+
+		foreach ($this->extractSubmittedFieldValues($fields) as $meta_key => $value) {
+			$order->update_meta_data($meta_key, $value);
+		}
+
+		$order->save_meta_data();
 	}
 
 	/**
