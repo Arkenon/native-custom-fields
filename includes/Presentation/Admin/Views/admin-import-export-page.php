@@ -109,11 +109,11 @@ use NativeCustomFields\Common\Helper;
 									outputWrap.style.display = '';
 								} else {
 									outputWrap.style.display = '';
-									codeEl.value = (data && data.message) ? data.message : 'Error';
+									codeEl.value = (data && data.message) ? data.message : '<?php echo esc_js( __( 'Error', 'native-custom-fields' ) ); ?>';
 								}
 							} catch (err) {
 								outputWrap.style.display = '';
-								codeEl.value = 'Request failed: ' + (err?.message || err);
+								codeEl.value = '<?php echo esc_js( __( 'Request failed:', 'native-custom-fields' ) ); ?> ' + (err?.message || err);
 							} finally {
 								btn.disabled = false;
 								btn.textContent = '<?php echo esc_js( __( 'Create PHP', 'native-custom-fields' ) ); ?>';

@@ -15,5 +15,10 @@ defined('ABSPATH') || exit;
 class ResponseModel
 {
 	public bool $status = true;
-	public string $message = 'Success.';
+	public string $message;
+
+	public function __construct()
+	{
+		$this->message = __('Success.', 'native-custom-fields');
+	}
 }
