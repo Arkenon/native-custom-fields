@@ -15,7 +15,8 @@ This schema is provided by `AbilityFieldAdapterTrait` and is shared by all field
     "default":           { "type": "string" },
     "required":          { "type": "boolean", "default": false },
     "disabled":          { "type": "boolean", "default": false },
-    "field_custom_info": { "type": "object" }
+    "field_custom_info": { "type": "object" },
+    "fields":            { "type": "array", "items": { "…this same field schema…" } }
   }
 }
 ```
@@ -31,6 +32,7 @@ This schema is provided by `AbilityFieldAdapterTrait` and is shared by all field
 | `required` | No | boolean | Makes the field mandatory (default: `false`) |
 | `disabled` | No | boolean | Disables the field (default: `false`) |
 | `field_custom_info` | No | object | Type-specific options (see below) |
+| `fields` | No | array | Sub-fields, for `repeater` and `group` only (see [Nested Fields](#nested-fields)) |
 
 ## Supported Field Types (`fieldType`)
 
@@ -61,7 +63,7 @@ This schema is provided by `AbilityFieldAdapterTrait` and is shared by all field
 | `group` | Field group\* |
 | `section` | Section heading |
 
-> \* Nested fields inside `repeater` and `group` cannot be defined via ability.
+> \* Define the contents of `repeater` and `group` with the `fields` property. See [Nested Fields](#nested-fields).
 
 ## `field_custom_info` Options
 
@@ -112,6 +114,87 @@ This schema is provided by `AbilityFieldAdapterTrait` and is shared by all field
   "step": 1
 }
 ```
+
+### `repeater`
+
+```json
+{
+  "layout": "table",
+  "addButtonText": "Add Item",
+  "min": 0,
+  "max": 50,
+  "initialOpen": false
+}
+```
+
+`layout` is `table` or `panel` (default `table`). `initialOpen` only applies to the `panel` layout.
+
+### `group`
+
+```json
+{
+  "layout": "flex",
+  "columns": 3,
+  "direction": "columnRow",
+  "justify": "space-between"
+}
+```
+
+`layout` is `flex` or `grid`. `columns` only applies to `grid`. `direction` is `row`, `columnRow` or `column`. `justify` is one of `flex-start`, `center`, `flex-end`, `space-between`, `space-around`, `space-evenly` and is ignored when `direction` is `column`.
+
+## Nested Fields
+
+`repeater` and `group` fields hold their sub-fields in a `fields` array. Each item is a full field definition using this same schema, so a repeater row can contain any combination of field types.
+
+Sub-field `name` values only have to be unique within their parent — they are stored as keys inside the parent's meta value, not as separate meta keys.
+
+Up to **2 levels** of nesting are supported through abilities (for example `repeater` → `group` → field). The abilities API validates input against a schema expanded to that depth, so deeper structures are rejected. Build them in the field builder UI instead, which has no depth limit.
+
+`fields` is ignored for every field type other than `repeater` and `group`.
+
+### Nested Field Example
+
+A `Certifications` repeater whose rows each hold three fields:
+
+```json
+{
+  "fieldType": "repeater",
+  "name": "certifications",
+  "fieldLabel": "Certifications",
+  "field_custom_info": {
+    "layout": "table",
+    "addButtonText": "Add Certification"
+  },
+  "fields": [
+    {
+      "fieldType": "text",
+      "name": "certification_name",
+      "fieldLabel": "Certification Name"
+    },
+    {
+      "fieldType": "text",
+      "name": "issuing_body",
+      "fieldLabel": "Issuing Body"
+    },
+    {
+      "fieldType": "date_picker",
+      "name": "date_earned",
+      "fieldLabel": "Date Earned"
+    }
+  ]
+}
+```
+
+The stored value is a list of row objects keyed by sub-field name:
+
+```json
+[
+  { "certification_name": "Gas Safe", "issuing_body": "Gas Safe Register", "date_earned": "2021-04-12" },
+  { "certification_name": "NICEIC", "issuing_body": "NICEIC", "date_earned": "2023-09-01" }
+]
+```
+
+A `repeater` default takes that same shape; a `group` default is a single object keyed by sub-field name.
 
 ## Example Field Definition
 

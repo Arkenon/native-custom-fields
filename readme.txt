@@ -138,6 +138,7 @@ Yes. The free version has Repeater and Group fields. These are custom components
 == Changelog ==
 
 = 1.3.9 =
+* Added: Sub-fields for `repeater` and `group` fields can now be defined through the field abilities (`save-post-meta-fields`, `save-term-meta-fields`, `save-user-meta-fields`, `save-options-page-fields`) using the new `fields` property on a field definition. Up to two levels of nesting are supported. Previously only the container field could be created and its contents had to be added in the field builder.
 * Updated: Aligned the editor controls with the WordPress 7.1 component changes, so no deprecation notices are logged on 7.1.
 * Removed: The "Size" option from the border, border box and font size field settings. The underlying `size` prop is deprecated and has no effect as of WordPress 7.1. A value stored by an earlier version is now ignored instead of being passed to the control.
 * Removed: The "Large" (`__unstable-large`) choice from the input field "Size" setting. The remaining choices are default, small and compact.
