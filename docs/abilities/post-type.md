@@ -146,3 +146,14 @@ pages:      true
 ## Permission
 
 Requires the `manage_options` WordPress capability.
+
+---
+
+## Read Abilities
+
+| Ability | Input | Description |
+|---|---|---|
+| `native-custom-fields/list-post-types` | none | Lists post types: `post_type`, `label`, `created_by` |
+| `native-custom-fields/get-post-type` | `post_type` (required) | Reads one post type |
+
+`get-post-type` returns the post type under `settings` using the `update-post-type` input shape (`post_type`, `label`, `singular_name`, `description`, `menu_position`, `menu_icon`, `has_archive`, `supports`, `taxonomies`, `public`, `hierarchical`, `show_in_rest`, `map_meta_cap`), plus `created_by` and `builder_state.form_present`. `menu_position` is omitted when not set. See [README](README.md#read-only-abilities-list--get).

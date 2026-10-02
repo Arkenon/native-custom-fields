@@ -4,7 +4,7 @@ Tags: custom fields, fields, meta, repeater, ncf
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,15 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 
 == Changelog ==
+
+= 1.4.1 =
+* Added: Read-only abilities to inspect the current configuration: `list-post-types`, `get-post-type`, `list-taxonomies`, `get-taxonomy`, `list-post-meta-fields`, `get-post-meta-fields`, `list-term-meta-fields`, `get-term-meta-fields`, `get-user-meta-fields`, `list-options-pages` and `get-options-page`. The `get-*` abilities return the configuration in the same shape the matching `update-*` / `save-*` abilities accept, so an AI agent can read a configuration, change it and save it back. Each result also reports `builder_state`, which shows whether the builder screens have data to load.
+* Fixed: An options page created through the `create-options-page`, `update-options-page` and `save-options-page-fields` abilities was listed and rendered correctly, but its Edit and Fields screens in the Options Page Builder opened empty. The abilities stored the builder form state under the wrong option name, and never stored it at all for the fields. They now write it where the builder reads it. Re-run the abilities for an existing page to repair it.
+* Fixed: The abilities also wrote the options page builder values into the page's own settings option. That value is no longer written there. An existing `native_custom_fields_create_options_page` entry in such an option can be removed.
+* Fixed: Saving the fields of an options page read the options pages configuration instead of the fields configuration as its base, so the configuration of other options pages could be copied into the stored fields configuration.
+* Updated: Sections and fields saved through the abilities now carry the same base settings and dependency structure as those saved from the builder, so the builder loads them the same way. This affects the post meta, term meta, user meta and options page field abilities.
+* Fixed: AI agents creating a `notice` field through the abilities put the message in the label, so the notice rendered empty. The ability schema did not list `notice`, `heading` or `text_highlight` or say where their content goes. The schema now documents it (`children` for notice, `text` for heading and text highlight), and a message given as `message`, or only in the label, is mapped to the right property. A notice that already exists with its text in the label needs the message entered in the builder.
+* Updated: Ability documentation now covers the read-only abilities and the `notice`, `heading` and `text_highlight` field types.
 
 = 1.4.0 =
 * Added: The `combobox` field now searches server side when its options come from a dynamic token. What is typed in the field is sent to the REST API as the `search` argument, so collections larger than a single REST response stay fully reachable. Previously the typed text only filtered the records that had already been fetched.

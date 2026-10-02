@@ -259,3 +259,25 @@ Requires the `manage_options` WordPress capability.
 ## Related
 
 - [Field Schema](field-schema.md) — Shared schema for field definitions
+
+---
+
+## Read Abilities
+
+| Ability | Input | Description |
+|---|---|---|
+| `native-custom-fields/list-options-pages` | none | Lists options pages: `menu_slug`, `page_title`, `menu_title`, `layout`, `created_by`, `has_fields` |
+| `native-custom-fields/get-options-page` | `menu_slug` (required) | Reads one page |
+
+`get-options-page` returns:
+
+```json
+{
+  "status": true,
+  "page": { "menu_slug": "...", "page_title": "...", "menu_title": "...", "layout": "stacked", "icon_url": "...", "position": 60, "created_by": "native_custom_fields" },
+  "sections": [ { "section_name": "...", "section_title": "...", "section_icon": "...", "fields": [] } ],
+  "builder_state": { "page_form_present": true, "fields_form_present": true }
+}
+```
+
+`sections` uses the `save-options-page-fields` input shape. `builder_state` tells whether the Edit and Fields screens of the Options Page Builder have data to load. See [README](README.md#read-only-abilities-list--get).

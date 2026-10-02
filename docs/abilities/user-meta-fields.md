@@ -169,3 +169,13 @@ Requires the `manage_options` WordPress capability.
 ## Related
 
 - [Field Schema](field-schema.md) — Shared schema for field definitions
+
+---
+
+## Read Abilities
+
+| Ability | Input | Description |
+|---|---|---|
+| `native-custom-fields/get-user-meta-fields` | none | Reads the field configuration shown on user profile pages |
+
+Returns `sections` (the `save-user-meta-fields` input shape) and `builder_state.fields_form_present`. Fails with `No user meta field configuration found.` when nothing has been saved yet. See [README](README.md#read-only-abilities-list--get).

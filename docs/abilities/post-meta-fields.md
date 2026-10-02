@@ -175,3 +175,14 @@ Requires the `manage_options` WordPress capability.
 
 - [Field Schema](field-schema.md) — Shared schema for field definitions
 - [Post Type Abilities](post-type.md) — Creating and updating post types
+
+---
+
+## Read Abilities
+
+| Ability | Input | Description |
+|---|---|---|
+| `native-custom-fields/list-post-meta-fields` | none | Lists post types that have a field configuration with `section_count` and `field_count` |
+| `native-custom-fields/get-post-meta-fields` | `post_type` (required) | Reads the configuration of one post type |
+
+`get-post-meta-fields` returns `post_type`, `sections` (the `save-post-meta-fields` input shape) and `builder_state.fields_form_present`. See [README](README.md#read-only-abilities-list--get).

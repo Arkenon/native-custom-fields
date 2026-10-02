@@ -137,3 +137,14 @@ ep_mask:      EP_NONE
 ## Permission
 
 Requires the `manage_options` WordPress capability.
+
+---
+
+## Read Abilities
+
+| Ability | Input | Description |
+|---|---|---|
+| `native-custom-fields/list-taxonomies` | none | Lists taxonomies: `taxonomy`, `label`, `object_type`, `created_by` |
+| `native-custom-fields/get-taxonomy` | `taxonomy` (required) | Reads one taxonomy |
+
+`get-taxonomy` returns the taxonomy under `settings` using the `update-taxonomy` input shape (`taxonomy`, `label`, `singular_name`, `object_type`, `description`, `public`, `hierarchical`, `show_admin_column`, `show_in_rest`), plus `created_by` and `builder_state.form_present`. See [README](README.md#read-only-abilities-list--get).

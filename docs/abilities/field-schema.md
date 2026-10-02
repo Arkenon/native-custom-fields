@@ -62,6 +62,11 @@ This schema is provided by `AbilityFieldAdapterTrait` and is shared by all field
 | `repeater` | Repeatable field group\* |
 | `group` | Field group\* |
 | `section` | Section heading |
+| `notice` | Message box shown to the user (display only)\*\* |
+| `heading` | Heading text (display only)\*\* |
+| `text_highlight` | Text with a highlighted part (display only)\*\* |
+
+> \*\* The visible content of `notice`, `heading` and `text_highlight` goes in `field_custom_info`, not in `fieldLabel`. See [`notice`, `heading`, `text_highlight`](#notice-heading-text_highlight).
 
 > \* Define the contents of `repeater` and `group` with the `fields` property. See [Nested Fields](#nested-fields).
 
@@ -114,6 +119,23 @@ This schema is provided by `AbilityFieldAdapterTrait` and is shared by all field
   "step": 1
 }
 ```
+
+### `notice`, `heading`, `text_highlight`
+
+These types only display content and store no value. The content goes in `field_custom_info`; `fieldLabel` is just the name shown in the builder.
+
+```json
+// notice
+{ "children": "The message shown to the user", "status": "info|success|warning|error" }
+
+// heading
+{ "text": "Heading text", "level": 2 }
+
+// text_highlight
+{ "text": "Full text", "highlight": "Part to highlight" }
+```
+
+If the content property is missing, it is taken from `message` (notice) or `content` (heading, text_highlight), and otherwise from `fieldLabel`, so a message placed in the label still renders.
 
 ### `repeater`
 

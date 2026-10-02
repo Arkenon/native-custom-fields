@@ -137,3 +137,14 @@ Requires the `manage_options` WordPress capability.
 
 - [Field Schema](field-schema.md) — Shared schema for field definitions
 - [Taxonomy Abilities](taxonomy.md) — Creating and updating taxonomies
+
+---
+
+## Read Abilities
+
+| Ability | Input | Description |
+|---|---|---|
+| `native-custom-fields/list-term-meta-fields` | none | Lists taxonomies that have a field configuration with `section_count` and `field_count` |
+| `native-custom-fields/get-term-meta-fields` | `taxonomy` (required) | Reads the configuration of one taxonomy |
+
+`get-term-meta-fields` returns `taxonomy`, `sections` (the `save-term-meta-fields` input shape) and `builder_state.fields_form_present`. See [README](README.md#read-only-abilities-list--get).
