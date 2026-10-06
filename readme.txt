@@ -4,7 +4,7 @@ Tags: custom fields, fields, meta, repeater, ncf
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,10 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 
 == Changelog ==
+
+= 1.4.2 =
+* Fixed: The field schema of the abilities accepted only a string or an array as `default`, so an AI agent giving a `number` field a numeric default (`10`) or a `toggle` field a boolean default (`true`) had the call rejected by schema validation. `default` now also accepts numbers and booleans. The value is still sanitized according to the field type, and string defaults keep working.
+* Updated: The field schema documentation lists the accepted `default` types.
 
 = 1.4.1 =
 * Added: Read-only abilities to inspect the current configuration: `list-post-types`, `get-post-type`, `list-taxonomies`, `get-taxonomy`, `list-post-meta-fields`, `get-post-meta-fields`, `list-term-meta-fields`, `get-term-meta-fields`, `get-user-meta-fields`, `list-options-pages` and `get-options-page`. The `get-*` abilities return the configuration in the same shape the matching `update-*` / `save-*` abilities accept, so an AI agent can read a configuration, change it and save it back. Each result also reports `builder_state`, which shows whether the builder screens have data to load.

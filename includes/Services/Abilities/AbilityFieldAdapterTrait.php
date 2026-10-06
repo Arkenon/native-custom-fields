@@ -68,8 +68,8 @@ trait AbilityFieldAdapterTrait
                 'name'       => ['type' => 'string', 'description' => __('Unique meta key slug', 'native-custom-fields')],
                 'fieldLabel' => ['type' => 'string'],
                 'default'    => [
-                    'type'        => ['string', 'array'],
-                    'description' => __('Default value. Repeater and group fields take an array: a repeater default is a list of row objects keyed by sub-field name.', 'native-custom-fields'),
+                    'type'        => ['string', 'number', 'boolean', 'array'],
+                    'description' => __('Default value. Number fields take a number, toggle fields a boolean. Repeater and group fields take an array: a repeater default is a list of row objects keyed by sub-field name.', 'native-custom-fields'),
                 ],
                 'required'   => ['type' => 'boolean', 'default' => false],
                 'disabled'   => ['type' => 'boolean', 'default' => false],

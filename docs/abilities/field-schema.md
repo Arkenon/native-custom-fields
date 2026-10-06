@@ -12,7 +12,7 @@ This schema is provided by `AbilityFieldAdapterTrait` and is shared by all field
     "fieldType":         { "type": "string" },
     "name":              { "type": "string" },
     "fieldLabel":        { "type": "string" },
-    "default":           { "type": "string" },
+    "default":           { "type": ["string", "number", "boolean", "array"] },
     "required":          { "type": "boolean", "default": false },
     "disabled":          { "type": "boolean", "default": false },
     "field_custom_info": { "type": "object" },
@@ -28,7 +28,7 @@ This schema is provided by `AbilityFieldAdapterTrait` and is shared by all field
 | `fieldType` | Yes | string | Field type. See supported values below. |
 | `name` | Yes | string | Unique meta key slug (`sanitize_key` is applied) |
 | `fieldLabel` | Yes | string | Label shown in the admin interface |
-| `default` | No | string | Default field value |
+| `default` | No | string \| number \| boolean \| array | Default field value. Use a number for `number` fields, a boolean for `toggle`, and an array for `repeater`/`group` (see [Nested Fields](#nested-fields)). The value is sanitized according to the field type. |
 | `required` | No | boolean | Makes the field mandatory (default: `false`) |
 | `disabled` | No | boolean | Disables the field (default: `false`) |
 | `field_custom_info` | No | object | Type-specific options (see below) |
