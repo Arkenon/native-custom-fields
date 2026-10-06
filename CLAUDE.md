@@ -166,6 +166,24 @@ The plugin is consumed through Composer, which resolves versions from Git tags. 
   5. Push the branch, then the tag: `git push origin main` and `git push origin v1.4.1`.
 - Commits that are not a release (docs, tooling) do not get a tag.
 
+## WordPress.org SVN release
+
+After the Git release is pushed, the same version is published to WordPress.org through SVN. Do this only when asked.
+
+- Working copy: `%USERPROFILE%\Desktop\svn\native-custom-fields` (`trunk/`, `tags/<version>/`, `assets/`). Tag folders have no `v` prefix (`tags/1.4.2`).
+- Only TortoiseSVN is installed (`C:\Program Files\TortoiseSVN\bin\TortoiseProc.exe`); there is no `svn` command line client. The user commits from the TortoiseSVN dialog.
+- `trunk/` holds only the runtime files: `build/`, `includes/`, `languages/`, `vendor/`, `composer.json`, `native-custom-fields.php`, `readme.txt`, `uninstall.php`. Never copy `src/`, `docs/`, `node_modules/`, `package*.json`, `CLAUDE.md` or other dev files.
+- Steps:
+  1. Check that `trunk/` equals the previous `tags/<previous version>/` (`diff -rq`), so the starting point is known.
+  2. Compare `trunk/` with the plugin folder (`diff -rq` on `includes`, `build`, `languages` and the root files listed above) and copy every changed file into `trunk/`. If JS changed, run `npm run build` first so `build/` is current. Update `vendor/` only when Composer dependencies changed (`composer install --no-dev`).
+  3. Files deleted in Git must also be deleted in `trunk/`. A plain file delete shows up as "missing" in the commit dialog; the user ticks it to commit the deletion.
+  4. Create `tags/<version>/` as a copy of `trunk/` (`cp -r trunk tags/<version>`) and confirm with `diff -rq trunk tags/<version>`. Never change an existing tag folder.
+  5. Check that `Version:` in `native-custom-fields.php`, `Stable tag:` in `readme.txt` and `Constants::VERSION` match the new version in both `trunk/` and the tag.
+  6. Open the commit dialog for the user (it commits nothing on its own):
+     `TortoiseProc.exe /command:commit /path:"<working copy>" /logmsg:"Release <version>: <short summary>"`
+     Tell the user to tick the unversioned `tags/<version>` folder (and any missing/deleted files) and press OK.
+- `assets/` (banners, icons, screenshots) is changed only when asked.
+
 ## Do / Don't
 
 - Do respect the layer boundaries and existing folder structure; match surrounding code style (the repo mixes tabs/spaces — follow the file you edit).
