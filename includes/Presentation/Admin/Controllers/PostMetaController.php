@@ -52,6 +52,11 @@ class PostMetaController
 
 		// Save custom fields into database
 		add_action('save_post', [$this->postMetaService, 'savePostMeta']);
+
+		// Save custom fields for WooCommerce orders (save_post does not fire for
+		// order saves under High-Performance Order Storage). Harmless no-op when
+		// WooCommerce isn't active, since the hook is simply never fired.
+		add_action('woocommerce_process_shop_order_meta', [$this->postMetaService, 'saveOrderMeta'], 10, 2);
 	}
 
 	#region Rest Routes and Callbacks
