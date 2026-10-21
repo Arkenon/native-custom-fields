@@ -4,7 +4,7 @@ Tags: custom fields, fields, meta, repeater, ncf
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,10 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 
 == Changelog ==
+
+= 1.4.3 =
+* Added: A `native-custom-fields/post-meta` block bindings source. Post meta fields can be bound to block attributes (paragraph, heading, button, image ...) from the block sidebar, including `token_field`, multiple `select`, `repeater`, `group`, `file_upload` and `media_library` fields, which the core Post Meta source does not list because they are stored as arrays. Values are shown as text: option labels, comma separated lists, one line per repeater row.
+* Added: The `native_custom_fields_block_bindings_value` filter (and the `nativeCustomFields.blockBindingsValue` JS filter for the editor preview) to change how a bound value is rendered.
 
 = 1.4.2 =
 * Fixed: The field schema of the abilities accepted only a string or an array as `default`, so an AI agent giving a `number` field a numeric default (`10`) or a `toggle` field a boolean default (`true`) had the call rejected by schema validation. `default` now also accepts numbers and booleans. The value is still sanitized according to the field type, and string defaults keep working.

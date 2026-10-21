@@ -5,7 +5,8 @@ const path = require('path');
 const config = {
     ...defaultConfig,
     entry: {
-        'admin/index': './src/admin/index.js'
+        'admin/index': './src/admin/index.js',
+        'editor/block-bindings': './src/editor/block-bindings.js'
     },
     output: {
         path: path.resolve(process.cwd(), 'build'),

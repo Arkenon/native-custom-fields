@@ -118,6 +118,13 @@
       "markdown_source": "developer-guides/8_conditional_rules.md"
     },
     {
+      "id": "developer-guides--block-bindings",
+      "title": "Block Bindings",
+      "slug": "block-bindings",
+      "parent": "developer-guides",
+      "markdown_source": "developer-guides/9_block_bindings.md"
+    },
+    {
       "id": "components",
       "title": "Components",
       "slug": "components",
