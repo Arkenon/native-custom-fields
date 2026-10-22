@@ -137,6 +137,10 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 == Changelog ==
 
+= x.x.x =
+* Fixed: After importing a configuration into another site, the post types, taxonomies, fields and options pages worked, but their builder screens opened empty or partly empty (for example, the slug, label and labels of a post type, or every meta box of a post type). The builder screens load their form values from a separate builder state that was not exported. The export file now includes the builder states (`builder_states`). On import, the builder state is restored from the file, or rebuilt from the imported configuration when the file has none, so files exported with earlier versions work too. Re-import such a file to repair a site that was imported before.
+* Fixed: Importing options page fields read the options pages configuration instead of the fields configuration as its base, so options page settings could be copied into the stored fields configuration.
+
 = 1.4.3 =
 * Added: A `native-custom-fields/post-meta` block bindings source. Post meta fields can be bound to block attributes (paragraph, heading, button, image ...) from the block sidebar, including `token_field`, multiple `select`, `repeater`, `group`, `file_upload` and `media_library` fields, which the core Post Meta source does not list because they are stored as arrays. Values are shown as text: option labels, comma separated lists, one line per repeater row.
 * Added: The `native_custom_fields_block_bindings_value` filter (and the `nativeCustomFields.blockBindingsValue` JS filter for the editor preview) to change how a bound value is rendered.

@@ -266,6 +266,25 @@ class OptionService implements OptionServiceInterface
 	}
 
 	/**
+	 * Build options page builder form values from a stored options page configuration
+	 * Reverse of saveOptionsPageConfig(), used when the builder state is missing (e.g. imported configurations)
+	 *
+	 * @param string $menu_slug Options page menu slug
+	 * @param array $config Stored options page configuration
+	 *
+	 * @return array
+	 * @since x.x.x
+	 */
+	public function buildOptionsPageBuilderValues(string $menu_slug, array $config): array
+	{
+		unset($config['created_by']);
+
+		return [
+			'native_custom_fields_create_options_page' => array_merge(['menu_slug' => $menu_slug], $config),
+		];
+	}
+
+	/**
 	 * Delete options pages configurations
 	 *
 	 * @param string $menu_slug

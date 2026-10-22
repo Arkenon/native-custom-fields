@@ -64,4 +64,22 @@ When you create a new options page, the configuration is stored in the `wp_optio
   - `includes/Services/OptionService.php`
   - `includes/Presentation/Admin/Controllers/OptionsController.php`
 
+### 1.7 Builder State
+
+The options above are what runs on the site (post type registration, meta boxes, options pages). The builder screens do not read them. Each builder screen loads its form values from a separate **builder state** option, written next to the configuration on every save:
+
+| Builder screen | Builder state option |
+|---|---|
+| Post Type Builder | `native_custom_fields_post_type_builder_{post_type}` |
+| Post Meta Fields | `native_custom_fields_post_meta_fields_builder_{post_type}` |
+| Taxonomy Builder | `native_custom_fields_taxonomy_builder_{taxonomy}` |
+| Term Meta Fields | `native_custom_fields_term_meta_fields_builder_{taxonomy}` |
+| User Meta Fields | `native_custom_fields_user_meta_fields_builder_{user_role}` (`all_users`) |
+| Options Page | `native_custom_fields_options_page_builder_{menu_slug}` |
+| Options Page Fields | `native_custom_fields_options_page_fields_builder_{menu_slug}` |
+
+If the configuration exists but its builder state does not, the item works at runtime but its builder screen opens empty.
+
+**Import / Export:** The export file carries the builder states of the exported items under the `builder_states` key, keyed by option name. On import, each imported item gets its builder state back: from `builder_states` when the file has it, otherwise rebuilt from the imported configuration. This covers files exported before `builder_states` was added. Re-importing such a file repairs the builder screens of a site that was imported earlier. Only the builder state options of the imported items are written.
+
 ---

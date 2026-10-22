@@ -108,15 +108,7 @@ trait AbilityFieldAdapterTrait
      */
     private function getDefaultFieldBaseInfo(): array
     {
-        return [
-            'fieldHelpText'           => '',
-            'className'               => '',
-            'fieldLabelPosition'      => 'top',
-            'fieldLabelTextTransform' => 'uppercase',
-            'required'                => false,
-            'disabled'                => false,
-            'hideLabelFromVision'     => false,
-        ];
+        return Helper::getDefaultBuilderFieldBaseInfo();
     }
 
     /**
@@ -127,7 +119,7 @@ trait AbilityFieldAdapterTrait
      */
     private function getDefaultDependencyInfo(): array
     {
-        return ['relation' => 'and', 'conditions' => []];
+        return Helper::getDefaultBuilderDependencyInfo();
     }
 
     /**
