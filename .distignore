@@ -10,3 +10,4 @@ webpack.config.js
 package.json
 package-lock.json
 composer.lock
+CLAUDE.md

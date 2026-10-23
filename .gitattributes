@@ -11,3 +11,4 @@ package.json        export-ignore
 package-lock.json   export-ignore
 phpcs.xml           export-ignore
 composer.lock       export-ignore
+CLAUDE.md           export-ignore

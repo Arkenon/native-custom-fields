@@ -4,7 +4,7 @@ Tags: custom fields, fields, meta, repeater, ncf
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,9 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 
 == Changelog ==
+
+= 1.4.6 =
+* Updated: Development files (CLAUDE.md) are no longer included in the package Composer installs.
 
 = 1.4.5 =
 * Added: The `Includes` (`includes`) and `Not Includes` (`not_includes`) operators for field dependency conditions. They check whether the field value contains a text, like SQL `LIKE '%value%'` (case-insensitive). With multiple select and token fields, one of the selected values has to contain it, so conditions can now be built on fields with multiple values.
