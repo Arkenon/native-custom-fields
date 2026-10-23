@@ -42,7 +42,9 @@ const fieldDependencyInfo = {
                         {label: __('Greater Than (>)', 'native-custom-fields'), value: '>'},
                         {label: __('Less Than (<)', 'native-custom-fields'), value: '<'},
                         {label: __('Greater Than or Equal (>=)', 'native-custom-fields'), value: '>='},
-                        {label: __('Less Than or Equal (<=)', 'native-custom-fields'), value: '<='}
+                        {label: __('Less Than or Equal (<=)', 'native-custom-fields'), value: '<='},
+                        {label: __('Includes (LIKE %value%)', 'native-custom-fields'), value: 'includes'},
+                        {label: __('Not Includes (NOT LIKE %value%)', 'native-custom-fields'), value: 'not_includes'}
                     ],
                     required: true
                 },
@@ -50,7 +52,7 @@ const fieldDependencyInfo = {
                     fieldType: 'text',
                     name: 'value',
                     fieldLabel: __('Value', 'native-custom-fields'),
-                    fieldHelpText: __('The value to compare against. For boolean values type true or false as string.', 'native-custom-fields'),
+                    fieldHelpText: __('The value to compare against. For boolean values type true or false as string. Includes checks whether the field value contains this text (case-insensitive); for multiple values (multiple select, token field) whether one of them contains it.', 'native-custom-fields'),
                     required: true
                 }
             ]

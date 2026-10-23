@@ -80,6 +80,10 @@ The options above are what runs on the site (post type registration, meta boxes,
 
 If the configuration exists but its builder state does not, the item works at runtime but its builder screen opens empty.
 
-**Import / Export:** The export file carries the builder states of the exported items under the `builder_states` key, keyed by option name. On import, each imported item gets its builder state back: from `builder_states` when the file has it, otherwise rebuilt from the imported configuration. This covers files exported before `builder_states` was added. Re-importing such a file repairs the builder screens of a site that was imported earlier. Only the builder state options of the imported items are written.
+**Deleting:** Deleting an options page also removes its fields configuration and both of its builder state options. The saved settings of the page (the option named after its menu slug) are kept. Deleting a post type or taxonomy removes its own builder state, but keeps its fields configuration and fields builder state, so its fields come back when a post type or taxonomy with the same slug is created again. Saved meta values are never removed.
+
+**Import / Export:** Fields are exported only for options pages, post types and taxonomies that exist on the site at export time (registered, by this plugin or another one). The fields of deleted ones stay in the database but are left out of the export. Fields of a post type or taxonomy whose plugin is deactivated at export time are left out too. On import, options page fields are skipped when their page is neither in the file nor on the site.
+
+The export file carries the builder states of the exported items under the `builder_states` key, keyed by option name. On import, each imported item gets its builder state back: from `builder_states` when the file has it, otherwise rebuilt from the imported configuration. This covers files exported before `builder_states` was added. Re-importing such a file repairs the builder screens of a site that was imported earlier. Only the builder state options of the imported items are written.
 
 ---

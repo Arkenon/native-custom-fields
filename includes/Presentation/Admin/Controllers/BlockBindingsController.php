@@ -67,11 +67,12 @@ class BlockBindingsController
 		);
 
 		wp_localize_script('native-custom-fields-block-bindings', 'nativeCustomFieldsBlockBindings', [
-			'source' => BlockBindingsService::SOURCE_NAME,
-			'label'  => __('Native Custom Fields', 'native-custom-fields'),
-			'yes'    => __('Yes', 'native-custom-fields'),
-			'no'     => __('No', 'native-custom-fields'),
-			'fields' => $fields,
+			'source'      => BlockBindingsService::SOURCE_NAME,
+			'label'       => __('Native Custom Fields', 'native-custom-fields'),
+			'yes'         => __('Yes', 'native-custom-fields'),
+			'no'          => __('No', 'native-custom-fields'),
+			'fields'      => $fields,
+			'dateFormats' => $this->blockBindingsService->getDateFormats(),
 		]);
 	}
 }

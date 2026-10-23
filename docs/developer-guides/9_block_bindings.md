@@ -31,9 +31,14 @@ The source is read only: values are edited in the meta box, not in the bound blo
 | select, radio, toggle_group, combobox | The option label (`İngilizce:ingilizce` shows `İngilizce`). Dynamic options show the stored value. |
 | token_field, multiple select | Items joined with `, `. |
 | toggle, checkbox | `Yes` / `No` (translatable). |
+| date_picker, text / input with the `date` type | The date in the **Date Format** of **Settings → General**. |
+| date_time_picker, text / input with the `datetime-local` type | The date and time in the **Date Format** and **Time Format** (`{date format} {time format}`). |
+| time_picker, text / input with the `time` type | The time in the **Time Format**. |
 | file_upload, media_library | File URLs joined with `, `. Bound to a `url` attribute (image, button), the first URL. |
 | repeater | One line per row, sub-field values joined with ` — `. Rows are separated by `<br>` in rich text and by `, ` elsewhere. |
 | group | `Label: value` lines, separated like repeater rows. |
+
+Dates are stored as the site's wall-clock time (`2026-10-22T12:00`) and shown as they are, without a timezone conversion. A value that can not be read as a date is shown unchanged. The stored meta value and its REST output are not changed; only the bound block output is formatted. Date fields inside a repeater or group are formatted the same way.
 
 Text is escaped for rich text attributes. A repeater cannot become a real `<table>` here, because a table inside a paragraph or heading is invalid HTML. For a table, list or custom layout, use the filter below or build a custom block.
 
@@ -53,6 +58,15 @@ add_filter( 'native_custom_fields_block_bindings_value', function( $value, $raw_
 ```
 
 To show the same output in the editor preview, add the JS filter `nativeCustomFields.blockBindingsValue` with `@wordpress/hooks` (same arguments).
+
+To use other date formats than the site settings, filter the formats. The editor preview uses the same formats:
+
+```php
+add_filter( 'native_custom_fields_block_bindings_date_formats', function( $formats ) {
+    $formats['datetime'] = 'd.m.Y H:i';
+    return $formats;
+} );
+```
 
 ### Notes
 

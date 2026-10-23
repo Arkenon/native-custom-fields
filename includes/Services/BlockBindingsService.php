@@ -11,6 +11,8 @@
 
 namespace NativeCustomFields\Services;
 
+use DateTimeImmutable;
+use Exception;
 use WP_Block;
 
 defined('ABSPATH') || exit;
@@ -30,6 +32,17 @@ class BlockBindingsService
 	 * @since 1.4.3
 	 */
 	private const CONTAINER_FIELD_TYPES = ['section', 'meta_box'];
+
+	/**
+	 * Date types of the text (inputType) and input (type) field input types
+	 *
+	 * @since 1.4.5
+	 */
+	private const DATE_INPUT_TYPES = [
+		'date'           => 'date',
+		'datetime-local' => 'datetime',
+		'time'           => 'time',
+	];
 
 	/**
 	 * Inject PostMetaService
@@ -218,6 +231,7 @@ class BlockBindingsService
 			'fieldType' => $field['fieldType'] ?? 'text',
 			'options'   => is_string($field['options'] ?? null) ? $field['options'] : '',
 			'multiple'  => ! empty($field['multiple']),
+			'dateType'  => $this->getDateType($field),
 		];
 
 		if (! empty($field['fields']) && is_array($field['fields'])) {
@@ -327,6 +341,12 @@ class BlockBindingsService
 				return implode($separator, $lines);
 		}
 
+		// Dates and times in the date and time formats of the site settings
+		$date_type = $this->getDateType($field);
+		if ($date_type !== '') {
+			return $this->escapeText($this->formatDate($value, $date_type), $rich_text);
+		}
+
 		// Select labels instead of stored values
 		$labels = in_array($field_type, ['select', 'radio', 'toggle_group', 'combobox'], true)
 			? $this->parseOptions($field['options'] ?? '')
@@ -348,6 +368,118 @@ class BlockBindingsService
 
 		// Keep the line breaks of multiline fields
 		return $rich_text ? (string) preg_replace('/\r?\n/', '<br>', $text) : $text;
+	}
+
+	/**
+	 * Get the date type of a field: date, datetime, time or an empty string when it holds no date
+	 *
+	 * @param array $field Field configuration
+	 *
+	 * @return string
+	 * @since 1.4.5
+	 */
+	public function getDateType(array $field): string
+	{
+		switch ($field['fieldType'] ?? '') {
+			case 'date_picker':
+				return 'date';
+			case 'date_time_picker':
+				return 'datetime';
+			case 'time_picker':
+				return 'time';
+			case 'text':
+				$input_type = $field['inputType'] ?? '';
+				break;
+			case 'input':
+				$input_type = $field['type'] ?? '';
+				break;
+			default:
+				return '';
+		}
+
+		return is_string($input_type) ? (self::DATE_INPUT_TYPES[$input_type] ?? '') : '';
+	}
+
+	/**
+	 * Get the formats dates and times are rendered with, from the Date Format and Time Format site settings
+	 *
+	 * @return array Date type (date, datetime, time) => PHP date format
+	 * @since 1.4.5
+	 */
+	public function getDateFormats(): array
+	{
+		$date_format = (string) get_option('date_format', 'F j, Y');
+		$time_format = (string) get_option('time_format', 'g:i a');
+
+		/**
+		 * Filter the formats dates and times are rendered with in bound block attributes.
+		 * Used by the editor preview as well.
+		 *
+		 * @param array $formats Date type (date, datetime, time) => PHP date format
+		 *
+		 * @since 1.4.5
+		 */
+		return apply_filters('native_custom_fields_block_bindings_date_formats', [
+			'date'     => $date_format,
+			'datetime' => trim($date_format . ' ' . $time_format),
+			'time'     => $time_format,
+		]);
+	}
+
+	/**
+	 * Format a stored date, date time or time value with the site settings
+	 * Stored values are the wall-clock time of the site (2026-10-22, 2026-10-22T12:00, 12:00).
+	 * Keep in sync with formatDate() in src/editor/block-bindings.js.
+	 *
+	 * @param mixed $value Stored value
+	 * @param string $date_type date, datetime or time
+	 *
+	 * @return string Formatted value, or the stored value when it can not be read as a date
+	 * @since 1.4.5
+	 */
+	private function formatDate($value, string $date_type): string
+	{
+		// A time picker value can be an hours/minutes object
+		if (is_array($value) && isset($value['hours'])) {
+			$value = sprintf('%02d:%02d', (int) $value['hours'], (int) ($value['minutes'] ?? 0));
+		}
+
+		if (! is_scalar($value)) {
+			return '';
+		}
+
+		$value = trim((string) $value);
+
+		if ($value === '') {
+			return '';
+		}
+
+		$is_time = (bool) preg_match('/^\d{1,2}:\d{2}(:\d{2})?$/', $value);
+		$is_date = (bool) preg_match('/^\d{4}-\d{2}-\d{2}/', $value);
+
+		if (! $is_time && ! $is_date) {
+			return $value;
+		}
+
+		$timezone = wp_timezone();
+		$formats  = $this->getDateFormats();
+		$format   = $formats[$is_time ? 'time' : $date_type] ?? '';
+
+		if ($format === '') {
+			return $value;
+		}
+
+		try {
+			$date = $is_time
+				? new DateTimeImmutable(wp_date('Y-m-d') . ' ' . $value, $timezone)
+				: new DateTimeImmutable($value, $timezone);
+		} catch (Exception $e) {
+			return $value;
+		}
+
+		$formatted = wp_date($format, $date->getTimestamp(), $timezone);
+
+		return is_string($formatted) && $formatted !== '' ? $formatted : $value;
 	}
 
 	/**

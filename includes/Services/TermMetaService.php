@@ -296,7 +296,7 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	 * @param array $config Stored taxonomy configuration (taxonomy, object_type, args, created_by)
 	 *
 	 * @return array
-	 * @since x.x.x
+	 * @since 1.4.5
 	 */
 	public function buildTaxonomyBuilderValues(array $config): array
 	{
@@ -389,6 +389,12 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 		//Delete taxonomy configurations
 		$result->status  = $this->termMetaRepository->deleteConfigurations('native_custom_fields_taxonomies_config', $taxonomy_slug);
 		$result->message = $result->status ? __('Taxonomy deleted successfully.', 'native-custom-fields') : __('Taxonomy can not be deleted.', 'native-custom-fields');
+
+		// The term meta fields (and their builder state) are kept, so they come back when the taxonomy
+		// is created again. They are left out of exports while the taxonomy is not registered.
+		if ($result->status) {
+			$this->termMetaRepository->deleteOption('native_custom_fields_taxonomy_builder_' . $taxonomy_slug);
+		}
 
 		return $result;
 	}

@@ -6,6 +6,7 @@ import {store as blockEditorStore} from '@wordpress/block-editor';
 import {store as coreStore} from '@wordpress/core-data';
 import {escapeHTML} from '@wordpress/escape-html';
 import {applyFilters} from '@wordpress/hooks';
+import {dateI18n, gmdateI18n} from '@wordpress/date';
 
 /**
  * Internal dependencies
@@ -53,6 +54,59 @@ const getFileUrls = (value) => {
 	return items
 		.map((item) => (item && typeof item === 'object' ? item.file_to_upload ?? item.url ?? '' : item))
 		.filter((url) => typeof url === 'string' && url !== '');
+};
+
+/**
+ * Format a stored date, date time or time value with the date and time formats of the site settings.
+ * Stored values are the wall-clock time of the site (2026-10-22, 2026-10-22T12:00, 12:00).
+ * Keep in sync with BlockBindingsService::formatDate().
+ *
+ * @param {*} value Stored value
+ * @param {string} dateType date, datetime or time
+ * @returns {string} Formatted value, or the stored value when it can not be read as a date
+ * @version 1.4.5
+ */
+const formatDate = (value, dateType) => {
+	// A time picker value can be an hours/minutes object
+	if (value && typeof value === 'object' && 'hours' in value) {
+		const pad = (number) => String(parseInt(number, 10) || 0).padStart(2, '0');
+		value = `${pad(value.hours)}:${pad(value.minutes)}`;
+	}
+
+	if (value === null || value === undefined || typeof value === 'object') {
+		return '';
+	}
+
+	value = String(value).trim();
+
+	if (value === '') {
+		return '';
+	}
+
+	const isTime = /^\d{1,2}:\d{2}(:\d{2})?$/.test(value);
+	const isDate = /^\d{4}-\d{2}-\d{2}/.test(value);
+	const format = (data.dateFormats || {})[isTime ? 'time' : dateType];
+
+	if ((!isTime && !isDate) || !format) {
+		return value;
+	}
+
+	let iso;
+	if (isTime) {
+		iso = `1970-01-01T${value.replace(/^(\d):/, '0$1:')}`;
+	} else {
+		iso = /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00` : value.replace(' ', 'T');
+	}
+
+	const hasOffset = /(Z|[+-]\d{2}:?\d{2})$/.test(iso);
+
+	if (isNaN(new Date(hasOffset ? iso : `${iso}Z`).getTime())) {
+		return value;
+	}
+
+	// A value without an offset is already the site time: read and print it as UTC so neither
+	// the browser nor the site timezone shifts it. A value with an offset is shown in the site timezone.
+	return hasOffset ? dateI18n(format, iso) : gmdateI18n(format, `${iso}Z`);
 };
 
 /**
@@ -122,6 +176,11 @@ export const formatValue = (value, field, richText, attributeName = '') => {
 				})
 				.filter((line) => line !== '')
 				.join(separator);
+	}
+
+	// Dates and times in the date and time formats of the site settings
+	if (field?.dateType) {
+		return escapeText(formatDate(value, field.dateType), richText);
 	}
 
 	// Select labels instead of stored values

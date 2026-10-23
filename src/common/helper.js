@@ -509,6 +509,31 @@ export function checkCondition(dependencies, values) {
     return conditions.every(condition => evaluateSingleCondition(condition, values));
 }
 
+/**
+ * Check whether a field value contains a text, like SQL LIKE '%text%' (case-insensitive).
+ * For multiple values (multiple select, token field ...) one of the values has to contain it.
+ *
+ * @param {any} fieldValue Field value
+ * @param {any} text Text to search for
+ * @returns {boolean}
+ * @since 1.4.5
+ */
+export function valueIncludes(fieldValue, text) {
+    if (text === null || text === undefined) {
+        return false;
+    }
+
+    // Lowercase without the combining dot "İ" leaves, so "İ" matches "i"
+    const normalize = (value) => String(value).toLowerCase().replace(/̇/g, '');
+    const search = normalize(text);
+
+    const items = Array.isArray(fieldValue) ? fieldValue : [fieldValue];
+
+    return items.some((item) =>
+        item !== null && item !== undefined && typeof item !== 'object' && normalize(item).includes(search)
+    );
+}
+
 export function evaluateSingleCondition(condition, values) {
     if (!condition || !condition.field || !condition.operator || !values) {
         return true;
@@ -579,6 +604,11 @@ export function evaluateSingleCondition(condition, values) {
             // Less than or equal to comparison
             const lte1 = parseFloat(fieldValue), lte2 = parseFloat(compareValue);
             return !isNaN(lte1) && !isNaN(lte2) && lte1 <= lte2;
+        case 'includes':
+            // Contains the value, like SQL LIKE '%value%'
+            return valueIncludes(fieldValue, compareValue);
+        case 'not_includes':
+            return !valueIncludes(fieldValue, compareValue);
         default:
             return true;
     }

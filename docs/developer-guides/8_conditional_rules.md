@@ -22,6 +22,23 @@ You can use the following operators in your conditions:
 - `<` : Less Than
 - `>=` : Greater Than or Equal
 - `<=` : Less Than or Equal
+- `includes` : Includes. The field value contains the text, like SQL `LIKE '%value%'` (case-insensitive). For fields with multiple values (multiple `select`, `token_field`), one of the values has to contain it.
+- `not_includes` : Not Includes. The opposite of `includes`; also true when the field has no value.
+
+For example, to show a field only when the multiple select `languages` has `english` selected:
+
+```php
+'dependencies' => [
+    'relation'   => 'and',
+    'conditions' => [
+        [
+            'field'    => 'languages',
+            'operator' => 'includes',
+            'value'    => 'english',
+        ],
+    ],
+],
+```
 
 ### Example
 

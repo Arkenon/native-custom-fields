@@ -774,7 +774,7 @@ class Helper
      * Base info defaults as the builder UI stores them (field_base_info)
      *
      * @return array
-     * @since x.x.x
+     * @since 1.4.5
      */
     public static function getDefaultBuilderFieldBaseInfo(): array
     {
@@ -793,7 +793,7 @@ class Helper
      * Empty dependency structure as the builder UI stores it (field_dependency_info)
      *
      * @return array
-     * @since x.x.x
+     * @since 1.4.5
      */
     public static function getDefaultBuilderDependencyInfo(): array
     {
@@ -808,7 +808,7 @@ class Helper
      * @param array $fields Stored field configs as produced by prepareFieldList()
      *
      * @return array
-     * @since x.x.x
+     * @since 1.4.5
      */
     public static function fieldsToBuilderFields(array $fields): array
     {
@@ -864,7 +864,7 @@ class Helper
      * @param string $section_type 'meta_box' for post meta, 'section' for term/user meta and options pages
      *
      * @return array
-     * @since x.x.x
+     * @since 1.4.5
      */
     public static function sectionsToBuilderSections(array $sections, string $section_type = 'section'): array
     {
@@ -909,7 +909,7 @@ class Helper
      * @param array $values Builder state values
      *
      * @return array
-     * @since x.x.x
+     * @since 1.4.5
      */
     public static function sanitizeBuilderState(array $values): array
     {

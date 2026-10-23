@@ -30,7 +30,7 @@ class ImportExportService {
 	 * The builder screens load their form values from these options ({prefix}{slug}), not from the
 	 * runtime configurations, so they are exported and imported alongside the configurations.
 	 *
-	 * @since x.x.x
+	 * @since 1.4.5
 	 */
 	private const BUILDER_STATE_PREFIXES = [
 		'options_pages_config'       => 'native_custom_fields_options_page_builder_',
@@ -119,6 +119,9 @@ class ImportExportService {
 				$this->importOptionsPages( $data['options_pages_config'] );
 			}
 			if ( array_key_exists( 'options_page_fields_config', $data ) ) {
+				// Files exported before deleted pages were left out can still carry their fields. Skip the fields
+				// of pages that are neither in the file nor on this site (the file's pages are imported above).
+				$data['options_page_fields_config'] = $this->filterFieldConfigs( $data['options_page_fields_config'], $this->getOptionsPageExistsCallback() );
 				$this->importOptionsPageFields( $data['options_page_fields_config'] );
 			}
 			if ( array_key_exists( 'post_types_config', $data ) ) {
@@ -180,19 +183,32 @@ class ImportExportService {
 			$user_meta_fields_config = $this->optionRepository->getOptions( 'native_custom_fields_user_meta_fields_config' );
 		}
 
+		// Fields are exported even when no page, post type or taxonomy was created with the plugin,
+		// since they can belong to ones registered by other plugins. Fields whose page, post type or
+		// taxonomy no longer exists (deleted ones) are left out.
+		$options_page_fields_config = $this->filterFieldConfigs( $options_page_fields_config, $this->getOptionsPageExistsCallback() );
+		$post_meta_fields_config    = $this->filterFieldConfigs( $post_meta_fields_config, 'post_type_exists' );
+		$taxonomy_fields_config     = $this->filterFieldConfigs( $taxonomy_fields_config, 'taxonomy_exists' );
+
 		$data = [];
 
 		if ( ! empty( $options_pages_config ) ) {
-			$data['options_pages_config']       = $options_pages_config;
-			$data['options_page_fields_config'] = $options_page_fields_config ?? [];
+			$data['options_pages_config'] = $options_pages_config;
+		}
+		if ( ! empty( $options_page_fields_config ) ) {
+			$data['options_page_fields_config'] = $options_page_fields_config;
 		}
 		if ( ! empty( $post_types_config ) ) {
-			$data['post_types_config']       = $post_types_config;
-			$data['post_meta_fields_config'] = $post_meta_fields_config ?? [];
+			$data['post_types_config'] = $post_types_config;
+		}
+		if ( ! empty( $post_meta_fields_config ) ) {
+			$data['post_meta_fields_config'] = $post_meta_fields_config;
 		}
 		if ( ! empty( $taxonomies_config ) ) {
-			$data['taxonomies_config']       = $taxonomies_config;
-			$data['term_meta_fields_config'] = $taxonomy_fields_config ?? [];
+			$data['taxonomies_config'] = $taxonomies_config;
+		}
+		if ( ! empty( $taxonomy_fields_config ) ) {
+			$data['term_meta_fields_config'] = $taxonomy_fields_config;
 		}
 		if ( ! empty( $user_meta_fields_config ) ) {
 			$data['user_meta_fields_config'] = $user_meta_fields_config;
@@ -507,11 +523,43 @@ class ImportExportService {
 	}
 
 	/**
+	 * Keep the field configurations whose page, post type or taxonomy passes the given check
+	 *
+	 * @param mixed $field_configs Field configurations keyed by slug
+	 * @param callable $exists Receives the slug, returns whether it still exists
+	 * @return array
+	 * @since 1.4.5
+	 */
+	private function filterFieldConfigs( $field_configs, callable $exists ): array {
+		if ( empty( $field_configs ) || ! is_array( $field_configs ) ) {
+			return [];
+		}
+
+		return array_filter( $field_configs, function ( $slug ) use ( $exists ): bool {
+			return (bool) call_user_func( $exists, (string) $slug );
+		}, ARRAY_FILTER_USE_KEY );
+	}
+
+	/**
+	 * Get a check for whether an options page exists, stored or added through the options pages filter
+	 *
+	 * @return callable
+	 * @since 1.4.5
+	 */
+	private function getOptionsPageExistsCallback(): callable {
+		$menu_slugs = array_map( 'strval', array_keys( $this->optionService->getOptionsPagesConfigurationsFiltered() ) );
+
+		return function ( string $menu_slug ) use ( $menu_slugs ): bool {
+			return in_array( $menu_slug, $menu_slugs, true );
+		};
+	}
+
+	/**
 	 * Collect the builder states of the exported configurations
 	 *
 	 * @param array $data Exported configurations keyed by export data key
 	 * @return array Builder states keyed by option name
-	 * @since x.x.x
+	 * @since 1.4.5
 	 */
 	private function exportBuilderStates( array $data ): array {
 		$builder_states = [];
@@ -543,7 +591,7 @@ class ImportExportService {
 	 * @param array $data Import data
 	 * @return void
 	 * @throws Exception
-	 * @since x.x.x
+	 * @since 1.4.5
 	 */
 	private function importBuilderStates( array $data ): void {
 		$imported_states = is_array( $data['builder_states'] ?? null ) ? $data['builder_states'] : [];
@@ -582,7 +630,7 @@ class ImportExportService {
 	 * @param string $slug Configuration slug (menu slug, post type, taxonomy or user role)
 	 * @param array $item Configuration
 	 * @return array
-	 * @since x.x.x
+	 * @since 1.4.5
 	 */
 	private function buildBuilderState( string $config_key, string $slug, array $item ): array {
 		$sections = is_array( $item['sections'] ?? null ) ? $item['sections'] : [];

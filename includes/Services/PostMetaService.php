@@ -354,7 +354,7 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	 * @param array $config Stored post type configuration (post_type, args, created_by)
 	 *
 	 * @return array
-	 * @since x.x.x
+	 * @since 1.4.5
 	 */
 	public function buildPostTypeBuilderValues(array $config): array
 	{
@@ -456,6 +456,12 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 		//Delete post type configurations
 		$result->status  = $this->postMetaRepository->deleteConfigurations('native_custom_fields_post_types_config', $post_type_slug);
 		$result->message = $result->status ? __('Post type deleted successfully.', 'native-custom-fields') : __('Post type can not be deleted.', 'native-custom-fields');
+
+		// The post meta fields (and their builder state) are kept, so they come back when the post type
+		// is created again. They are left out of exports while the post type is not registered.
+		if ($result->status) {
+			$this->postMetaRepository->deleteOption('native_custom_fields_post_type_builder_' . $post_type_slug);
+		}
 
 		return $result;
 	}
