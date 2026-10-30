@@ -4,7 +4,7 @@ Tags: custom fields, fields, meta, repeater, ncf
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,9 @@ Yes. The free version has Repeater and Group fields. These are custom components
 
 
 == Changelog ==
+
+= 1.4.7 =
+* Fixed: When a field list passed in through a filter, import or `App::boot()` contained a section or meta box entry, the fields after it were not registered as post or term meta, so they were missing from the REST API and block bindings. Such entries are now skipped and the remaining fields are registered. Configurations built in the field builder were not affected.
 
 = 1.4.6 =
 * Updated: Development files (CLAUDE.md) are no longer included in the package Composer installs.

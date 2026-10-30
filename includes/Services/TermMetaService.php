@@ -592,15 +592,15 @@ class TermMetaService implements BaseMetaServiceInterface, TermMetaServiceInterf
 	{
 		foreach ($fields as $field) {
 
-			$meta_key = $field['name'];
-			$field_type = $field['fieldType'];
+			$meta_key = $field['name'] ?? '';
+			$field_type = $field['fieldType'] ?? '';
 
 			if (empty($meta_key) || ! is_string($meta_key)) {
 				continue;
 			}
 
 			if ($field_type === 'section' || $field_type === 'meta_box') {
-				return;
+				continue;
 			}
 
 			// Resolve the type the field actually stores (repeater/file fields are arrays,

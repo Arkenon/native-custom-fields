@@ -826,17 +826,17 @@ class PostMetaService implements BaseMetaServiceInterface, PostMetaServiceInterf
 	private function registerFieldsForPostType(string $post_type, array $fields): void
 	{
 
-		if (empty($fields) && $post_type === '') {
+		if (empty($fields) || $post_type === '') {
 			return;
 		}
 
 		foreach ($fields as $field) {
 
-			$meta_key = $field['name'];
-			$field_type = $field['fieldType'];
+			$meta_key = $field['name'] ?? '';
+			$field_type = $field['fieldType'] ?? '';
 
 			if ($field_type === 'section' || $field_type === 'meta_box') {
-				return;
+				continue;
 			}
 
 			if (empty($meta_key) || ! is_string($meta_key)) {
